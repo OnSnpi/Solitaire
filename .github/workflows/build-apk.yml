@@ -48,7 +48,7 @@ jobs:
           MANIFEST="android/app/src/main/AndroidManifest.xml"
           sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="portrait"/g' "$MANIFEST"
 
-      - name: Generate 512x512 Detailed King of Clubs Android App Icon
+      - name: Generate 512x512 Detailed King of Clubs Android App Icon (incl. Adaptive Icons)
         run: |
           cat << 'EOF' > app-icon.svg
           <svg width="512" height="512" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,56 +68,70 @@ jobs:
                 <stop offset="100%" stop-color="#64748b"/>
               </linearGradient>
             </defs>
-            <rect width="128" height="128" rx="28" fill="url(#bg-grad)"/>
-            <rect x="5" y="5" width="118" height="118" rx="24" fill="none" stroke="url(#gold)" stroke-width="4.5"/>
-            <rect x="11" y="11" width="106" height="106" rx="19" fill="none" stroke="rgba(254,240,138,0.28)" stroke-width="1.2"/>
-            <g transform="translate(17, 17) scale(0.75)">
-              <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
-              <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
-              <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
-              <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
+            <rect width="128" height="128" fill="url(#bg-grad)"/>
+            <g transform="translate(14, 14) scale(0.78)">
+              <rect x="4" y="4" width="120" height="120" rx="26" fill="none" stroke="url(#gold)" stroke-width="4.5"/>
+              <g transform="translate(17, 17) scale(0.75)">
+                <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
+                <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
+                <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
+                <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
+              </g>
+              <g transform="translate(93, 17) scale(0.75)">
+                <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
+                <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
+                <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
+                <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
+              </g>
+              <path d="M22 117C26 91 42 82 64 82C86 82 102 91 106 117Z" fill="#1d4ed8" stroke="#0f172a" stroke-width="2"/>
+              <path d="M34 117L64 83L94 117Z" fill="#dc2626" stroke="#fef08a" stroke-width="1.5"/>
+              <path d="M44 117L64 90L84 117Z" fill="#f8fafc"/>
+              <path d="M36 96L54 117M92 96L74 117" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="64" cy="100" r="4.4" fill="#0f172a"/>
+              <circle cx="59.4" cy="104.5" r="4.1" fill="#0f172a"/>
+              <circle cx="68.6" cy="104.5" r="4.1" fill="#0f172a"/>
+              <path d="M64 103L61.2 112H66.8L64 103Z" fill="#0f172a"/>
+              <path d="M38 45C33 56 35 70 42 77H86C93 70 95 56 90 45Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.8"/>
+              <circle cx="38" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
+              <circle cx="90" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
+              <rect x="44" y="42" width="40" height="36" rx="16" fill="#fde68a" stroke="#0f172a" stroke-width="1.8"/>
+              <path d="M51 51Q55 49 58 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              <path d="M70 51Q73 49 77 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="55" cy="54.5" r="2.5" fill="#0f172a"/>
+              <circle cx="73" cy="54.5" r="2.5" fill="#0f172a"/>
+              <path d="M64 54V61L61.5 62.5" stroke="#b45309" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M43 62C43 75 51 83 64 83C77 83 85 75 85 62C79 66 71 68 64 68C57 68 49 66 43 62Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.6"/>
+              <path d="M54 65Q64 61 74 65" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+              <path d="M36 42L42 21L55 34L64 17L73 34L86 21L92 42H36Z" fill="url(#gold)" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
+              <rect x="36" y="38.5" width="56" height="6.5" rx="2.5" fill="#fef08a" stroke="#0f172a" stroke-width="1.6"/>
+              <circle cx="42" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="64" cy="14" r="3.8" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="86" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="64" cy="41.8" r="2.3" fill="#dc2626"/>
+              <circle cx="49" cy="41.8" r="2" fill="#2563eb"/>
+              <circle cx="79" cy="41.8" r="2" fill="#2563eb"/>
             </g>
-            <g transform="translate(93, 17) scale(0.75)">
-              <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
-              <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
-              <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
-              <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
-            </g>
-            <path d="M22 117C26 91 42 82 64 82C86 82 102 91 106 117Z" fill="#1d4ed8" stroke="#0f172a" stroke-width="2"/>
-            <path d="M34 117L64 83L94 117Z" fill="#dc2626" stroke="#fef08a" stroke-width="1.5"/>
-            <path d="M44 117L64 90L84 117Z" fill="#f8fafc"/>
-            <path d="M36 96L54 117M92 96L74 117" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="64" cy="100" r="4.4" fill="#0f172a"/>
-            <circle cx="59.4" cy="104.5" r="4.1" fill="#0f172a"/>
-            <circle cx="68.6" cy="104.5" r="4.1" fill="#0f172a"/>
-            <path d="M64 103L61.2 112H66.8L64 103Z" fill="#0f172a"/>
-            <path d="M38 45C33 56 35 70 42 77H86C93 70 95 56 90 45Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.8"/>
-            <circle cx="38" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
-            <circle cx="90" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
-            <rect x="44" y="42" width="40" height="36" rx="16" fill="#fde68a" stroke="#0f172a" stroke-width="1.8"/>
-            <path d="M51 51Q55 49 58 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-            <path d="M70 51Q73 49 77 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="55" cy="54.5" r="2.5" fill="#0f172a"/>
-            <circle cx="73" cy="54.5" r="2.5" fill="#0f172a"/>
-            <path d="M64 54V61L61.5 62.5" stroke="#b45309" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M43 62C43 75 51 83 64 83C77 83 85 75 85 62C79 66 71 68 64 68C57 68 49 66 43 62Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.6"/>
-            <path d="M54 65Q64 61 74 65" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-            <path d="M36 42L42 21L55 34L64 17L73 34L86 21L92 42H36Z" fill="url(#gold)" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="36" y="38.5" width="56" height="6.5" rx="2.5" fill="#fef08a" stroke="#0f172a" stroke-width="1.6"/>
-            <circle cx="42" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
-            <circle cx="64" cy="14" r="3.8" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
-            <circle cx="86" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
-            <circle cx="64" cy="41.8" r="2.3" fill="#dc2626"/>
-            <circle cx="49" cy="41.8" r="2" fill="#2563eb"/>
-            <circle cx="79" cy="41.8" r="2" fill="#2563eb"/>
           </svg>
           EOF
+
           rsvg-convert -w 512 -h 512 app-icon.svg -o icon-512.png
+
+          # Replace standard and adaptive foreground icons across all density folders
           for dir in mipmap-mdpi mipmap-hdpi mipmap-xhdpi mipmap-xxhdpi mipmap-xxxhdpi; do
             mkdir -p "android/app/src/main/res/$dir"
             cp icon-512.png "android/app/src/main/res/$dir/ic_launcher.png"
             cp icon-512.png "android/app/src/main/res/$dir/ic_launcher_round.png"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher_foreground.png"
           done
+
+          # Set matching dark navy background for Android adaptive icons
+          mkdir -p android/app/src/main/res/values
+          cat << 'EOF' > android/app/src/main/res/values/ic_launcher_background.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="ic_launcher_background">#0f172a</color>
+          </resources>
+          EOF
 
       - name: Increment versionCode and Sync Android Project
         run: |
