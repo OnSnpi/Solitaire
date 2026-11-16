@@ -1,0 +1,124 @@
+name: Build Solitaire Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install librsvg2-bin for vector icon generation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Restore or Generate Persistent Android Signing Keystore
+        id: keystore-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: android-signing-keystore-ondrandy-solitaire-v1
+
+      - name: Create Debug Keystore if not cached
+        if: steps.keystore-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/.android
+          keytool -genkey -v \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 36500 \
+            -dname "CN=Ondrandy,O=Ondrandy,C=CZ"
+
+      - name: Initialize Capacitor 6 Android Project
+        run: |
+          npm init -y
+          npm install @capacitor/core@^6.0.0 @capacitor/cli@^6.0.0 @capacitor/android@^6.0.0
+          npx cap init "Solitaire" "cz.ondrandy.solitaire" --web-dir www
+          npx cap add android
+
+      - name: Lock Portrait Orientation in AndroidManifest.xml
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="portrait"/g' "$MANIFEST"
+
+      - name: Generate 512x512 App Icon from Ornate Club King SVG
+        run: |
+          cat << 'EOF' > app-icon.svg
+          <svg width="512" height="512" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a" />
+                <stop offset="55%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#b45309" />
+              </linearGradient>
+              <linearGradient id="plat" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="55%" stop-color="#cbd5e1" />
+                <stop offset="100%" stop-color="#64748b" />
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="14" fill="#0f172a"/>
+            <rect x="4" y="4" width="56" height="56" rx="12" fill="#1e293b" stroke="url(#gold)" stroke-width="3"/>
+            <path d="M16 25L21 15L32 22L43 15L48 25H16Z" fill="url(#gold)"/>
+            <circle cx="21" cy="13" r="2.2" fill="#fef08a"/>
+            <circle cx="32" cy="11" r="2.6" fill="#fef08a"/>
+            <circle cx="43" cy="13" r="2.2" fill="#fef08a"/>
+            <rect x="20" y="26" width="24" height="14" rx="5" fill="#f8fafc"/>
+            <circle cx="27" cy="32" r="1.8" fill="#0f172a"/>
+            <circle cx="37" cy="32" r="1.8" fill="#0f172a"/>
+            <path d="M23 36C26 39 38 39 41 36" stroke="#b45309" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="32" cy="46" r="4.2" fill="url(#plat)"/>
+            <circle cx="27.2" cy="50.5" r="4" fill="url(#plat)"/>
+            <circle cx="36.8" cy="50.5" r="4" fill="url(#plat)"/>
+            <path d="M32 49L29.5 56H34.5L32 49Z" fill="url(#plat)"/>
+          </svg>
+          EOF
+          rsvg-convert -w 512 -h 512 app-icon.svg -o icon-512.png
+          for dir in mipmap-mdpi mipmap-hdpi mipmap-xhdpi mipmap-xxhdpi mipmap-xxxhdpi; do
+            mkdir -p "android/app/src/main/res/$dir"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher.png"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher_round.png"
+          done
+
+      - name: Increment versionCode and Sync Android Project
+        run: |
+          BUILD_GRADLE="android/app/build.gradle"
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/g" "$BUILD_GRADLE"
+          sed -i "s/versionName \"1.0\"/versionName \"1.0.${{ github.run_number }}\"/g" "$BUILD_GRADLE"
+          npx cap sync android
+
+      - name: Build Signed Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../Solitaire.apk
+
+      - name: Upload Solitaire.apk Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: Solitaire-APK
+          path: Solitaire.apk
