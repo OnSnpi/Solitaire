@@ -12,18 +12,19 @@
       --card: #ffffff;
       --border: #dcdfe4;
       --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --text: #111827;
-      --text-muted: #6b7280;
-      --board-bg: #e5e8ee;
-      --slot-bg: rgba(255, 255, 255, 0.55);
-      --slot-border: #cbd2df;
+      --accent-soft: #eff6ff;
+      --accent-border: #bfdbfe;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --board-bg: #f0f2f5;
+      --slot-bg: #ffffff;
+      --slot-border: #cbd5e1;
       --card-face: #ffffff;
       --card-border: #cbd5e1;
       --suit-red: #dc2626;
       --suit-black: #0f172a;
-      --shadow-sm: 0 2px 5px rgba(15, 23, 42, 0.08);
-      --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.16);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 6px 16px rgba(15, 23, 42, 0.14);
       --gold-grad: linear-gradient(135deg, #fef08a 0%, #f59e0b 55%, #b45309 100%);
     }
 
@@ -32,13 +33,14 @@
       --card: #162033;
       --border: rgba(251, 191, 36, 0.35);
       --accent: #f59e0b;
-      --accent-hover: #d97706;
+      --accent-soft: rgba(245, 158, 11, 0.14);
+      --accent-border: rgba(251, 191, 36, 0.45);
       --text: #fef3c7;
       --text-muted: #fde68a;
       --board-bg: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
-      --slot-bg: rgba(30, 41, 59, 0.65);
-      --slot-border: rgba(251, 191, 36, 0.35);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+      --slot-bg: rgba(30, 41, 59, 0.72);
+      --slot-border: rgba(251, 191, 36, 0.38);
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
       --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.65);
     }
 
@@ -47,6 +49,7 @@
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     html, body {
@@ -56,9 +59,14 @@
       height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
       overflow: hidden;
       touch-action: manipulation;
+    }
+
+    button {
+      font-family: inherit;
     }
 
     .app-shell {
@@ -78,46 +86,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 10px;
+      padding: 10px 12px;
       background: var(--card);
       border-bottom: 1px solid var(--border);
-      gap: 6px;
       flex-shrink: 0;
     }
 
-    .header-left, .header-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 96px;
+    .header-stat {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .header-stat strong {
+      color: var(--text);
+      font-weight: 700;
     }
 
     .header-right {
-      justify-content: flex-end;
-    }
-
-    .stat-pill {
       display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 3px 8px;
-      line-height: 1.15;
-    }
-
-    .stat-label {
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--text-muted);
-    }
-
-    .stat-value {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--text);
+      align-items: center;
+      gap: 8px;
     }
 
     .brand {
@@ -127,16 +117,16 @@
     }
 
     .brand-icon {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       flex-shrink: 0;
     }
 
     .brand-title {
-      font-size: 19px;
-      font-weight: 900;
-      letter-spacing: -0.3px;
-      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--accent);
     }
 
     body.royal-gold .brand-title {
@@ -146,13 +136,12 @@
     }
 
     .icon-btn {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text);
-      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -164,7 +153,12 @@
       transform: scale(0.95);
     }
 
-    /* FIXED STATUS BAR */
+    /* FIXED HEIGHT STATUS BAR */
+    .status-wrap {
+      padding: 8px 10px 4px 10px;
+      flex-shrink: 0;
+    }
+
     .status-bar {
       height: 46px;
       overflow: hidden;
@@ -176,15 +170,10 @@
       font-size: 13px;
       font-weight: 600;
       line-height: 1.25;
-      color: var(--text);
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    .status-bar.highlight {
       color: var(--accent);
-      font-weight: 700;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      border-radius: 12px;
     }
 
     /* GAME BOARD */
@@ -192,21 +181,16 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 8px 6px 4px 6px;
+      padding: 6px 8px 4px 8px;
       background: var(--board-bg);
       position: relative;
       overflow: hidden;
     }
 
-    body.royal-gold .board {
-      border-left: 1px solid rgba(251, 191, 36, 0.25);
-      border-right: 1px solid rgba(251, 191, 36, 0.25);
-    }
-
     .top-row {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 5px;
       margin-bottom: 10px;
       flex-shrink: 0;
     }
@@ -215,28 +199,20 @@
       flex: 1;
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 5px;
       position: relative;
       min-height: 0;
     }
 
     .slot {
       aspect-ratio: 5 / 7.2;
-      border-radius: 8px;
+      border-radius: 9px;
       border: 1.5px dashed var(--slot-border);
       background: var(--slot-bg);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .slot-foundation::after {
-      content: attr(data-suit);
-      font-size: 20px;
-      opacity: 0.28;
-      color: var(--text);
-      font-weight: 700;
     }
 
     .slot-stock {
@@ -245,27 +221,27 @@
 
     .stock-recycle {
       font-size: 22px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--accent);
     }
 
     .column {
       position: relative;
       height: 100%;
-      border-radius: 8px;
+      border-radius: 9px;
     }
 
     .column-empty-target {
       width: 100%;
       aspect-ratio: 5 / 7.2;
-      border-radius: 8px;
+      border-radius: 9px;
       border: 1.5px dashed var(--slot-border);
       background: var(--slot-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       color: var(--text-muted);
       opacity: 0.55;
     }
@@ -287,6 +263,11 @@
       touch-action: none;
     }
 
+    .card.dragging-hidden {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
     .card.face-up {
       display: flex;
       flex-direction: column;
@@ -301,7 +282,7 @@
       color: var(--suit-black);
     }
 
-    /* Face Theme Variants */
+    /* Face Theme 2: Soft Tinted (1 win) */
     body.face-tinted .card.face-up.red {
       background: #fff5f5;
       border-color: #fca5a5;
@@ -311,6 +292,7 @@
       border-color: #94a3b8;
     }
 
+    /* Face Theme 3: Night Contrast (5 wins) */
     body.face-dark .card.face-up {
       background: #1e293b;
       border-color: #475569;
@@ -322,20 +304,93 @@
       color: #f8fafc;
     }
 
+    /* Face Theme 4: Truly Metallic Gold (10 wins) */
     body.face-royal .card.face-up {
-      background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
-      border: 1.5px solid #f59e0b;
+      background: linear-gradient(145deg, #fef08a 0%, #f59e0b 48%, #d97706 100%);
+      border: 1.5px solid #fef9c3;
+      box-shadow: inset 0 0 0 1px rgba(146, 64, 14, 0.35), var(--shadow-sm);
     }
     body.face-royal .card.face-up.red {
-      color: #fb7185;
+      color: #991b1b;
     }
     body.face-royal .card.face-up.black {
-      color: #fef08a;
+      color: #0f172a;
+    }
+
+    /* Face Theme 6: Classic Canasta / Rummy Deck (40 wins) */
+    body.face-canasta .card.face-up {
+      background: #fffdf7;
+      border: 1.5px solid #d6c7a9;
+      padding: 2px;
+    }
+    body.face-canasta .card.face-up.red {
+      color: #c81e1e;
+    }
+    body.face-canasta .card.face-up.black {
+      color: #111827;
+    }
+
+    .canasta-frame {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #d4af37;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      padding: 1px 2px;
+    }
+
+    .canasta-corner-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .canasta-corner-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      line-height: 1;
+      font-weight: 800;
+      transform: rotate(180deg);
+    }
+
+    .canasta-mid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      line-height: 1;
+    }
+
+    .canasta-pip-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .canasta-pip-row svg {
+      width: clamp(11px, 3.2vw, 14px);
+      height: clamp(11px, 3.2vw, 14px);
+    }
+
+    .canasta-center-rank {
+      font-size: clamp(15px, 4.5vw, 19px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 1px 0;
     }
 
     .card.selected {
       border: 2.5px solid var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3), var(--shadow-md);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28), var(--shadow-md);
       z-index: 60 !important;
     }
 
@@ -345,8 +400,30 @@
     }
 
     .card.hint-glow {
-      border: 2.5px solid #10b981 !important;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+      border: 2.5px solid var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+    }
+
+    /* SIGNPOST TARGET HIGHLIGHT */
+    .signpost-target {
+      position: absolute;
+      inset: -2px;
+      border-radius: 9px;
+      border: 2.5px solid var(--accent);
+      background: rgba(37, 99, 235, 0.14);
+      z-index: 80;
+      cursor: pointer;
+      animation: pulseTarget 1.15s infinite ease-in-out;
+    }
+
+    body.royal-gold .signpost-target {
+      border-color: #fef08a;
+      background: rgba(245, 158, 11, 0.22);
+    }
+
+    @keyframes pulseTarget {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
+      50% { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
     }
 
     .card-top-strip {
@@ -355,16 +432,18 @@
       justify-content: space-between;
       padding: 2px 4px 0 4px;
       line-height: 1;
-      font-weight: 900;
+      font-weight: 800;
     }
 
     .card-rank-sm {
       font-size: clamp(13px, 3.8vw, 16px);
-      letter-spacing: -0.8px;
+      letter-spacing: -0.6px;
     }
 
-    .card-suit-sm {
-      font-size: clamp(12px, 3.5vw, 15px);
+    .card-suit-sm svg {
+      width: clamp(11px, 3.2vw, 14px);
+      height: clamp(11px, 3.2vw, 14px);
+      display: block;
     }
 
     .card-center-hero {
@@ -373,19 +452,21 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      line-height: 0.92;
+      line-height: 0.95;
       padding-bottom: 3px;
+      gap: 2px;
     }
 
     .card-rank-xl {
-      font-size: clamp(20px, 6vw, 26px);
-      font-weight: 900;
-      letter-spacing: -1px;
+      font-size: clamp(19px, 5.8vw, 25px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
     }
 
-    .card-suit-xl {
-      font-size: clamp(18px, 5.4vw, 24px);
-      margin-top: 1px;
+    .card-suit-xl svg {
+      width: clamp(17px, 5vw, 22px);
+      height: clamp(17px, 5vw, 22px);
+      display: block;
     }
 
     /* Face down SVG container */
@@ -399,6 +480,10 @@
       border-color: rgba(251, 191, 36, 0.55);
     }
 
+    body.royal-gold .card.face-down.light-back {
+      background: #ffffff;
+    }
+
     .card-back-svg {
       width: 100%;
       height: 100%;
@@ -406,85 +491,6 @@
       display: block;
     }
 
-    /* VISUAL SIGNPOST (ROZCESTNÍK) */
-    .signpost-target {
-      position: absolute;
-      inset: -3px;
-      border-radius: 10px;
-      border: 2.5px solid #10b981;
-      background: rgba(16, 185, 129, 0.16);
-      z-index: 80;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: pulseTarget 1.1s infinite ease-in-out;
-    }
-
-    .signpost-badge {
-      background: #10b981;
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 900;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
-      border: 2px solid #ffffff;
-    }
-
-    body.royal-gold .signpost-target {
-      border-color: #fef08a;
-      background: rgba(245, 158, 11, 0.24);
-    }
-
-    body.royal-gold .signpost-badge {
-      background: linear-gradient(135deg, #fef08a, #f59e0b);
-      color: #0f172a;
-      border-color: #0f172a;
-    }
-
-    @keyframes pulseTarget {
-      0%, 100% { transform: scale(1); opacity: 0.95; }
-      50% { transform: scale(1.04); opacity: 1; }
-    }
-
-    /* Floating signpost directional bar on selected card */
-    .signpost-picker {
-      position: absolute;
-      left: 50%;
-      top: -36px;
-      transform: translateX(-50%);
-      background: #0f172a;
-      color: #ffffff;
-      border: 1.5px solid #10b981;
-      border-radius: 999px;
-      padding: 3px 6px;
-      display: flex;
-      gap: 4px;
-      z-index: 95;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-      white-space: nowrap;
-    }
-
-    .signpost-dir-btn {
-      background: #10b981;
-      color: #ffffff;
-      border: none;
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 2px;
-    }
-
-    /* Drag ghost */
     .drag-layer {
       position: fixed;
       pointer-events: none;
@@ -495,47 +501,6 @@
       height: 100%;
     }
 
-    /* AUTO-COMPLETE FLOATING BANNER */
-    .autocomplete-bar {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 90;
-      display: none;
-    }
-
-    .autocomplete-bar.visible {
-      display: block;
-    }
-
-    .autocomplete-btn {
-      background: #10b981;
-      color: #ffffff;
-      border: 2px solid #ffffff;
-      border-radius: 999px;
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 800;
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: bounceIn 0.35s ease;
-    }
-
-    body.royal-gold .autocomplete-btn {
-      background: var(--gold-grad);
-      color: #0f172a;
-      border-color: #fef08a;
-    }
-
-    @keyframes bounceIn {
-      0% { transform: scale(0.85); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
     /* BOTTOM CONTROLS */
     .controls {
       margin-top: auto;
@@ -544,8 +509,8 @@
       background: var(--card);
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: 0.9fr 1fr 1fr 1.25fr;
-      gap: 6px;
+      grid-template-columns: 0.95fr 1fr 1fr 1.2fr;
+      gap: 7px;
       flex-shrink: 0;
     }
 
@@ -553,16 +518,17 @@
       height: 42px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--card);
       color: var(--text);
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
       padding: 0 6px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
       transition: opacity 0.15s, transform 0.1s;
     }
 
@@ -571,7 +537,7 @@
     }
 
     .btn:disabled {
-      opacity: 0.42;
+      opacity: 0.45;
       cursor: not-allowed;
     }
 
@@ -585,18 +551,18 @@
       background: var(--gold-grad);
       color: #0f172a;
       border: none;
-      font-weight: 800;
+      font-weight: 700;
     }
 
     /* MODALS */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.62);
+      background: rgba(15, 23, 42, 0.55);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       z-index: 200;
     }
 
@@ -606,87 +572,113 @@
 
     .modal {
       width: 100%;
-      max-width: 408px;
-      max-height: 86dvh;
+      max-width: 412px;
+      max-height: 88dvh;
       background: var(--card);
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       box-shadow: var(--shadow-md);
     }
 
-    .modal-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 17px;
-      font-weight: 800;
-    }
-
-    .modal-close {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
     .modal-body {
-      padding: 14px 16px;
+      padding: 18px 16px 14px 16px;
       overflow-y: auto;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.45;
+    }
+
+    .modal-title-center {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+      color: var(--text);
+    }
+
+    .stats-summary-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 6px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .stats-summary-item {
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .stats-summary-item.gold-pill {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #854d0e;
+    }
+
+    body.royal-gold .stats-summary-item.gold-pill {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(251, 191, 36, 0.45);
+      color: #fef08a;
+    }
+
+    .stats-summary-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stats-summary-val {
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     .setting-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .setting-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
       margin-bottom: 8px;
     }
 
     .segmented {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 8px;
     }
 
     .seg-btn {
-      padding: 9px 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--bg);
+      padding: 10px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
       color: var(--text);
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
       text-align: center;
     }
 
-    .seg-btn.active {
-      border-color: var(--accent);
-      background: rgba(37, 99, 235, 0.12);
-      color: var(--accent);
+    .seg-btn .lang-code {
+      font-size: 10.5px;
+      font-weight: 700;
+      opacity: 0.78;
+      margin-right: 3px;
     }
 
-    body.royal-gold .seg-btn.active {
-      border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.18);
-      color: #fef08a;
+    .seg-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
     }
 
     .unlock-grid {
@@ -697,119 +689,152 @@
 
     .unlock-card {
       border: 1.5px solid var(--border);
-      background: var(--bg);
+      background: var(--card);
       border-radius: 12px;
-      padding: 9px;
+      padding: 10px 8px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
 
     .unlock-card.active {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      background: var(--accent-soft);
     }
 
-    body.royal-gold .unlock-card.active {
-      border-color: #f59e0b;
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+    .unlock-card.active .unlock-name {
+      color: var(--accent);
+    }
+
+    .unlock-check {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .unlock-card.locked {
-      opacity: 0.55;
+      background: var(--bg);
+      opacity: 0.72;
       cursor: not-allowed;
     }
 
     .unlock-name {
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--text);
     }
 
     .unlock-req {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 400;
       color: var(--text-muted);
     }
 
-    .royal-banner {
-      border: 1.5px solid #f59e0b;
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-      color: #fef3c7;
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .royal-banner.locked {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-
-    .new-game-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .option-card {
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+    .info-box-gray {
       background: var(--bg);
-      color: var(--text);
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .option-card strong {
-      font-size: 15px;
-    }
-
-    .option-card span {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
       font-size: 12.5px;
-      color: var(--text-muted);
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .info-box-green {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #166534;
+      margin: 10px 0;
+    }
+
+    body.royal-gold .info-box-green {
+      background: rgba(22, 163, 74, 0.16);
+      border-color: rgba(74, 222, 128, 0.35);
+      color: #bbf7d0;
+    }
+
+    .text-danger {
+      color: #b91c1c;
+      font-size: 13px;
+      margin: 10px 0 6px 0;
+    }
+
+    body.royal-gold .text-danger {
+      color: #fca5a5;
+    }
+
+    .text-amber {
+      color: #b45309;
+      font-size: 13px;
+      margin: 6px 0 12px 0;
+    }
+
+    body.royal-gold .text-amber {
+      color: #fde68a;
+    }
+
+    .modal-full-btn {
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
     }
 
     .author-footer {
-      margin-top: 18px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
+      margin-top: 12px;
       text-align: center;
       font-size: 12px;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 400;
     }
 
     .rules-list {
       padding-left: 18px;
-      margin: 8px 0;
+      margin: 6px 0;
     }
 
     .rules-list li {
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .win-badge {
-      width: 68px;
-      height: 68px;
+      width: 78px;
+      height: 78px;
       margin: 0 auto 10px auto;
       display: block;
+    }
+
+    .unlock-link {
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
-  <!-- Shared Noble Metal SVG Gradients -->
+  <!-- Shared Noble Metal SVG Gradients & Patterns -->
   <svg width="0" height="0" style="position:absolute">
     <defs>
       <linearGradient id="metal-yellow-gold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -827,38 +852,42 @@
         <stop offset="55%" stop-color="#cbd5e1" />
         <stop offset="100%" stop-color="#64748b" />
       </linearGradient>
+      <!-- Real Card Back 1: Crimson Dotted Matrix Pattern -->
+      <pattern id="pat-crimson-dots" width="3.5" height="3.5" patternUnits="userSpaceOnUse">
+        <circle cx="1.75" cy="1.75" r="0.85" fill="#e11d48" opacity="0.55" />
+      </pattern>
+      <!-- Real Card Back 2: Blue Diagonal Tartan Plaid Pattern -->
+      <pattern id="pat-blue-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="16" height="16" fill="#ffffff" />
+        <line x1="0" y1="2" x2="16" y2="2" stroke="#0284c7" stroke-width="1.3" />
+        <line x1="0" y1="5.5" x2="16" y2="5.5" stroke="#38bdf8" stroke-width="0.75" />
+        <line x1="0" y1="9" x2="16" y2="9" stroke="#0369a1" stroke-width="1.5" />
+        <line x1="0" y1="12.5" x2="16" y2="12.5" stroke="#7dd3fc" stroke-width="0.7" />
+        <line x1="2" y1="0" x2="2" y2="16" stroke="#0284c7" stroke-width="1.3" />
+        <line x1="5.5" y1="0" x2="5.5" y2="16" stroke="#38bdf8" stroke-width="0.75" />
+        <line x1="9" y1="0" x2="9" y2="16" stroke="#0369a1" stroke-width="1.5" />
+        <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#7dd3fc" stroke-width="0.7" />
+      </pattern>
     </defs>
   </svg>
 
   <div class="app-shell">
     <!-- HEADER -->
     <header class="header">
-      <div class="header-left">
-        <div class="stat-pill">
-          <span class="stat-label" id="lbl-wins">Výhry</span>
-          <span class="stat-value" id="val-wins">0</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label" id="lbl-moves">Tahy</span>
-          <span class="stat-value" id="val-moves">0</span>
-        </div>
-      </div>
+      <div class="header-stat"><span id="lbl-wins">V&#253;hry</span>: <strong id="val-wins">0</strong></div>
 
       <div class="brand">
         <!-- Ornate Club King SVG Emblem -->
         <svg class="brand-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="4" y="4" width="56" height="56" rx="14" fill="#1e293b" stroke="url(#metal-yellow-gold)" stroke-width="3"/>
-          <!-- Crown -->
           <path d="M16 25L21 15L32 22L43 15L48 25H16Z" fill="url(#metal-yellow-gold)"/>
           <circle cx="21" cy="13" r="2.2" fill="#fef08a"/>
           <circle cx="32" cy="11" r="2.6" fill="#fef08a"/>
           <circle cx="43" cy="13" r="2.2" fill="#fef08a"/>
-          <!-- King Face & Beard -->
           <rect x="20" y="26" width="24" height="14" rx="5" fill="#f8fafc"/>
           <circle cx="27" cy="32" r="1.8" fill="#0f172a"/>
           <circle cx="37" cy="32" r="1.8" fill="#0f172a"/>
           <path d="M23 36C26 39 38 39 41 36" stroke="#b45309" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Ornate Club (Kříž) Emblem at base -->
           <circle cx="32" cy="46" r="4.2" fill="url(#metal-platinum)"/>
           <circle cx="27.2" cy="50.5" r="4" fill="url(#metal-platinum)"/>
           <circle cx="36.8" cy="50.5" r="4" fill="url(#metal-platinum)"/>
@@ -868,16 +897,20 @@
       </div>
 
       <div class="header-right">
-        <div class="stat-pill">
-          <span class="stat-label" id="lbl-stock">Balíček</span>
-          <span class="stat-value" id="val-stock">24</span>
-        </div>
-        <button class="icon-btn" id="btn-settings" aria-label="Settings">⚙</button>
+        <div class="header-stat"><span id="lbl-stock">Bal&#237;&#269;ek</span>: <strong id="val-stock">24</strong></div>
+        <button class="icon-btn" id="btn-settings" aria-label="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
       </div>
     </header>
 
     <!-- FIXED HEIGHT STATUS BAR -->
-    <div class="status-bar" id="status-bar">Připraveno ke hře.</div>
+    <div class="status-wrap">
+      <div class="status-bar" id="status-bar"></div>
+    </div>
 
     <!-- GAME BOARD -->
     <main class="board" id="board">
@@ -885,25 +918,21 @@
         <div class="slot slot-stock" id="slot-stock"></div>
         <div class="slot" id="slot-waste"></div>
         <div style="visibility:hidden"></div>
-        <div class="slot slot-foundation" id="slot-f0" data-suit="♠"></div>
-        <div class="slot slot-foundation" id="slot-f1" data-suit="♥"></div>
-        <div class="slot slot-foundation" id="slot-f2" data-suit="♣"></div>
-        <div class="slot slot-foundation" id="slot-f3" data-suit="♦"></div>
+        <div class="slot slot-foundation" id="slot-f0"></div>
+        <div class="slot slot-foundation" id="slot-f1"></div>
+        <div class="slot slot-foundation" id="slot-f2"></div>
+        <div class="slot slot-foundation" id="slot-f3"></div>
       </div>
 
       <div class="tableau-row" id="tableau-row"></div>
-
-      <div class="autocomplete-bar" id="autocomplete-bar">
-        <button class="autocomplete-btn" id="btn-autocomplete">✨ <span id="lbl-autocomplete">Dokončit hru</span></button>
-      </div>
     </main>
 
     <!-- BOTTOM CONTROLS -->
     <footer class="controls">
-      <button class="btn" id="btn-undo" disabled>↩ <span id="lbl-undo">Zpět</span></button>
-      <button class="btn" id="btn-rules">📖 <span id="lbl-rules">Návod</span></button>
-      <button class="btn" id="btn-hint">💡 <span id="lbl-hint">Nápověda</span></button>
-      <button class="btn primary" id="btn-new">＋ <span id="lbl-new">Nová hra</span></button>
+      <button class="btn" id="btn-undo" disabled>&#8617; <span id="lbl-undo"></span></button>
+      <button class="btn" id="btn-rules"><span id="lbl-rules"></span></button>
+      <button class="btn" id="btn-hint"><span id="lbl-hint"></span></button>
+      <button class="btn primary" id="btn-new"><span id="lbl-new"></span></button>
     </footer>
   </div>
 
@@ -912,41 +941,53 @@
   <!-- SETTINGS MODAL -->
   <div class="modal-backdrop" id="modal-settings">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-settings-title">Nastavení</span>
-        <button class="modal-close" data-close="modal-settings">✕</button>
-      </div>
       <div class="modal-body">
-        <div class="setting-group">
-          <div class="setting-title" id="lbl-lang-title">Jazyk / Language</div>
-          <div class="segmented">
-            <button class="seg-btn" id="lang-cs">Čeština</button>
-            <button class="seg-btn" id="lang-en">English</button>
+        <h2 class="modal-title-center" id="modal-settings-title" style="cursor:pointer;"></h2>
+
+        <div class="stats-summary-box">
+          <div class="stats-summary-item">
+            <div class="stats-summary-lbl" id="stat-lbl-moves"></div>
+            <div class="stats-summary-val" id="stat-val-moves">0</div>
+          </div>
+          <div class="stats-summary-item">
+            <div class="stats-summary-lbl" id="stat-lbl-cards"></div>
+            <div class="stats-summary-val" id="stat-val-cards">52</div>
+          </div>
+          <div class="stats-summary-item gold-pill">
+            <div class="stats-summary-lbl" id="stat-lbl-wins" style="cursor:pointer;"></div>
+            <div class="stats-summary-val" id="stat-val-wins">0</div>
           </div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-title" id="lbl-faces-title">Vzhled líců karet (výrazný kontrast)</div>
+          <div class="setting-title" id="lbl-lang-title">Jazyk / Language</div>
+          <div class="segmented">
+            <button class="seg-btn" id="lang-cs"><span class="lang-code">CZ</span> &#268;e&#353;tina</button>
+            <button class="seg-btn" id="lang-en"><span class="lang-code">GB</span> English</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-title" id="lbl-faces-title"></div>
           <div class="unlock-grid" id="face-themes-grid"></div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-title" id="lbl-backs-title">Vzor rubu karet</div>
+          <div class="setting-title" id="lbl-backs-title"></div>
           <div class="unlock-grid" id="back-themes-grid"></div>
         </div>
 
         <div class="setting-group">
-          <div class="setting-title" id="lbl-royal-title">Mistrovská odměna</div>
-          <div class="royal-banner" id="royal-gold-toggle">
-            <div>
-              <div style="font-weight:900; font-size:14px; color:#fef08a;" id="royal-name">👑 Královská zlatá edice</div>
-              <div style="font-size:12px; color:#fde68a;" id="royal-desc">Odemkne se po 5 výhrách</div>
-            </div>
-            <div style="font-size:18px; font-weight:900;" id="royal-state">🔒</div>
-          </div>
+          <div class="setting-title" id="lbl-royal-title"></div>
+          <div class="unlock-grid" style="grid-template-columns: 1fr;" id="royal-gold-box"></div>
         </div>
 
-        <div class="author-footer">© 2026 Ondrandy</div>
+        <div class="info-box-gray" id="settings-unlock-info"></div>
+
+        <button class="btn modal-full-btn" id="btn-restart-deal" style="background:var(--bg);"></button>
+        <button class="btn primary modal-full-btn" id="btn-close-settings"></button>
+
+        <div class="author-footer">&copy; 2026 Ondrandy</div>
       </div>
     </div>
   </div>
@@ -954,143 +995,198 @@
   <!-- RULES MODAL -->
   <div class="modal-backdrop" id="modal-rules">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-rules-title">Pravidla a ovládání</span>
-        <button class="modal-close" data-close="modal-rules">✕</button>
+      <div class="modal-body">
+        <h2 class="modal-title-center" id="modal-rules-title"></h2>
+        <div id="rules-content"></div>
+        <button class="btn primary modal-full-btn" id="btn-close-rules"></button>
+        <div class="author-footer">&copy; 2026 Ondrandy</div>
       </div>
-      <div class="modal-body" id="rules-content"></div>
     </div>
   </div>
 
   <!-- NEW GAME / RESTART MODAL -->
   <div class="modal-backdrop" id="modal-new">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-new-title">Nová nebo opakovaná hra</span>
-        <button class="modal-close" data-close="modal-new">✕</button>
-      </div>
       <div class="modal-body">
-        <div class="new-game-options">
-          <button class="option-card" id="opt-deal-new">
-            <strong id="opt-new-title">🃏 Rozdat novou hru</strong>
-            <span id="opt-new-desc">Zamíchá balíček a rozdá zcela novou partii.</span>
-          </button>
-          <button class="option-card" id="opt-restart-same">
-            <strong id="opt-restart-title">🔄 Hrát tuto partii od začátku</strong>
-            <span id="opt-restart-desc">Vrátí rozdané karty do původního rozložení této hry.</span>
-          </button>
-        </div>
+        <h2 class="modal-title-center" id="modal-new-title"></h2>
+        <button class="btn primary modal-full-btn" id="opt-deal-new"></button>
+        <button class="btn modal-full-btn" id="opt-restart-same" style="background:var(--bg);"></button>
+        <button class="btn modal-full-btn" id="btn-close-new" style="border:none; color:var(--text-muted);"></button>
       </div>
     </div>
   </div>
 
-  <!-- WIN MODAL -->
+  <!-- WIN MODAL WITH ILLUSTRATED KING PORTRAIT -->
   <div class="modal-backdrop" id="modal-win">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-win-title">Vítězství!</span>
-        <button class="modal-close" data-close="modal-win">✕</button>
-      </div>
       <div class="modal-body" style="text-align:center;">
-        <svg class="win-badge" viewBox="0 0 64 64" fill="none">
-          <circle cx="32" cy="32" r="28" fill="#1e293b" stroke="url(#metal-yellow-gold)" stroke-width="3"/>
-          <path d="M18 28L23 18L32 25L41 18L46 28H18Z" fill="url(#metal-yellow-gold)"/>
-          <rect x="20" y="30" width="24" height="14" rx="4" fill="url(#metal-platinum)"/>
-          <text x="32" y="41" text-anchor="middle" font-size="11" font-weight="900" fill="#0f172a">KING</text>
+        <svg class="win-badge" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="36" fill="#1e293b" stroke="url(#metal-yellow-gold)" stroke-width="4"/>
+          <circle cx="40" cy="40" r="31" fill="none" stroke="rgba(254,240,138,0.28)" stroke-width="1"/>
+          <path d="M20 64C22 53 30 49 40 49C50 49 58 53 60 64" fill="#b91c1c"/>
+          <path d="M26 64L40 50L54 64" fill="#f8fafc"/>
+          <circle cx="40" cy="57" r="2.3" fill="#0f172a"/>
+          <circle cx="37.6" cy="59.4" r="2.1" fill="#0f172a"/>
+          <circle cx="42.4" cy="59.4" r="2.1" fill="#0f172a"/>
+          <path d="M40 58.5L38.6 63H41.4L40 58.5Z" fill="#0f172a"/>
+          <rect x="29" y="29" width="22" height="19" rx="8" fill="#fde68a"/>
+          <path d="M28 39C28 46 33 50 40 50C47 50 52 46 52 39C49 41 44 42 40 42C36 42 31 41 28 39Z" fill="url(#metal-yellow-gold)"/>
+          <circle cx="35.5" cy="35.5" r="1.7" fill="#0f172a"/>
+          <circle cx="44.5" cy="35.5" r="1.7" fill="#0f172a"/>
+          <path d="M36 40.5C38 42 42 42 44 40.5" stroke="#92400e" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M25 29L28 17L35 24L40 14L45 24L52 17L55 29H25Z" fill="url(#metal-yellow-gold)"/>
+          <rect x="25" y="27" width="30" height="3.5" rx="1.5" fill="#fef08a"/>
+          <circle cx="28" cy="15" r="2" fill="#fef08a"/>
+          <circle cx="40" cy="12" r="2.5" fill="#fef08a"/>
+          <circle cx="52" cy="15" r="2" fill="#fef08a"/>
         </svg>
-        <h3 style="margin:4px 0 8px 0;" id="win-heading">Skvělá práce!</h3>
-        <p id="win-summary" style="margin:0 0 12px 0; color:var(--text-muted);"></p>
-        <div id="win-unlock-msg" style="font-weight:800; color:var(--accent); margin-bottom:14px;"></div>
-        <button class="btn primary" style="width:100%;" id="btn-win-new">🃏 <span id="lbl-win-new">Hrát další partii</span></button>
+        <h2 class="modal-title-center" id="win-heading" style="margin-bottom:6px;"></h2>
+        <p id="win-summary" style="margin:0 0 10px 0; color:var(--text-muted);"></p>
+        <div id="win-unlock-msg" style="font-weight:700; color:var(--accent); margin-bottom:12px;"></div>
+        <button class="btn primary modal-full-btn" id="btn-win-new"></button>
       </div>
     </div>
   </div>
 
   <script>
     (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v1';
+      const STORAGE_KEY = 'ondrandy_solitaire_v6';
+
+      const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
+      const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
+      const RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+
+      // Rainbow spectrum from Ace (1 = violet) to King (13 = red)
+      // blackColor: '#ffffff' or '#0f172a' for high contrast on each shade
+      // redColor: vibrant non-black, non-white contrast color for Hearts/Diamonds
+      const RAINBOW_BY_RANK = {
+        1:  { bg: '#6d28d9', border: '#a78bfa', blackColor: '#ffffff', redColor: '#fde047' }, // Ace: Violet
+        2:  { bg: '#4338ca', border: '#818cf8', blackColor: '#ffffff', redColor: '#fde047' }, // 2: Indigo
+        3:  { bg: '#1d4ed8', border: '#60a5fa', blackColor: '#ffffff', redColor: '#fde047' }, // 3: Royal Blue
+        4:  { bg: '#0284c7', border: '#38bdf8', blackColor: '#ffffff', redColor: '#fef08a' }, // 4: Sky Blue
+        5:  { bg: '#06b6d4', border: '#67e8f9', blackColor: '#0f172a', redColor: '#9f1239' }, // 5: Cyan
+        6:  { bg: '#14b8a6', border: '#5eead4', blackColor: '#0f172a', redColor: '#9f1239' }, // 6: Teal
+        7:  { bg: '#10b981', border: '#6ee7b7', blackColor: '#0f172a', redColor: '#9f1239' }, // 7: Emerald
+        8:  { bg: '#65a30d', border: '#a3e635', blackColor: '#ffffff', redColor: '#fef08a' }, // 8: Lime Green
+        9:  { bg: '#eab308', border: '#fde047', blackColor: '#0f172a', redColor: '#b91c1c' }, // 9: Yellow
+        10: { bg: '#f59e0b', border: '#fcd34d', blackColor: '#0f172a', redColor: '#991b1b' }, // 10: Amber
+        11: { bg: '#f97316', border: '#fdba74', blackColor: '#0f172a', redColor: '#881337' }, // J: Orange
+        12: { bg: '#ea580c', border: '#fb923c', blackColor: '#ffffff', redColor: '#fef08a' }, // Q: Deep Orange
+        13: { bg: '#dc2626', border: '#fca5a5', blackColor: '#ffffff', redColor: '#fef08a' }  // K: Red
+      };
+
+      function suitSVG(suit, colorOverride = null) {
+        const fill = colorOverride ? `fill="${colorOverride}"` : 'fill="currentColor"';
+        if (suit === 'spades') {
+          return `<svg viewBox="0 0 24 24" ${fill}><path d="M12 2C9 6.5 4 10.2 4 14.2C4 16.9 6.1 19 8.7 19C10.1 19 11.3 18.4 12 17.4C12.7 18.4 13.9 19 15.3 19C17.9 19 20 16.9 20 14.2C20 10.2 15 6.5 12 2ZM10.4 22H13.6L12.6 17.5H11.4L10.4 22Z"/></svg>`;
+        }
+        if (suit === 'hearts') {
+          return `<svg viewBox="0 0 24 24" ${fill}><path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"/></svg>`;
+        }
+        if (suit === 'clubs') {
+          return `<svg viewBox="0 0 24 24" ${fill}><path d="M12 2.5C9.6 2.5 7.7 4.4 7.7 6.8C7.7 8.1 8.3 9.3 9.2 10.1C8.6 9.8 7.9 9.6 7.1 9.6C4.6 9.6 2.6 11.6 2.6 14.1C2.6 16.6 4.6 18.6 7.1 18.6C8.8 18.6 10.3 17.7 11.1 16.3L10.1 21.5H13.9L12.9 16.3C13.7 17.7 15.2 18.6 16.9 18.6C19.4 18.6 21.4 16.6 21.4 14.1C21.4 11.6 19.4 9.6 16.9 9.6C16.1 9.6 15.4 9.8 14.8 10.1C15.7 9.3 16.3 8.1 16.3 6.8C16.3 4.4 14.4 2.5 12 2.5Z"/></svg>`;
+        }
+        return `<svg viewBox="0 0 24 24" ${fill}><path d="M12 2L4.5 12L12 22L19.5 12L12 2Z"/></svg>`;
+      }
 
       const I18N = {
         cs: {
-          wins: 'Výhry',
+          wins: 'V\u00fdhry',
           moves: 'Tahy',
-          stock: 'Balíček',
-          undo: 'Zpět',
-          rules: 'Návod',
-          hint: 'Nápověda',
-          newGame: 'Nová hra',
-          autocomplete: 'Dokončit hru',
-          ready: 'Klepněte na kartu pro tah nebo na balíček pro rozdání.',
-          noMoves: 'Žádný platný tah pro tuto kartu.',
-          multiTarget: 'Více možností tahu – vyberte cíl přes rozcestník.',
-          hintStock: 'Nápověda: Otočte další kartu z dobíracího balíčku.',
-          hintRecycle: 'Nápověda: Obnovte dobírací balíček.',
-          hintMove: 'Nápověda: Přesuňte kartu {card} na {target}.',
-          noHints: 'Žádné další tahy nejsou k dispozici.',
-          targetFoundation: 'odkládací hromádku',
+          cardsCount: 'Karet v sad\u011b',
+          stock: 'Bal\u00ed\u010dek',
+          undo: 'Zp\u011bt',
+          rules: 'N\u00e1vod',
+          hint: 'N\u00e1pov\u011bda',
+          newGame: 'Nov\u00e1 hra',
+          ready: 'Klepnut\u00edm ozna\u010d kartu nebo dob\u00edrej z bal\u00ed\u010dku.',
+          noMoves: 'Pro tuto kartu nen\u00ed \u017e\u00e1dn\u00fd platn\u00fd tah.',
+          multiTarget: 'V\u00edce mo\u017enost\u00ed tahu \u2013 klepnut\u00edm vyber zv\u00fdrazn\u011bn\u00fd c\u00edl.',
+          hintStock: 'N\u00e1pov\u011bda: Oto\u010d dal\u0161\u00ed kartu z dob\u00edrac\u00edho bal\u00ed\u010dku.',
+          hintRecycle: 'N\u00e1pov\u011bda: Obnov dob\u00edrac\u00ed bal\u00ed\u010dek.',
+          hintMove: 'N\u00e1pov\u011bda: P\u0159esu\u0148 kartu {card} na {target}.',
+          noHints: '\u017d\u00e1dn\u00e9 dal\u0161\u00ed tahy nejsou k dispozici.',
+          targetFoundation: 'odkl\u00e1dac\u00ed hrom\u00e1dku',
           targetColumn: 'sloupec {col}',
-          restarted: 'Partie byla vrácena na úplný začátek.',
-          newDealt: 'Rozdána nová partie.',
-          autoCompleting: 'Automaticky dokončuji vyhranou partii…',
-          settingsTitle: 'Nastavení',
+          restarted: 'Partie byla vr\u00e1cena na \u00fapln\u00fd za\u010d\u00e1tek.',
+          newDealt: 'Rozd\u00e1na nov\u00e1 partie (52 karet).',
+          autoCompleting: 'V\u0161echny karty na stole oto\u010deny \u2013 automaticky dokon\u010duji partii\u2026',
+          winsReset: 'Po\u010det v\u00fdher byl vynulov\u00e1n.',
+          settingsTitle: 'Nastaven\u00ed hry',
           langTitle: 'Jazyk / Language',
-          facesTitle: 'Vzhled líců karet',
+          facesTitle: 'Vzhled l\u00edc\u016f karet',
           backsTitle: 'Vzor rubu karet',
-          royalTitle: 'Mistrovská odměna',
-          royalName: '👑 Královská zlatá edice',
-          royalLocked: 'Odemkne se po 5 výhrách',
-          royalUnlocked: 'Odemčeno – klepnutím aktivujete',
-          royalActive: 'Aktivní královský režim',
-          unlockedAt: 'Od {n} výher',
-          unlockedFree: 'Výchozí',
-          newModalTitle: 'Nová nebo opakovaná hra',
-          optNewTitle: '🃏 Rozdat novou hru',
-          optNewDesc: 'Zamíchá balíček a rozdá zcela novou partii.',
-          optRestartTitle: '🔄 Hrát tuto partii od začátku',
-          optRestartDesc: 'Vrátí karty této hry do původního rozložení.',
-          winTitle: 'Vítězství!',
-          winHeading: 'Gratulujeme k výhře!',
-          winSummary: 'Dokončeno za {moves} tahů. Celkem výher: {wins}.',
-          winNewBtn: 'Hrát další partii',
-          winUnlockNew: '🎉 Odemčena nová odměna v Nastavení!',
-          rulesTitle: 'Pravidla a ovládání',
+          royalTitle: 'Mistrovsk\u00e1 edice',
+          royalName: 'Kr\u00e1lovsk\u00e1 zlat\u00e1 edice',
+          royalActive: 'Aktivn\u00ed zlat\u00fd re\u017eim',
+          royalReady: 'Odem\u010deno (klepni)',
+          unlockedFree: 'Z\u00e1kladn\u00ed',
+          settingsUnlockInfo: '<strong>Odemknut\u00ed bonus\u016f:</strong> 1 v\u00fdhra = T\u00f3novan\u00e9 karty, 3 = Karm\u00ednov\u00fd erb, 5 = No\u010dn\u00ed kontrast, 7 = Smaragdov\u00fd rub, 10 = Kr\u00e1lovsk\u00e9 zlat\u00e9 l\u00edce, 13 = U\u0161lechtil\u00e9 kovy, 17 = Duhov\u00e9 l\u00edce, 20 = Karm\u00ednov\u00fd ornament, 30 = Modr\u00fd tartan, 40 = Canasta \u017eol\u00edkov\u00e9, 52 = <strong>Kr\u00e1lovsk\u00e1 zlat\u00e1 edice</strong>.',
+          restartBtn: '\u21bb Restartovat tuto hru',
+          saveCloseBtn: 'Ulo\u017eit a zav\u0159\u00edt',
+          newModalTitle: 'Nov\u00e1 hra',
+          optNewTitle: 'Rozdat novou partii',
+          optRestartTitle: '\u21bb Hr\u00e1t tuto partii od za\u010d\u00e1tku',
+          cancelBtn: 'Zru\u0161it',
+          winHeading: 'Gratulujeme k v\u00fdh\u0159e!',
+          winSummary: 'Dokon\u010deno za {moves} tah\u016f. Celkem v\u00fdher: {wins}.',
+          winNewBtn: 'Hr\u00e1t dal\u0161\u00ed partii',
+          winUnlockNewHtml: 'Odem\u010dena a aktivov\u00e1na nov\u00e1 odm\u011bna v <span id="win-open-settings" class="unlock-link">Nastaven\u00ed</span>!',
+          rulesTitle: 'Jak hr\u00e1t Solitaire',
+          rulesUnderstandBtn: 'Rozum\u00edm, hr\u00e1t',
           rulesHtml: `
-            <p><strong>Cíl hry:</strong> Seřadit všechny karty podle barev na 4 horní odkládací hromádky vzestupně od <strong>Esa (A)</strong> až po <strong>Krále (K)</strong>.</p>
-            <ul class="rules-list">
-              <li><strong>Sloupce na stole (7):</strong> Karty se skládají sestupně (K, Q, J, 10… 2) se střídáním <strong>červené</strong> a <strong>černé</strong> barvy.</li>
-              <li><strong>Prázdný sloupec:</strong> Lze na něj položit pouze <strong>Krále (K)</strong> nebo sloupec začínající Králem.</li>
-              <li><strong>Dobírací balíček:</strong> Rozdává po 1 kartě bez omezení počtu otočení.</li>
-              <li><strong>Odkládací hromádky:</strong> Vrchní kartu ze 4 horních hromádek můžete kdykoli vrátit zpět do hry na stůl.</li>
-              <li><strong>Vizuální rozcestník:</strong> Pokud má vybraná karta více platných cílů, rozsvítí se zelené šipky a terčíky – klepnutím vyberete přesný cíl.</li>
-              <li><strong>Odměny:</strong> Za každé vítězství odemykáte nové vzory karet až po <em>Královskou zlatou edici</em>.</li>
-            </ul>
-            <div class="author-footer">© 2026 Ondrandy</div>
+            <p>C\u00edlem hry je se\u0159adit v\u0161ech <strong>52 karet</strong> (4 barvy po 13 hodnot\u00e1ch) na 4 horn\u00ed odkl\u00e1dac\u00ed hrom\u00e1dky vzestupn\u011b od <strong>Esa (A)</strong> a\u017e po <strong>Kr\u00e1le (K)</strong>.</p>
+            <p><strong>Ovl\u00e1d\u00e1n\u00ed a n\u00e1stroje:</strong></p>
+            <div class="info-box-gray">
+              <ul class="rules-list">
+                <li><strong>Sloupce na stole (7):</strong> Karty se skl\u00e1daj\u00ed sestupn\u011b (K, Q, J, 10\u2026 2) se st\u0159\u00edd\u00e1n\u00edm <strong>\u010derven\u00e9</strong> a <strong>\u010dern\u00e9</strong> barvy.</li>
+                <li><strong>Pr\u00e1zdn\u00fd sloupec:</strong> Lze na n\u011bj polo\u017eit pouze <strong>Kr\u00e1le (K)</strong> nebo sloupec za\u010d\u00ednaj\u00edc\u00ed Kr\u00e1lem.</li>
+                <li><strong>Odkl\u00e1dac\u00ed hrom\u00e1dky:</strong> Po\u0159ad\u00ed barev je Srdce, K\u00e1ry, Piky, K\u0159\u00ed\u017ee. P\u0159i ru\u010dn\u00edm p\u0159eta\u017een\u00ed m\u016f\u017ee\u0161 prvn\u00ed Eso polo\u017eit na libovoln\u00e9 voln\u00e9 pole.</li>
+                <li><strong>Klepnut\u00ed na kartu:</strong> Je-li tah jednozna\u010dn\u00fd, karta se hned p\u0159esune. P\u0159i v\u00edce mo\u017enostech se zv\u00fdrazn\u00ed v\u0161echny c\u00edle pro v\u00fdb\u011br.</li>
+              </ul>
+            </div>
+            <div class="info-box-green">
+              <strong>Automatick\u00e9 dokon\u010den\u00ed partie:</strong><br/>
+              Jakmile jsou v\u0161echny karty ve sloupc\u00edch oto\u010deny l\u00edcem nahoru, hra se sama automaticky dohraje v\u010detn\u011b dob\u00edrac\u00edho bal\u00ed\u010dku bez nutnosti ma\u010dkat dal\u0161\u00ed tla\u010d\u00edtka.
+            </div>
+            <p class="text-danger"><strong>Pozor:</strong> Po v\u00fdh\u0159e se historie tah\u016f uzamkne a tla\u010d\u00edtko Zp\u011bt se deaktivuje.</p>
+            <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Karm\u00ednov\u00fd erb (3), No\u010dn\u00ed kontrast (5), Smaragdov\u00fd rub (7), Kr\u00e1lovsk\u00e9 zlat\u00e9 l\u00edce (10), U\u0161lechtil\u00e9 kovy (13), Duhov\u00e9 l\u00edce (17), Karm\u00ednov\u00fd ornament (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
           `,
+          suitNames: {
+            spades: 'Piky',
+            hearts: 'Srdce',
+            clubs: 'K\u0159\u00ed\u017ee',
+            diamonds: 'K\u00e1ry'
+          },
           faces: {
-            classic: 'Extra kontrastní bílá',
-            tinted: 'Jemně tónovaná',
-            dark: 'Noční vysoký kontrast',
-            royal: 'Královská tmavá zlatá'
+            classic: 'Klasick\u00fd kontrast',
+            tinted: 'T\u00f3novan\u00e9',
+            dark: 'No\u010dn\u00ed kontrast',
+            royal: 'Kr\u00e1lovsk\u00e9 zlat\u00e9',
+            rainbow: 'Duhov\u00e9',
+            canasta: 'Canasta \u017eol\u00edkov\u00e9'
           },
           backs: {
-            royal_blue: 'Královská modrá mřížka',
-            crimson_crest: 'Karmínový erb',
-            emerald_geo: 'Smaragdová geometrie',
-            noble_gold: 'Ušlechtilé kovy (3 kovy)'
+            royal_blue: 'Modr\u00e1 m\u0159\u00ed\u017eka',
+            crimson_crest: 'Karm\u00ednov\u00fd erb',
+            emerald_geo: 'Smaragdov\u00fd',
+            noble_gold: 'U\u0161lechtil\u00e9 kovy',
+            crimson_filigree: 'Karm\u00ednov\u00fd ornament',
+            blue_tartan: 'Modr\u00fd tartan'
           }
         },
         en: {
           wins: 'Wins',
           moves: 'Moves',
+          cardsCount: 'Deck size',
           stock: 'Stock',
           undo: 'Undo',
           rules: 'Rules',
           hint: 'Hint',
           newGame: 'New Game',
-          autocomplete: 'Auto-Complete',
           ready: 'Tap a card to move or tap the stock pile to draw.',
           noMoves: 'No valid moves for this card.',
-          multiTarget: 'Multiple moves available – choose via the signpost.',
+          multiTarget: 'Multiple targets available \u2013 tap a highlighted destination.',
           hintStock: 'Hint: Draw the next card from the stock pile.',
           hintRecycle: 'Hint: Recycle the waste pile back to stock.',
           hintMove: 'Hint: Move {card} to {target}.',
@@ -1098,73 +1194,102 @@
           targetFoundation: 'foundation pile',
           targetColumn: 'column {col}',
           restarted: 'Current deal restarted from the beginning.',
-          newDealt: 'New game dealt.',
-          autoCompleting: 'Auto-completing won game…',
-          settingsTitle: 'Settings',
+          newDealt: 'New game dealt (52 cards).',
+          autoCompleting: 'All tableau cards face up \u2013 auto-completing game\u2026',
+          winsReset: 'Win counter has been reset.',
+          settingsTitle: 'Game Settings',
           langTitle: 'Jazyk / Language',
           facesTitle: 'Card Face Style',
           backsTitle: 'Card Back Pattern',
-          royalTitle: 'Master Reward',
-          royalName: '👑 Royal Gold Edition',
-          royalLocked: 'Unlocks at 5 wins',
-          royalUnlocked: 'Unlocked – tap to activate',
-          royalActive: 'Royal Gold mode active',
-          unlockedAt: 'At {n} wins',
+          royalTitle: 'Master Edition',
+          royalName: 'Royal Gold Edition',
+          royalActive: 'Royal Gold active',
+          royalReady: 'Unlocked (tap)',
           unlockedFree: 'Default',
-          newModalTitle: 'New or Restart Game',
-          optNewTitle: '🃏 Deal New Game',
-          optNewDesc: 'Shuffles the deck and deals a brand new game.',
-          optRestartTitle: '🔄 Restart This Deal',
-          optRestartDesc: 'Resets this exact deal back to its initial layout.',
-          winTitle: 'Victory!',
+          settingsUnlockInfo: '<strong>Unlock Rewards:</strong> 1 win = Tinted Faces, 3 = Crimson Crest, 5 = Night Contrast, 7 = Emerald Back, 10 = Royal Gold Faces, 13 = Noble Metals, 17 = Rainbow Faces, 20 = Crimson Filigree, 30 = Blue Tartan, 40 = Canasta Rummy, 52 = <strong>Royal Gold Edition</strong>.',
+          restartBtn: '\u21bb Restart this deal',
+          saveCloseBtn: 'Save and close',
+          newModalTitle: 'New Game',
+          optNewTitle: 'Deal new game',
+          optRestartTitle: '\u21bb Restart this deal',
+          cancelBtn: 'Cancel',
           winHeading: 'Congratulations!',
           winSummary: 'Completed in {moves} moves. Total wins: {wins}.',
           winNewBtn: 'Play Next Deal',
-          winUnlockNew: '🎉 New visual reward unlocked in Settings!',
-          rulesTitle: 'Rules & Controls',
+          winUnlockNewHtml: 'New reward unlocked & applied in <span id="win-open-settings" class="unlock-link">Settings</span>!',
+          rulesTitle: 'How to Play Solitaire',
+          rulesUnderstandBtn: 'Got it, play',
           rulesHtml: `
-            <p><strong>Goal:</strong> Build all 4 foundation piles up in suit from <strong>Ace (A)</strong> to <strong>King (K)</strong>.</p>
-            <ul class="rules-list">
-              <li><strong>Tableau (7 columns):</strong> Build down in alternating colors (<strong>Red</strong> on <strong>Black</strong>).</li>
-              <li><strong>Empty Column:</strong> Only a <strong>King (K)</strong> (or stack led by a King) can fill an empty column.</li>
-              <li><strong>Stock Pile:</strong> Deals 1 card at a time with unlimited passes.</li>
-              <li><strong>Foundations:</strong> You can move the top card from any foundation pile back onto the tableau.</li>
-              <li><strong>Visual Signpost:</strong> When a card has 2+ valid targets, glowing directional arrows appear so you can pick the exact destination with a single tap.</li>
-              <li><strong>Rewards:</strong> Win games to unlock new card faces, backs, and the <em>Royal Gold Edition</em>.</li>
-            </ul>
-            <div class="author-footer">© 2026 Ondrandy</div>
+            <p>The goal is to build all <strong>52 cards</strong> (4 suits of 13 ranks) onto the 4 top foundation piles ascending from <strong>Ace (A)</strong> to <strong>King (K)</strong>.</p>
+            <p><strong>Controls & Tools:</strong></p>
+            <div class="info-box-gray">
+              <ul class="rules-list">
+                <li><strong>Tableau (7 columns):</strong> Build down (K, Q, J, 10\u2026 2) in alternating <strong>Red</strong> and <strong>Black</strong> colors.</li>
+                <li><strong>Empty Column:</strong> Only a <strong>King (K)</strong> (or stack led by a King) can fill an empty column.</li>
+                <li><strong>Foundations:</strong> Default order is Hearts, Diamonds, Spades, Clubs. When dragging manually, you can drop your first Ace onto any empty foundation slot.</li>
+                <li><strong>Tap to Move:</strong> Unambiguous moves happen immediately. When multiple targets exist, all valid destinations highlight for your choice.</li>
+              </ul>
+            </div>
+            <div class="info-box-green">
+              <strong>Automatic Game Completion:</strong><br/>
+              As soon as all tableau cards are face up, the game automatically cycles the stock and finishes the deal without pressing any extra button.
+            </div>
+            <p class="text-danger"><strong>Note:</strong> Once a game is won, move history is locked and Undo is disabled.</p>
+            <p class="text-amber"><strong>Rewards:</strong> Wins unlock Tinted Faces (1), Crimson Crest (3), Night Contrast (5), Emerald Back (7), Royal Gold Faces (10), Noble Metals (13), Rainbow Faces (17), Crimson Filigree (20), Blue Tartan (30), Canasta Rummy (40), and Royal Gold Edition (52).</p>
           `,
+          suitNames: {
+            spades: 'Spades',
+            hearts: 'Hearts',
+            clubs: 'Clubs',
+            diamonds: 'Diamonds'
+          },
           faces: {
-            classic: 'High-Contrast White',
-            tinted: 'Soft Suit-Tinted',
-            dark: 'Night High-Contrast',
-            royal: 'Royal Dark & Gold'
+            classic: 'High-Contrast',
+            tinted: 'Soft Tinted',
+            dark: 'Night Contrast',
+            royal: 'Royal Gold',
+            rainbow: 'Rainbow',
+            canasta: 'Canasta Rummy'
           },
           backs: {
-            royal_blue: 'Royal Blue Lattice',
+            royal_blue: 'Blue Lattice',
             crimson_crest: 'Crimson Crest',
-            emerald_geo: 'Emerald Geometry',
-            noble_gold: 'Noble Metals (Tri-Metal)'
+            emerald_geo: 'Emerald Back',
+            noble_gold: 'Noble Metals',
+            crimson_filigree: 'Crimson Filigree',
+            blue_tartan: 'Blue Tartan'
           }
         }
       };
 
+      function formatWinsLabel(n, lang) {
+        if (lang === 'cs') {
+          if (n === 1) return '1 v\u00fdhra';
+          if (n >= 2 && n <= 4) return `${n} v\u00fdhry`;
+          return `${n} v\u00fdher`;
+        }
+        return n === 1 ? '1 win' : `${n} wins`;
+      }
+
       const FACE_THEMES = [
         { id: 'classic', req: 0 },
         { id: 'tinted', req: 1 },
-        { id: 'dark', req: 3 },
-        { id: 'royal', req: 5 }
+        { id: 'dark', req: 5 },
+        { id: 'royal', req: 10 },
+        { id: 'rainbow', req: 17 },
+        { id: 'canasta', req: 40 }
       ];
 
       const BACK_THEMES = [
         { id: 'royal_blue', req: 0 },
-        { id: 'crimson_crest', req: 2 },
-        { id: 'emerald_geo', req: 4 },
-        { id: 'noble_gold', req: 5 }
+        { id: 'crimson_crest', req: 3 },
+        { id: 'emerald_geo', req: 7 },
+        { id: 'noble_gold', req: 13 },
+        { id: 'crimson_filigree', req: 20 },
+        { id: 'blue_tartan', req: 30 }
       ];
 
-      const SUITS = ['♠', '♥', '♣', '♦'];
-      const RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      const ROYAL_GOLD_REQ = 52;
 
       function rankLabel(r) {
         if (r === 1) return 'A';
@@ -1175,7 +1300,7 @@
       }
 
       function isRed(suit) {
-        return suit === '♥' || suit === '♦';
+        return suit === 'hearts' || suit === 'diamonds';
       }
 
       function detectLang() {
@@ -1192,6 +1317,7 @@
         stock: [],
         waste: [],
         foundations: [[], [], [], []],
+        foundationSuits: [...DEFAULT_FOUNDATION_SUITS],
         tableau: [[], [], [], [], [], [], []],
         initialDeal: null,
         history: [],
@@ -1199,8 +1325,8 @@
         isGameOver: false
       };
 
-      let selection = null; // { source: 'waste'|'foundation'|'tableau', index: number, cardIndex: number, targets: Array }
-      let hintHighlight = null; // { source, index, cardIndex }
+      let selection = null;
+      let hintHighlight = null;
       let autoCompleting = false;
 
       function t(key, vars = {}) {
@@ -1211,10 +1337,8 @@
         return str;
       }
 
-      function setStatus(msg, highlight = false) {
-        const el = document.getElementById('status-bar');
-        el.textContent = msg;
-        el.classList.toggle('highlight', highlight);
+      function setStatus(msg) {
+        document.getElementById('status-bar').textContent = msg;
       }
 
       function cloneBoardState() {
@@ -1222,6 +1346,7 @@
           stock: state.stock,
           waste: state.waste,
           foundations: state.foundations,
+          foundationSuits: state.foundationSuits,
           tableau: state.tableau,
           moves: state.moves
         }));
@@ -1238,6 +1363,7 @@
             stock: state.stock,
             waste: state.waste,
             foundations: state.foundations,
+            foundationSuits: state.foundationSuits,
             tableau: state.tableau,
             initialDeal: state.initialDeal,
             history: state.history,
@@ -1254,6 +1380,9 @@
           const saved = JSON.parse(raw);
           if (!saved || !Array.isArray(saved.tableau)) return false;
           Object.assign(state, saved);
+          if (!Array.isArray(state.foundationSuits) || state.foundationSuits.length !== 4) {
+            state.foundationSuits = [...DEFAULT_FOUNDATION_SUITS];
+          }
           if (state.isGameOver) {
             state.history = [];
           }
@@ -1266,7 +1395,7 @@
       function createDeck() {
         const deck = [];
         let id = 1;
-        for (const suit of SUITS) {
+        for (const suit of ALL_SUITS) {
           for (const rank of RANKS) {
             deck.push({ id: id++, suit, rank, faceUp: false });
           }
@@ -1294,6 +1423,7 @@
         state.stock = deck;
         state.waste = [];
         state.foundations = [[], [], [], []];
+        state.foundationSuits = [...DEFAULT_FOUNDATION_SUITS];
         state.tableau = tableau;
         state.moves = 0;
         state.history = [];
@@ -1302,6 +1432,7 @@
           stock: state.stock,
           waste: [],
           foundations: [[], [], [], []],
+          foundationSuits: [...DEFAULT_FOUNDATION_SUITS],
           tableau: state.tableau
         }));
         saveToStorage();
@@ -1321,6 +1452,7 @@
         state.stock = copy.stock;
         state.waste = copy.waste;
         state.foundations = copy.foundations;
+        state.foundationSuits = copy.foundationSuits || [...DEFAULT_FOUNDATION_SUITS];
         state.tableau = copy.tableau;
         state.moves = 0;
         state.history = [];
@@ -1342,6 +1474,7 @@
         state.stock = prev.stock;
         state.waste = prev.waste;
         state.foundations = prev.foundations;
+        state.foundationSuits = prev.foundationSuits || [...DEFAULT_FOUNDATION_SUITS];
         state.tableau = prev.tableau;
         state.moves = prev.moves;
         selection = null;
@@ -1351,10 +1484,31 @@
         setStatus(t('ready'));
       }
 
-      function canMoveToFoundation(card, fIdx) {
+      function isSuitClaimedElsewhere(suit, excludeIdx) {
+        for (let i = 0; i < 4; i++) {
+          if (i !== excludeIdx && state.foundations[i].length > 0 && state.foundations[i][0].suit === suit) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function canDropManualToFoundation(card, fIdx) {
         const pile = state.foundations[fIdx];
         if (pile.length === 0) {
-          return card.rank === 1 && SUITS[fIdx] === card.suit;
+          return card.rank === 1 && !isSuitClaimedElsewhere(card.suit, fIdx);
+        }
+        const top = pile[pile.length - 1];
+        return top.suit === card.suit && card.rank === top.rank + 1;
+      }
+
+      function canAutoMoveToFoundation(card, fIdx) {
+        const pile = state.foundations[fIdx];
+        if (pile.length === 0) {
+          if (card.rank !== 1 || isSuitClaimedElsewhere(card.suit, fIdx)) return false;
+          if (state.foundationSuits[fIdx] === card.suit) return true;
+          const designatedIdx = state.foundationSuits.indexOf(card.suit);
+          return designatedIdx !== -1 && state.foundations[designatedIdx].length > 0;
         }
         const top = pile[pile.length - 1];
         return top.suit === card.suit && card.rank === top.rank + 1;
@@ -1370,7 +1524,7 @@
         return isRed(top.suit) !== isRed(card.suit) && card.rank === top.rank - 1;
       }
 
-      function getValidTargets(source, index, cardIndex) {
+      function getValidTargets(source, index, cardIndex, isManualDrag = false) {
         let cards = [];
         if (source === 'waste') {
           if (state.waste.length === 0) return [];
@@ -1388,16 +1542,17 @@
         const leadCard = cards[0];
         const targets = [];
 
-        // Foundations only accept single top card
         if (cards.length === 1 && source !== 'foundation') {
           for (let f = 0; f < 4; f++) {
-            if (canMoveToFoundation(leadCard, f)) {
+            const allowed = isManualDrag
+              ? canDropManualToFoundation(leadCard, f)
+              : canAutoMoveToFoundation(leadCard, f);
+            if (allowed) {
               targets.push({ type: 'foundation', index: f });
             }
           }
         }
 
-        // Tableau columns
         for (let c = 0; c < 7; c++) {
           if (source === 'tableau' && c === index) continue;
           if (canMoveToTableau(leadCard, c)) {
@@ -1406,6 +1561,16 @@
         }
 
         return targets;
+      }
+
+      function syncFoundationSuitSlot(fIdx, placedSuit) {
+        const oldSuitAtSlot = state.foundationSuits[fIdx];
+        if (oldSuitAtSlot === placedSuit) return;
+        const otherIdx = state.foundationSuits.indexOf(placedSuit);
+        state.foundationSuits[fIdx] = placedSuit;
+        if (otherIdx !== -1 && state.foundations[otherIdx].length === 0) {
+          state.foundationSuits[otherIdx] = oldSuitAtSlot;
+        }
       }
 
       function executeMove(source, index, cardIndex, target) {
@@ -1426,6 +1591,9 @@
         }
 
         if (target.type === 'foundation') {
+          if (state.foundations[target.index].length === 0) {
+            syncFoundationSuitSlot(target.index, movingCards[0].suit);
+          }
           state.foundations[target.index].push(movingCards[0]);
         } else if (target.type === 'tableau') {
           state.tableau[target.index].push(...movingCards);
@@ -1452,6 +1620,7 @@
           saveToStorage();
           renderAll();
           setStatus(t('ready'));
+          checkVictoryOrAutoComplete();
         } else if (state.waste.length > 0) {
           pushHistory();
           while (state.waste.length > 0) {
@@ -1463,6 +1632,7 @@
           saveToStorage();
           renderAll();
           setStatus(t('ready'));
+          checkVictoryOrAutoComplete();
         }
       }
 
@@ -1470,7 +1640,6 @@
         if (state.isGameOver || autoCompleting) return;
         hintHighlight = null;
 
-        // If tapping the already selected card -> deselect
         if (selection && selection.source === source && selection.index === index && selection.cardIndex === cardIndex) {
           selection = null;
           renderAll();
@@ -1478,7 +1647,6 @@
           return;
         }
 
-        // Check if tapped card is a valid target for currently selected card
         if (selection) {
           const matchingTarget = selection.targets.find(tg => {
             if (tg.type === 'tableau' && source === 'tableau' && tg.index === index) return true;
@@ -1492,37 +1660,34 @@
           }
         }
 
-        const targets = getValidTargets(source, index, cardIndex);
+        const targets = getValidTargets(source, index, cardIndex, false);
         if (targets.length === 0) {
           selection = null;
           renderAll();
-          setStatus(t('noMoves'), true);
+          setStatus(t('noMoves'));
           return;
         }
 
         if (targets.length === 1) {
-          // Single valid destination -> move immediately!
           executeMove(source, index, cardIndex, targets[0]);
           setStatus(t('ready'));
           return;
         }
 
-        // 2+ valid destinations -> activate Visual Signpost (Rozcestník)
         selection = { source, index, cardIndex, targets };
         renderAll();
-        setStatus(t('multiTarget'), true);
+        setStatus(t('multiTarget'));
       }
 
       function canAutoComplete() {
         if (state.isGameOver || autoCompleting) return false;
-        if (state.stock.length > 0 || state.waste.length > 0) return false;
         for (const col of state.tableau) {
           for (const c of col) {
             if (!c.faceUp) return false;
           }
         }
-        const totalTableau = state.tableau.reduce((acc, c) => acc + c.length, 0);
-        return totalTableau > 0;
+        const foundationTotal = state.foundations.reduce((acc, p) => acc + p.length, 0);
+        return foundationTotal < 52;
       }
 
       function checkVictoryOrAutoComplete() {
@@ -1531,47 +1696,97 @@
           handleVictory();
           return;
         }
-        const acBar = document.getElementById('autocomplete-bar');
-        acBar.classList.toggle('visible', canAutoComplete());
+        if (canAutoComplete()) {
+          runAutoComplete();
+        }
       }
 
       function runAutoComplete() {
-        if (!canAutoComplete()) return;
+        if (autoCompleting) return;
         autoCompleting = true;
         selection = null;
         hintHighlight = null;
-        document.getElementById('autocomplete-bar').classList.remove('visible');
-        setStatus(t('autoCompleting'), true);
+        setStatus(t('autoCompleting'));
+
+        let stallCycles = 0;
 
         const step = () => {
           let moved = false;
-          for (let c = 0; c < 7; c++) {
-            const col = state.tableau[c];
-            if (col.length === 0) continue;
-            const topCard = col[col.length - 1];
+
+          if (state.waste.length > 0) {
+            const wTop = state.waste[state.waste.length - 1];
             for (let f = 0; f < 4; f++) {
-              if (canMoveToFoundation(topCard, f)) {
-                col.pop();
-                state.foundations[f].push(topCard);
+              if (canAutoMoveToFoundation(wTop, f)) {
+                state.waste.pop();
+                if (state.foundations[f].length === 0) syncFoundationSuitSlot(f, wTop.suit);
+                state.foundations[f].push(wTop);
                 state.moves += 1;
                 moved = true;
+                stallCycles = 0;
                 break;
               }
             }
-            if (moved) break;
           }
+
+          if (!moved) {
+            let bestCol = -1;
+            let bestF = -1;
+            let lowestRank = 99;
+            for (let c = 0; c < 7; c++) {
+              const col = state.tableau[c];
+              if (col.length === 0) continue;
+              const topCard = col[col.length - 1];
+              for (let f = 0; f < 4; f++) {
+                if (canAutoMoveToFoundation(topCard, f) && topCard.rank < lowestRank) {
+                  lowestRank = topCard.rank;
+                  bestCol = c;
+                  bestF = f;
+                }
+              }
+            }
+            if (bestCol !== -1) {
+              const card = state.tableau[bestCol].pop();
+              if (state.foundations[bestF].length === 0) syncFoundationSuitSlot(bestF, card.suit);
+              state.foundations[bestF].push(card);
+              state.moves += 1;
+              moved = true;
+              stallCycles = 0;
+            }
+          }
+
+          if (!moved && (state.stock.length > 0 || state.waste.length > 0)) {
+            if (state.stock.length > 0) {
+              const card = state.stock.pop();
+              card.faceUp = true;
+              state.waste.push(card);
+              state.moves += 1;
+              moved = true;
+              stallCycles += 1;
+            } else if (state.waste.length > 0) {
+              while (state.waste.length > 0) {
+                const c = state.waste.pop();
+                c.faceUp = false;
+                state.stock.push(c);
+              }
+              state.moves += 1;
+              moved = true;
+              stallCycles += 1;
+            }
+          }
+
           renderAll();
           const total = state.foundations.reduce((acc, p) => acc + p.length, 0);
           if (total === 52) {
             autoCompleting = false;
             handleVictory();
-          } else if (moved) {
-            setTimeout(step, 75);
+          } else if (moved && stallCycles <= 60) {
+            setTimeout(step, 55);
           } else {
             autoCompleting = false;
+            setStatus(t('ready'));
           }
         };
-        setTimeout(step, 80);
+        setTimeout(step, 100);
       }
 
       function handleVictory() {
@@ -1581,12 +1796,26 @@
         state.history = [];
         selection = null;
         hintHighlight = null;
-        document.getElementById('autocomplete-bar').classList.remove('visible');
 
-        const unlockedSomething =
-          FACE_THEMES.some(f => f.req > prevWins && f.req <= state.wins) ||
-          BACK_THEMES.some(b => b.req > prevWins && b.req <= state.wins) ||
-          (prevWins < 5 && state.wins >= 5);
+        let unlockedSomething = false;
+
+        const newFace = FACE_THEMES.find(f => f.req > prevWins && f.req <= state.wins);
+        if (newFace) {
+          state.faceTheme = newFace.id;
+          unlockedSomething = true;
+        }
+
+        const newBack = BACK_THEMES.find(b => b.req > prevWins && b.req <= state.wins);
+        if (newBack) {
+          state.backTheme = newBack.id;
+          unlockedSomething = true;
+        }
+
+        if (prevWins < ROYAL_GOLD_REQ && state.wins >= ROYAL_GOLD_REQ) {
+          state.royalGold = true;
+          state.faceTheme = 'royal';
+          unlockedSomething = true;
+        }
 
         saveToStorage();
         renderAll();
@@ -1595,7 +1824,21 @@
           moves: state.moves,
           wins: state.wins
         });
-        document.getElementById('win-unlock-msg').textContent = unlockedSomething ? t('winUnlockNew') : '';
+
+        const unlockMsgEl = document.getElementById('win-unlock-msg');
+        if (unlockedSomething) {
+          unlockMsgEl.innerHTML = t('winUnlockNewHtml');
+          const settingsLink = document.getElementById('win-open-settings');
+          if (settingsLink) {
+            settingsLink.addEventListener('click', () => {
+              closeModal('modal-win');
+              openModal('modal-settings');
+            });
+          }
+        } else {
+          unlockMsgEl.innerHTML = '';
+        }
+
         openModal('modal-win');
       }
 
@@ -1603,26 +1846,24 @@
         if (state.isGameOver || autoCompleting) return;
         selection = null;
 
-        // 1. Check tableau moves that uncover hidden cards or move to foundation
         for (let c = 0; c < 7; c++) {
           const col = state.tableau[c];
           for (let i = 0; i < col.length; i++) {
             if (!col[i].faceUp) continue;
-            // Skip moving a King from bottom of empty-backed column to another empty column
             if (i === 0 && col[i].rank === 13) {
-              const targets = getValidTargets('tableau', c, i).filter(tg => tg.type === 'foundation');
+              const targets = getValidTargets('tableau', c, i, false).filter(tg => tg.type === 'foundation');
               if (targets.length > 0) {
                 hintHighlight = { source: 'tableau', index: c, cardIndex: i };
                 renderAll();
                 setStatus(t('hintMove', {
-                  card: `${rankLabel(col[i].rank)}${col[i].suit}`,
+                  card: `${rankLabel(col[i].rank)} (${I18N[state.lang].suitNames[col[i].suit]})`,
                   target: t('targetFoundation')
-                }), true);
+                }));
                 return;
               }
               continue;
             }
-            const targets = getValidTargets('tableau', c, i);
+            const targets = getValidTargets('tableau', c, i, false);
             if (targets.length > 0) {
               const tg = targets[0];
               const targetLabel = tg.type === 'foundation'
@@ -1631,18 +1872,17 @@
               hintHighlight = { source: 'tableau', index: c, cardIndex: i };
               renderAll();
               setStatus(t('hintMove', {
-                card: `${rankLabel(col[i].rank)}${col[i].suit}`,
+                card: `${rankLabel(col[i].rank)} (${I18N[state.lang].suitNames[col[i].suit]})`,
                 target: targetLabel
-              }), true);
+              }));
               return;
             }
           }
         }
 
-        // 2. Check waste card
         if (state.waste.length > 0) {
           const wCard = state.waste[state.waste.length - 1];
-          const targets = getValidTargets('waste', 0, state.waste.length - 1);
+          const targets = getValidTargets('waste', 0, state.waste.length - 1, false);
           if (targets.length > 0) {
             const tg = targets[0];
             const targetLabel = tg.type === 'foundation'
@@ -1651,21 +1891,20 @@
             hintHighlight = { source: 'waste', index: 0, cardIndex: state.waste.length - 1 };
             renderAll();
             setStatus(t('hintMove', {
-              card: `${rankLabel(wCard.rank)}${wCard.suit}`,
+              card: `${rankLabel(wCard.rank)} (${I18N[state.lang].suitNames[wCard.suit]})`,
               target: targetLabel
-            }), true);
+            }));
             return;
           }
         }
 
-        // 3. Stock pile
         renderAll();
         if (state.stock.length > 0) {
-          setStatus(t('hintStock'), true);
+          setStatus(t('hintStock'));
         } else if (state.waste.length > 0) {
-          setStatus(t('hintRecycle'), true);
+          setStatus(t('hintRecycle'));
         } else {
-          setStatus(t('noHints'), true);
+          setStatus(t('noHints'));
         }
       }
 
@@ -1699,7 +1938,37 @@
               <circle cx="30" cy="43" r="5.5" fill="url(#metal-yellow-gold)"/>
             </svg>`;
         }
-        // Default: royal_blue
+        if (themeId === 'crimson_filigree') {
+          return `
+            <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
+              <rect width="60" height="86" rx="5" fill="#ffffff"/>
+              <rect x="2.5" y="2.5" width="55" height="81" rx="3.5" fill="url(#pat-crimson-dots)"/>
+              <path d="M12 16 C12 8, 25 8, 30 15 C35 8, 48 8, 48 16 C54 19, 54 31, 47 36 C55 40, 55 46, 47 50 C54 55, 54 67, 48 70 C48 78, 35 78, 30 71 C25 78, 12 78, 12 70 C6 67, 6 55, 13 50 C5 46, 5 40, 13 36 C6 31, 6 19, 12 16 Z"
+                    fill="#e11d48" stroke="#ffffff" stroke-width="1.4"/>
+              <path d="M16 18 C20 13, 26 16, 26 22 C26 27, 19 28, 17 24 M44 18 C40 13, 34 16, 34 22 C34 27, 41 28, 43 24
+                       M16 68 C20 73, 26 70, 26 64 C26 59, 19 58, 17 62 M44 68 C40 73, 34 70, 34 64 C34 59, 41 58, 43 62"
+                    fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+              <polygon points="30,17 25,29 35,29" fill="#ffffff" opacity="0.9"/>
+              <polygon points="30,69 25,57 35,57" fill="#ffffff" opacity="0.9"/>
+              <circle cx="30" cy="13.5" r="2.2" fill="#e11d48" stroke="#ffffff" stroke-width="1"/>
+              <circle cx="30" cy="72.5" r="2.2" fill="#e11d48" stroke="#ffffff" stroke-width="1"/>
+              <circle cx="30" cy="43" r="14" fill="#ffffff" stroke="#e11d48" stroke-width="1.4"/>
+              <circle cx="30" cy="43" r="11.5" fill="#e11d48"/>
+              <polygon points="30,33 34,43 30,53 26,43" fill="none" stroke="#ffffff" stroke-width="1.1"/>
+              <polygon points="20,43 30,39 40,43 30,47" fill="none" stroke="#ffffff" stroke-width="1.1"/>
+              <polygon points="23,36 33,40 37,50 27,46" fill="none" stroke="#ffffff" stroke-width="1.1"/>
+              <polygon points="37,36 33,46 23,50 27,40" fill="none" stroke="#ffffff" stroke-width="1.1"/>
+              <circle cx="30" cy="43" r="4.5" fill="#ffffff"/>
+              <circle cx="30" cy="43" r="2.1" fill="#e11d48"/>
+            </svg>`;
+        }
+        if (themeId === 'blue_tartan') {
+          return `
+            <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
+              <rect width="60" height="86" rx="5" fill="url(#pat-blue-tartan)"/>
+              <rect x="0.75" y="0.75" width="58.5" height="84.5" rx="4.5" fill="none" stroke="#bae6fd" stroke-width="1"/>
+            </svg>`;
+        }
         return `
           <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
             <rect width="60" height="86" rx="5" fill="#1d4ed8"/>
@@ -1710,10 +1979,14 @@
       }
 
       function createCardElement(card, source, index, cardIndex, topPx = 0) {
+        const isLightBack = state.backTheme === 'crimson_filigree' || state.backTheme === 'blue_tartan';
         const el = document.createElement('div');
-        el.className = 'card ' + (card.faceUp ? 'face-up ' + (isRed(card.suit) ? 'red' : 'black') : 'face-down');
+        el.className = 'card ' + (card.faceUp ? 'face-up ' + (isRed(card.suit) ? 'red' : 'black') : ('face-down' + (isLightBack ? ' light-back' : '')));
         el.style.top = `${topPx}px`;
         el.style.zIndex = String(cardIndex + 2);
+        el.dataset.source = source;
+        el.dataset.index = String(index);
+        el.dataset.cardIndex = String(cardIndex);
 
         if (!card.faceUp) {
           el.innerHTML = renderCardBackSVG(state.backTheme);
@@ -1721,16 +1994,62 @@
         }
 
         const rText = rankLabel(card.rank);
-        el.innerHTML = `
-          <div class="card-top-strip">
-            <span class="card-rank-sm">${rText}</span>
-            <span class="card-suit-sm">${card.suit}</span>
-          </div>
-          <div class="card-center-hero">
-            <span class="card-rank-xl">${rText}</span>
-            <span class="card-suit-xl">${card.suit}</span>
-          </div>
-        `;
+        const sIcon = suitSVG(card.suit);
+
+        // Theme-specific card face rendering
+        if (state.faceTheme === 'rainbow') {
+          const rb = RAINBOW_BY_RANK[card.rank] || RAINBOW_BY_RANK[1];
+          el.style.background = rb.bg;
+          el.style.borderColor = rb.border;
+          el.style.color = isRed(card.suit) ? rb.redColor : rb.blackColor;
+          el.innerHTML = `
+            <div class="card-top-strip">
+              <span class="card-rank-sm">${rText}</span>
+              <span class="card-suit-sm">${sIcon}</span>
+            </div>
+            <div class="card-center-hero">
+              <span class="card-rank-xl">${rText}</span>
+              <span class="card-suit-xl">${sIcon}</span>
+            </div>
+          `;
+        } else if (state.faceTheme === 'canasta') {
+          // Classic Canasta / Rummy double-ended bordered card face
+          const isCourt = card.rank >= 11;
+          const midContent = isCourt
+            ? `<div class="canasta-pip-row">${sIcon}${sIcon}</div>
+               <div class="canasta-center-rank">${rText}</div>
+               <div class="canasta-pip-row" style="transform:rotate(180deg)">${sIcon}${sIcon}</div>`
+            : `<div class="canasta-pip-row">${sIcon}</div>
+               <div class="canasta-center-rank">${rText}</div>
+               <div class="canasta-pip-row" style="transform:rotate(180deg)">${sIcon}</div>`;
+
+          el.innerHTML = `
+            <div class="canasta-frame">
+              <div class="canasta-corner-top">
+                <span class="card-rank-sm">${rText}</span>
+                <span class="card-suit-sm">${sIcon}</span>
+              </div>
+              <div class="canasta-mid">
+                ${midContent}
+              </div>
+              <div class="canasta-corner-bottom">
+                <span class="card-rank-sm">${rText}</span>
+                <span class="card-suit-sm">${sIcon}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          el.innerHTML = `
+            <div class="card-top-strip">
+              <span class="card-rank-sm">${rText}</span>
+              <span class="card-suit-sm">${sIcon}</span>
+            </div>
+            <div class="card-center-hero">
+              <span class="card-rank-xl">${rText}</span>
+              <span class="card-suit-xl">${sIcon}</span>
+            </div>
+          `;
+        }
 
         const isSelected = selection &&
           selection.source === source &&
@@ -1750,31 +2069,27 @@
           el.classList.add('hint-glow');
         }
 
-        // Add floating Signpost directional chips on lead selected card
-        if (selection && selection.source === source && selection.index === index && selection.cardIndex === cardIndex && selection.targets.length > 1) {
-          const picker = document.createElement('div');
-          picker.className = 'signpost-picker';
-          selection.targets.forEach((tg) => {
-            const chip = document.createElement('button');
-            chip.className = 'signpost-dir-btn';
-            if (tg.type === 'foundation') {
-              chip.textContent = `⬆ ${SUITS[tg.index]}`;
-            } else {
-              const arrow = (source === 'tableau' && tg.index < index) ? '↙' : (source === 'tableau' && tg.index > index) ? '↘' : '⬇';
-              chip.textContent = `${arrow} #${tg.index + 1}`;
-            }
-            chip.addEventListener('pointerdown', (ev) => {
-              ev.stopPropagation();
-              executeMove(selection.source, selection.index, selection.cardIndex, tg);
-              setStatus(t('ready'));
-            });
-            picker.appendChild(chip);
-          });
-          el.appendChild(picker);
-        }
-
         attachCardInteraction(el, source, index, cardIndex);
         return el;
+      }
+
+      function setSourceCardsHidden(source, index, cardIndex, hidden) {
+        if (source === 'tableau') {
+          const colEl = document.querySelector(`.column[data-col="${index}"]`);
+          if (!colEl) return;
+          colEl.querySelectorAll('.card').forEach((cardEl) => {
+            const idx = Number(cardEl.dataset.cardIndex);
+            if (idx >= cardIndex) {
+              cardEl.classList.toggle('dragging-hidden', hidden);
+            }
+          });
+        } else if (source === 'waste') {
+          const wasteCard = document.querySelector('#slot-waste .card');
+          if (wasteCard) wasteCard.classList.toggle('dragging-hidden', hidden);
+        } else if (source === 'foundation') {
+          const fCard = document.querySelector(`#slot-f${index} .card`);
+          if (fCard) fCard.classList.toggle('dragging-hidden', hidden);
+        }
       }
 
       function attachCardInteraction(el, source, index, cardIndex) {
@@ -1793,14 +2108,14 @@
           const onMove = (mv) => {
             const dx = mv.clientX - startX;
             const dy = mv.clientY - startY;
-            if (!dragging && Math.hypot(dx, dy) > 10) {
+            if (!dragging && Math.hypot(dx, dy) > 8) {
               dragging = true;
-              const targets = getValidTargets(source, index, cardIndex);
-              if (targets.length === 0) return;
-              selection = { source, index, cardIndex, targets };
+              const manualTargets = getValidTargets(source, index, cardIndex, true);
+              selection = { source, index, cardIndex, targets: manualTargets };
               renderSignpostOverlaysOnly();
 
-              // Create floating stack ghost
+              setSourceCardsHidden(source, index, cardIndex, true);
+
               const rect = el.getBoundingClientRect();
               dragGhost = document.createElement('div');
               dragGhost.style.position = 'fixed';
@@ -1808,7 +2123,7 @@
               dragGhost.style.left = `${rect.left}px`;
               dragGhost.style.top = `${rect.top}px`;
               dragGhost.style.pointerEvents = 'none';
-              dragGhost.style.opacity = '0.92';
+              dragGhost.style.opacity = '0.96';
               dragGhost.style.transform = 'scale(1.05)';
 
               if (source === 'tableau') {
@@ -1847,7 +2162,8 @@
               return;
             }
 
-            // Drop detection over valid targets
+            setSourceCardsHidden(source, index, cardIndex, false);
+
             if (selection && selection.targets.length > 0) {
               const dropEl = document.elementFromPoint(up.clientX, up.clientY);
               if (dropEl) {
@@ -1872,11 +2188,11 @@
                   }
                 }
               }
-              renderAll();
-              if (selection.targets.length > 1) {
-                setStatus(t('multiTarget'), true);
-              }
             }
+
+            selection = null;
+            renderAll();
+            setStatus(t('ready'));
           };
 
           window.addEventListener('pointermove', onMove);
@@ -1884,10 +2200,9 @@
         });
       }
 
-      function addSignpostBadge(container, targetObj, badgeSymbol = '⬇') {
+      function addSignpostHighlight(container, targetObj) {
         const overlay = document.createElement('div');
         overlay.className = 'signpost-target';
-        overlay.innerHTML = `<div class="signpost-badge">${badgeSymbol}</div>`;
         overlay.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
           if (!selection) return;
@@ -1904,16 +2219,16 @@
         selection.targets.forEach(tg => {
           if (tg.type === 'foundation') {
             const fSlot = document.getElementById(`slot-f${tg.index}`);
-            if (fSlot) addSignpostBadge(fSlot, tg, '⬆');
+            if (fSlot) addSignpostHighlight(fSlot, tg);
           } else if (tg.type === 'tableau') {
             const colEl = document.querySelector(`.column[data-col="${tg.index}"]`);
             if (!colEl) return;
             const cards = colEl.querySelectorAll('.card');
             if (cards.length > 0) {
-              addSignpostBadge(cards[cards.length - 1], tg, '⬇');
+              addSignpostHighlight(cards[cards.length - 1], tg);
             } else {
               const emptyBox = colEl.querySelector('.column-empty-target');
-              if (emptyBox) addSignpostBadge(emptyBox, tg, 'K');
+              if (emptyBox) addSignpostHighlight(emptyBox, tg);
             }
           }
         });
@@ -1922,18 +2237,14 @@
       function renderAll() {
         applyThemeClasses();
 
-        // Update UI strings & counters
         document.getElementById('lbl-wins').textContent = t('wins');
-        document.getElementById('lbl-moves').textContent = t('moves');
         document.getElementById('lbl-stock').textContent = t('stock');
         document.getElementById('lbl-undo').textContent = t('undo');
         document.getElementById('lbl-rules').textContent = t('rules');
         document.getElementById('lbl-hint').textContent = t('hint');
         document.getElementById('lbl-new').textContent = t('newGame');
-        document.getElementById('lbl-autocomplete').textContent = t('autocomplete');
 
         document.getElementById('val-wins').textContent = state.wins;
-        document.getElementById('val-moves').textContent = state.moves;
         document.getElementById('val-stock').textContent = state.stock.length;
 
         const undoBtn = document.getElementById('btn-undo');
@@ -1946,7 +2257,7 @@
           const backCard = createCardElement({ faceUp: false }, 'stock', 0, 0, 0);
           stockEl.appendChild(backCard);
         } else if (state.waste.length > 0) {
-          stockEl.innerHTML = '<span class="stock-recycle">↻</span>';
+          stockEl.innerHTML = '<span class="stock-recycle">\u21bb</span>';
         }
 
         // Render Waste
@@ -1960,7 +2271,8 @@
         // Render Foundations
         for (let f = 0; f < 4; f++) {
           const fEl = document.getElementById(`slot-f${f}`);
-          fEl.innerHTML = '';
+          const slotSuit = state.foundationSuits[f] || DEFAULT_FOUNDATION_SUITS[f];
+          fEl.innerHTML = `<div style="width:22px;height:22px;opacity:0.22;">${suitSVG(slotSuit)}</div>`;
           const pile = state.foundations[f];
           if (pile.length > 0) {
             const topF = pile[pile.length - 1];
@@ -1968,7 +2280,7 @@
           }
         }
 
-        // Render Tableau with dynamic responsive vertical offset
+        // Render Tableau
         const tabRow = document.getElementById('tableau-row');
         const availHeight = tabRow.clientHeight || 380;
         tabRow.innerHTML = '';
@@ -1985,7 +2297,6 @@
             emptyBox.textContent = 'K';
             colEl.appendChild(emptyBox);
           } else {
-            // Compute adaptive spacing so tall stacks fit cleanly on mobile screens
             const maxUsable = Math.max(180, availHeight - 88);
             const defaultFaceUpGap = 25;
             const defaultFaceDownGap = 11;
@@ -2011,8 +2322,8 @@
       }
 
       function applyThemeClasses() {
-        document.body.classList.remove('royal-gold', 'face-tinted', 'face-dark', 'face-royal');
-        if (state.royalGold && state.wins >= 5) {
+        document.body.classList.remove('royal-gold', 'face-tinted', 'face-dark', 'face-royal', 'face-rainbow', 'face-canasta');
+        if (state.royalGold && state.wins >= ROYAL_GOLD_REQ) {
           document.body.classList.add('royal-gold');
           document.getElementById('meta-theme-color').setAttribute('content', '#0f172a');
         } else {
@@ -2025,10 +2336,20 @@
 
       function renderSettingsModal() {
         document.getElementById('modal-settings-title').textContent = t('settingsTitle');
+        document.getElementById('stat-lbl-moves').textContent = t('moves');
+        document.getElementById('stat-val-moves').textContent = state.moves;
+        document.getElementById('stat-lbl-cards').textContent = t('cardsCount');
+        document.getElementById('stat-val-cards').textContent = '52';
+        document.getElementById('stat-lbl-wins').textContent = t('wins');
+        document.getElementById('stat-val-wins').textContent = state.wins;
+
         document.getElementById('lbl-lang-title').textContent = t('langTitle');
         document.getElementById('lbl-faces-title').textContent = t('facesTitle');
         document.getElementById('lbl-backs-title').textContent = t('backsTitle');
         document.getElementById('lbl-royal-title').textContent = t('royalTitle');
+        document.getElementById('settings-unlock-info').innerHTML = t('settingsUnlockInfo');
+        document.getElementById('btn-restart-deal').textContent = t('restartBtn');
+        document.getElementById('btn-close-settings').textContent = t('saveCloseBtn');
 
         document.getElementById('lang-cs').classList.toggle('active', state.lang === 'cs');
         document.getElementById('lang-en').classList.toggle('active', state.lang === 'en');
@@ -2038,11 +2359,16 @@
         facesGrid.innerHTML = '';
         FACE_THEMES.forEach(ft => {
           const unlocked = state.wins >= ft.req;
+          const active = state.faceTheme === ft.id;
+          const reqText = ft.req === 0
+            ? t('unlockedFree')
+            : (unlocked ? `\u2713 ${formatWinsLabel(ft.req, state.lang)}` : `\ud83d\udd12 ${formatWinsLabel(ft.req, state.lang)}`);
           const btn = document.createElement('button');
-          btn.className = 'unlock-card' + (state.faceTheme === ft.id ? ' active' : '') + (!unlocked ? ' locked' : '');
+          btn.className = 'unlock-card' + (active ? ' active' : '') + (!unlocked ? ' locked' : '');
           btn.innerHTML = `
-            <span class="unlock-name">${unlocked ? '✓' : '🔒'} ${I18N[state.lang].faces[ft.id]}</span>
-            <span class="unlock-req">${ft.req === 0 ? t('unlockedFree') : t('unlockedAt', { n: ft.req })}</span>
+            ${active ? '<span class="unlock-check">\u2713</span>' : ''}
+            <span class="unlock-name">${I18N[state.lang].faces[ft.id]}</span>
+            <span class="unlock-req">${reqText}</span>
           `;
           if (unlocked) {
             btn.addEventListener('click', () => {
@@ -2060,11 +2386,16 @@
         backsGrid.innerHTML = '';
         BACK_THEMES.forEach(bt => {
           const unlocked = state.wins >= bt.req;
+          const active = state.backTheme === bt.id;
+          const reqText = bt.req === 0
+            ? t('unlockedFree')
+            : (unlocked ? `\u2713 ${formatWinsLabel(bt.req, state.lang)}` : `\ud83d\udd12 ${formatWinsLabel(bt.req, state.lang)}`);
           const btn = document.createElement('button');
-          btn.className = 'unlock-card' + (state.backTheme === bt.id ? ' active' : '') + (!unlocked ? ' locked' : '');
+          btn.className = 'unlock-card' + (active ? ' active' : '') + (!unlocked ? ' locked' : '');
           btn.innerHTML = `
-            <span class="unlock-name">${unlocked ? '✓' : '🔒'} ${I18N[state.lang].backs[bt.id]}</span>
-            <span class="unlock-req">${bt.req === 0 ? t('unlockedFree') : t('unlockedAt', { n: bt.req })}</span>
+            ${active ? '<span class="unlock-check">\u2713</span>' : ''}
+            <span class="unlock-name">${I18N[state.lang].backs[bt.id]}</span>
+            <span class="unlock-req">${reqText}</span>
           `;
           if (unlocked) {
             btn.addEventListener('click', () => {
@@ -2077,15 +2408,30 @@
           backsGrid.appendChild(btn);
         });
 
-        // Royal Gold Edition
-        const royalUnlocked = state.wins >= 5;
-        const royalBanner = document.getElementById('royal-gold-toggle');
-        royalBanner.classList.toggle('locked', !royalUnlocked);
-        document.getElementById('royal-name').textContent = t('royalName');
-        document.getElementById('royal-desc').textContent = !royalUnlocked
-          ? t('royalLocked')
-          : (state.royalGold ? t('royalActive') : t('royalUnlocked'));
-        document.getElementById('royal-state').textContent = !royalUnlocked ? '🔒' : (state.royalGold ? '✨' : '👑');
+        // Royal Gold Edition tile (52 wins)
+        const royalUnlocked = state.wins >= ROYAL_GOLD_REQ;
+        const royalBox = document.getElementById('royal-gold-box');
+        royalBox.innerHTML = '';
+        const rBtn = document.createElement('button');
+        rBtn.className = 'unlock-card' + (state.royalGold ? ' active' : '') + (!royalUnlocked ? ' locked' : '');
+        rBtn.innerHTML = `
+          ${state.royalGold ? '<span class="unlock-check">\u2713</span>' : ''}
+          <span class="unlock-name">\u265b ${t('royalName')}</span>
+          <span class="unlock-req">${!royalUnlocked ? `\ud83d\udd12 ${formatWinsLabel(ROYAL_GOLD_REQ, state.lang)}` : (state.royalGold ? t('royalActive') : t('royalReady'))}</span>
+        `;
+        if (royalUnlocked) {
+          rBtn.addEventListener('click', () => {
+            state.royalGold = !state.royalGold;
+            if (state.royalGold) {
+              state.faceTheme = 'royal';
+              state.backTheme = 'noble_gold';
+            }
+            saveToStorage();
+            renderSettingsModal();
+            renderAll();
+          });
+        }
+        royalBox.appendChild(rBtn);
       }
 
       function openModal(id) {
@@ -2093,18 +2439,17 @@
         if (id === 'modal-rules') {
           document.getElementById('modal-rules-title').textContent = t('rulesTitle');
           document.getElementById('rules-content').innerHTML = t('rulesHtml');
+          document.getElementById('btn-close-rules').textContent = t('rulesUnderstandBtn');
         }
         if (id === 'modal-new') {
           document.getElementById('modal-new-title').textContent = t('newModalTitle');
-          document.getElementById('opt-new-title').textContent = t('optNewTitle');
-          document.getElementById('opt-new-desc').textContent = t('optNewDesc');
-          document.getElementById('opt-restart-title').textContent = t('optRestartTitle');
-          document.getElementById('opt-restart-desc').textContent = t('optRestartDesc');
+          document.getElementById('opt-deal-new').textContent = t('optNewTitle');
+          document.getElementById('opt-restart-same').textContent = t('optRestartTitle');
+          document.getElementById('btn-close-new').textContent = t('cancelBtn');
         }
         if (id === 'modal-win') {
-          document.getElementById('modal-win-title').textContent = t('winTitle');
           document.getElementById('win-heading').textContent = t('winHeading');
-          document.getElementById('lbl-win-new').textContent = t('winNewBtn');
+          document.getElementById('btn-win-new').textContent = t('winNewBtn');
         }
         document.getElementById(id).classList.add('open');
       }
@@ -2113,6 +2458,40 @@
         document.getElementById(id).classList.remove('open');
       }
 
+      // Secret Testing Gestures:
+      // 5x tap on "Nastavení hry" -> jumps directly to the NEXT bonus milestone & applies it immediately
+      const ALL_MILESTONES = [1, 3, 5, 7, 10, 13, 17, 20, 30, 40, 52];
+      let titleTapCount = 0;
+      let titleTapTimer = null;
+      document.getElementById('modal-settings-title').addEventListener('click', () => {
+        titleTapCount += 1;
+        clearTimeout(titleTapTimer);
+        if (titleTapCount >= 5) {
+          titleTapCount = 0;
+          const nextMilestone = ALL_MILESTONES.find(m => m > state.wins);
+          const prevWins = state.wins;
+          state.wins = nextMilestone !== undefined ? nextMilestone : (state.wins + 1);
+
+          const newFace = FACE_THEMES.find(f => f.req > prevWins && f.req <= state.wins);
+          if (newFace) state.faceTheme = newFace.id;
+
+          const newBack = BACK_THEMES.find(b => b.req > prevWins && b.req <= state.wins);
+          if (newBack) state.backTheme = newBack.id;
+
+          if (prevWins < ROYAL_GOLD_REQ && state.wins >= ROYAL_GOLD_REQ) {
+            state.royalGold = true;
+            state.faceTheme = 'royal';
+          }
+
+          saveToStorage();
+          renderSettingsModal();
+          renderAll();
+          setStatus(t('winUnlockNewHtml').replace(/<[^>]*>/g, ''));
+          return;
+        }
+        titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1500);
+      });
+
       // Event Bindings
       document.getElementById('slot-stock').addEventListener('click', drawFromStock);
       document.getElementById('btn-undo').addEventListener('click', undoMove);
@@ -2120,7 +2499,15 @@
       document.getElementById('btn-rules').addEventListener('click', () => openModal('modal-rules'));
       document.getElementById('btn-settings').addEventListener('click', () => openModal('modal-settings'));
       document.getElementById('btn-new').addEventListener('click', () => openModal('modal-new'));
-      document.getElementById('btn-autocomplete').addEventListener('click', runAutoComplete);
+
+      document.getElementById('btn-close-settings').addEventListener('click', () => closeModal('modal-settings'));
+      document.getElementById('btn-close-rules').addEventListener('click', () => closeModal('modal-rules'));
+      document.getElementById('btn-close-new').addEventListener('click', () => closeModal('modal-new'));
+
+      document.getElementById('btn-restart-deal').addEventListener('click', () => {
+        closeModal('modal-settings');
+        restartCurrentDeal();
+      });
 
       document.getElementById('opt-deal-new').addEventListener('click', () => {
         closeModal('modal-new');
@@ -2151,22 +2538,6 @@
         renderSettingsModal();
         renderAll();
         setStatus(t('ready'));
-      });
-
-      document.getElementById('royal-gold-toggle').addEventListener('click', () => {
-        if (state.wins < 5) return;
-        state.royalGold = !state.royalGold;
-        if (state.royalGold) {
-          state.faceTheme = 'royal';
-          state.backTheme = 'noble_gold';
-        }
-        saveToStorage();
-        renderSettingsModal();
-        renderAll();
-      });
-
-      document.querySelectorAll('[data-close]').forEach(btn => {
-        btn.addEventListener('click', () => closeModal(btn.dataset.close));
       });
 
       document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
