@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v5
@@ -31,26 +31,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y librsvg2-bin
 
-      - name: Restore or Generate Persistent Android Signing Keystore
-        id: keystore-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/debug.keystore
-          key: android-signing-keystore-ondrandy-solitaire-v1
-
-      - name: Create Debug Keystore if not cached
-        if: steps.keystore-cache.outputs.cache-hit != 'true'
+      - name: Restore Persistent Android Signing Keystore
         run: |
           mkdir -p ~/.android
-          keytool -genkey -v \
-            -keystore ~/.android/debug.keystore \
-            -storepass android \
-            -alias androiddebugkey \
-            -keypass android \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 36500 \
-            -dname "CN=Ondrandy,O=Ondrandy,C=CZ"
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ~/.android/debug.keystore
 
       - name: Initialize Capacitor 6 Android Project
         run: |
@@ -84,12 +68,9 @@ jobs:
                 <stop offset="100%" stop-color="#64748b"/>
               </linearGradient>
             </defs>
-            <!-- Outer Rounded Badge -->
             <rect width="128" height="128" rx="28" fill="url(#bg-grad)"/>
             <rect x="5" y="5" width="118" height="118" rx="24" fill="none" stroke="url(#gold)" stroke-width="4.5"/>
             <rect x="11" y="11" width="106" height="106" rx="19" fill="none" stroke="rgba(254,240,138,0.28)" stroke-width="1.2"/>
-
-            <!-- Corner Club Pips -->
             <g transform="translate(17, 17) scale(0.75)">
               <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
               <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
@@ -102,41 +83,27 @@ jobs:
               <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
               <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
             </g>
-
-            <!-- Royal Robe & Ornate Tunic -->
             <path d="M22 117C26 91 42 82 64 82C86 82 102 91 106 117Z" fill="#1d4ed8" stroke="#0f172a" stroke-width="2"/>
             <path d="M34 117L64 83L94 117Z" fill="#dc2626" stroke="#fef08a" stroke-width="1.5"/>
-            <!-- Gold Tunic Trim -->
             <path d="M44 117L64 90L84 117Z" fill="#f8fafc"/>
             <path d="M36 96L54 117M92 96L74 117" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- Prominent Black Club (Kříž) on Royal Chest -->
             <circle cx="64" cy="100" r="4.4" fill="#0f172a"/>
             <circle cx="59.4" cy="104.5" r="4.1" fill="#0f172a"/>
             <circle cx="68.6" cy="104.5" r="4.1" fill="#0f172a"/>
             <path d="M64 103L61.2 112H66.8L64 103Z" fill="#0f172a"/>
-
-            <!-- Flowing Royal Hair Curls -->
             <path d="M38 45C33 56 35 70 42 77H86C93 70 95 56 90 45Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.8"/>
             <circle cx="38" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
             <circle cx="90" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
-
-            <!-- King Face -->
             <rect x="44" y="42" width="40" height="36" rx="16" fill="#fde68a" stroke="#0f172a" stroke-width="1.8"/>
-            <!-- Eyes & Eyebrows -->
             <path d="M51 51Q55 49 58 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
             <path d="M70 51Q73 49 77 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
             <circle cx="55" cy="54.5" r="2.5" fill="#0f172a"/>
             <circle cx="73" cy="54.5" r="2.5" fill="#0f172a"/>
             <path d="M64 54V61L61.5 62.5" stroke="#b45309" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Mustache & Royal Beard -->
             <path d="M43 62C43 75 51 83 64 83C77 83 85 75 85 62C79 66 71 68 64 68C57 68 49 66 43 62Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.6"/>
             <path d="M54 65Q64 61 74 65" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-
-            <!-- Ornate Jeweled Golden Crown -->
             <path d="M36 42L42 21L55 34L64 17L73 34L86 21L92 42H36Z" fill="url(#gold)" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
             <rect x="36" y="38.5" width="56" height="6.5" rx="2.5" fill="#fef08a" stroke="#0f172a" stroke-width="1.6"/>
-            <!-- Crown Pearls & Gems -->
             <circle cx="42" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
             <circle cx="64" cy="14" r="3.8" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
             <circle cx="86" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
