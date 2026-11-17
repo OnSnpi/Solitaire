@@ -186,6 +186,7 @@
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      touch-action: none;
     }
 
     .top-row {
@@ -247,6 +248,39 @@
       font-weight: 700;
       color: var(--text-muted);
       opacity: 0.55;
+    }
+
+    /* SWIPE UNDO BADGE */
+    .swipe-undo-badge {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 950;
+      transition: opacity 0.14s ease, transform 0.14s ease;
+    }
+
+    .swipe-undo-badge.visible {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    body.royal-gold .swipe-undo-badge {
+      background: var(--gold-grad);
+      color: #0f172a;
     }
 
     /* CARDS */
@@ -967,6 +1001,7 @@
     </footer>
   </div>
 
+  <div class="swipe-undo-badge" id="swipe-undo-badge">&#8617;</div>
   <div class="drag-layer" id="drag-layer"></div>
 
   <!-- SETTINGS MODAL -->
@@ -1098,7 +1133,7 @@
 
   <script>
     (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v12';
+      const STORAGE_KEY = 'ondrandy_solitaire_v13';
 
       const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
       const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
@@ -1141,9 +1176,6 @@
       }
 
       // Face Theme 4 (10 wins): Solid 4-Color Max Contrast
-      // "Black" suits (Spades & Clubs) -> White ink on Deep Black (#090d16) & Dark Navy (#1e3a8a)
-      // "Red" suits (Hearts & Diamonds) -> Black ink (#090d16) on Bright Crimson (#f43f5e) & Deep Amber Orange (#f59e0b)
-      // Enlarged top strip (rank + suit spanning full width of top strip for stacked tableau columns)
       function renderSolid4ColorCardSVG(card) {
         const styleMap = {
           spades:   { bg: '#090d16', fg: '#ffffff' },
@@ -1159,10 +1191,8 @@
         return `
           <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
             <rect width="60" height="88" fill="${bg}"/>
-            <!-- Enlarged full-width top index for stacked tableau visibility -->
             <text x="15.5" y="21" text-anchor="middle" font-size="22" font-weight="900" fill="${fg}">${rTxt}</text>
             ${topPip}
-            <!-- Giant center single-character rank -->
             <text x="30" y="76" text-anchor="middle" font-size="58" font-weight="900" fill="${fg}">${rTxt}</text>
           </svg>`;
       }
@@ -1328,9 +1358,10 @@
           rules: 'N\u00e1vod',
           hint: 'N\u00e1pov\u011bda',
           newGame: 'Nov\u00e1 hra',
-          ready: 'Klepnut\u00edm ozna\u010d kartu nebo klepni na plochu pro dal\u0161\u00ed kartu.',
+          ready: 'Klepnut\u00edm ozna\u010d kartu, klepnut\u00edm na plochu dob\u00edrej, swipem doleva vra\u0165 tah.',
           noMoves: 'Pro tuto kartu nen\u00ed \u017e\u00e1dn\u00fd platn\u00fd tah.',
           multiTarget: 'V\u00edce mo\u017enost\u00ed tahu \u2013 klepnut\u00edm vyber zelen\u00fd ter\u010d\u00edk.',
+          undoneStatus: 'Posledn\u00ed tah byl vr\u00e1cen zp\u011bt.',
           hintStock: 'N\u00e1pov\u011bda: Oto\u010d dal\u0161\u00ed kartu z dob\u00edrac\u00edho bal\u00ed\u010dku.',
           hintRecycle: 'N\u00e1pov\u011bda: Obnov dob\u00edrac\u00ed bal\u00ed\u010dek.',
           hintMove: 'N\u00e1pov\u011bda: P\u0159esu\u0148 kartu {card} na {target}.',
@@ -1365,20 +1396,20 @@
           rulesUnderstandBtn: 'Rozum\u00edm, hr\u00e1t',
           rulesHtml: `
             <p>C\u00edlem hry je se\u0159adit v\u0161ech <strong>52 karet</strong> (4 barvy po 13 hodnot\u00e1ch) na 4 horn\u00ed odkl\u00e1dac\u00ed hrom\u00e1dky vzestupn\u011b od <strong>Esa (A)</strong> a\u017e po <strong>Kr\u00e1le (K)</strong>.</p>
-            <p><strong>Ovl\u00e1d\u00e1n\u00ed a n\u00e1stroje:</strong></p>
+            <p><strong>Ovl\u00e1d\u00e1n\u00ed a gesta palcem:</strong></p>
             <div class="info-box-gray">
               <ul class="rules-list">
                 <li><strong>Sloupce na stole (7):</strong> Karty se skl\u00e1daj\u00ed sestupn\u011b (K, Q, J, 10\u2026 2) se st\u0159\u00edd\u00e1n\u00edm <strong>\u010derven\u00e9</strong> a <strong>\u010dern\u00e9</strong> barvy.</li>
-                <li><strong>Pr\u00e1zdn\u00fd sloupec:</strong> Lze na n\u011bj polo\u017eit pouze <strong>Kr\u00e1le (K)</strong> nebo sloupec za\u010d\u00ednaj\u00edc\u00ed Kr\u00e1lem.</li>
+                <li><strong>Chytr\u00e9 ukl\u00e1d\u00e1n\u00ed (A, 2, K):</strong> Klepnut\u00edm jde Eso i Dvojka rovnou na odkl\u00e1dac\u00ed hrom\u00e1dku, Kr\u00e1l se automaticky ulo\u017e\u00ed na pr\u00e1zdn\u00fd sloupec nejv\u00edce vlevo.</li>
                 <li><strong>Dob\u00edrac\u00ed bal\u00ed\u010dek:</strong> Dal\u0161\u00ed kartu oto\u010d\u00ed\u0161 klepnut\u00edm na bal\u00ed\u010dek nebo kamkoli na volnou plochu stolu.</li>
-                <li><strong>Klepnut\u00ed na kartu:</strong> Je-li tah jednozna\u010dn\u00fd, karta se hned p\u0159esune. P\u0159i v\u00edce mo\u017enostech se rozsv\u00edt\u00ed zelen\u00e9 ter\u010d\u00edky na c\u00edlech.</li>
+                <li><strong>Gesto Zp\u011bt (\u21a9):</strong> P\u0159ejet\u00edm prstu po pr\u00e1zdn\u00e9 plo\u0161e stolu zprava doleva p\u0159es alespo\u0148 p\u016flku obrazovky vr\u00e1t\u00ed\u0161 posledn\u00ed tah zp\u011bt.</li>
               </ul>
             </div>
             <div class="info-box-green">
               <strong>Automatick\u00e9 dokon\u010den\u00ed partie:</strong><br/>
               Jakmile jsou v\u0161echny karty ve sloupc\u00edch oto\u010deny l\u00edcem nahoru, hra se sama automaticky dohraje v\u010detn\u011b dob\u00edrac\u00edho bal\u00ed\u010dku bez nutnosti ma\u010dkat dal\u0161\u00ed tla\u010d\u00edtka.
             </div>
-            <p class="text-danger"><strong>Pozor:</strong> Po v\u00fdh\u0159e se historie tah\u016f uzamkne a tla\u010d\u00edtko Zp\u011bt se deaktivuje.</p>
+            <p class="text-danger"><strong>Pozor:</strong> Po v\u00fdh\u0159e se historie tah\u016f uzamkne a krok Zp\u011bt se deaktivuje.</p>
             <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Modr\u00fd klasick\u00fd (3), Vodoznakov\u00fd l\u00edc (5), \u010cerven\u00fd klasick\u00fd (7), \u010cty\u0159barevn\u00fd maxikontrast (10), \u010cervenou r\u016f\u017eici (13), Canasta p\u0159ehledn\u00e1 (17), \u010cerven\u00fd tartan (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
           `,
           suitNames: {
@@ -1413,9 +1444,10 @@
           rules: 'Rules',
           hint: 'Hint',
           newGame: 'New Game',
-          ready: 'Tap a card to move or tap empty board space to draw.',
+          ready: 'Tap a card to move, tap empty board to draw, or swipe left to undo.',
           noMoves: 'No valid moves for this card.',
           multiTarget: 'Multiple targets available \u2013 tap a green target.',
+          undoneStatus: 'Last move undone.',
           hintStock: 'Hint: Draw the next card from the stock pile.',
           hintRecycle: 'Hint: Recycle the waste pile back to stock.',
           hintMove: 'Hint: Move {card} to {target}.',
@@ -1450,13 +1482,13 @@
           rulesUnderstandBtn: 'Got it, play',
           rulesHtml: `
             <p>The goal is to build all <strong>52 cards</strong> (4 suits of 13 ranks) onto the 4 top foundation piles ascending from <strong>Ace (A)</strong> to <strong>King (K)</strong>.</p>
-            <p><strong>Controls & Tools:</strong></p>
+            <p><strong>Controls & One-Hand Gestures:</strong></p>
             <div class="info-box-gray">
               <ul class="rules-list">
                 <li><strong>Tableau (7 columns):</strong> Build down (K, Q, J, 10\u2026 2) in alternating <strong>Red</strong> and <strong>Black</strong> colors.</li>
-                <li><strong>Empty Column:</strong> Only a <strong>King (K)</strong> (or stack led by a King) can fill an empty column.</li>
+                <li><strong>Smart Placement (A, 2, K):</strong> Tapping Aces and Twos moves them straight to foundations; Kings automatically fill the leftmost empty column.</li>
                 <li><strong>Stock Pile:</strong> Draw the next card by tapping the stock pile or any empty table area.</li>
-                <li><strong>Tap to Move:</strong> Unambiguous moves happen immediately. When multiple targets exist, green targets highlight your destinations.</li>
+                <li><strong>Swipe Left to Undo (\u21a9):</strong> Swipe right-to-left across at least half the screen width on empty board space to undo your last move.</li>
               </ul>
             </div>
             <div class="info-box-green">
@@ -1558,6 +1590,11 @@
       let selection = null;
       let hintHighlight = null;
       let autoCompleting = false;
+      let lastCardInteractionTs = 0;
+
+      function markCardInteraction() {
+        lastCardInteractionTs = Date.now();
+      }
 
       function t(key, vars = {}) {
         let str = I18N[state.lang][key] || key;
@@ -1717,7 +1754,7 @@
         hintHighlight = null;
         saveToStorage();
         renderAll();
-        setStatus(t('ready'));
+        setStatus(t('undoneStatus'));
       }
 
       function isSuitClaimedElsewhere(suit, excludeIdx) {
@@ -1811,6 +1848,7 @@
 
       function executeMove(source, index, cardIndex, target) {
         if (state.isGameOver) return;
+        markCardInteraction();
         pushHistory();
         let movingCards = [];
 
@@ -1874,6 +1912,7 @@
 
       function handleCardTap(source, index, cardIndex) {
         if (state.isGameOver || autoCompleting) return;
+        markCardInteraction();
         hintHighlight = null;
 
         if (selection && selection.source === source && selection.index === index && selection.cardIndex === cardIndex) {
@@ -1908,7 +1947,7 @@
           isSingleTopCard = (cardIndex === state.tableau[index].length - 1);
         }
 
-        let targets = getValidTargets(source, index, cardIndex, false);
+        const targets = getValidTargets(source, index, cardIndex, false);
         if (targets.length === 0) {
           selection = null;
           renderAll();
@@ -1950,7 +1989,7 @@
         renderAll();
         setStatus(t('multiTarget'));
       }
-      
+
       function canAutoComplete() {
         if (state.isGameOver || autoCompleting) return false;
         for (const col of state.tableau) {
@@ -2268,6 +2307,7 @@
 
         if (!card.faceUp) {
           el.innerHTML = renderCardBackSVG(state.backTheme);
+          el.addEventListener('pointerdown', () => markCardInteraction());
           return el;
         }
 
@@ -2344,6 +2384,7 @@
 
         el.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
+          markCardInteraction();
           if (state.isGameOver || autoCompleting) return;
           if (e.button !== undefined && e.button !== 0) return;
           startX = e.clientX;
@@ -2355,6 +2396,7 @@
             const dy = mv.clientY - startY;
             if (!dragging && Math.hypot(dx, dy) > 8) {
               dragging = true;
+              markCardInteraction();
               const manualTargets = getValidTargets(source, index, cardIndex, true);
               selection = { source, index, cardIndex, targets: manualTargets };
               renderSignpostOverlaysOnly();
@@ -2396,6 +2438,7 @@
           const onUp = (up) => {
             window.removeEventListener('pointermove', onMove);
             window.removeEventListener('pointerup', onUp);
+            markCardInteraction();
 
             if (dragGhost) {
               dragGhost.remove();
@@ -2451,6 +2494,7 @@
         overlay.innerHTML = `<div class="signpost-dot"></div>`;
         overlay.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
+          markCardInteraction();
           if (!selection) return;
           executeMove(selection.source, selection.index, selection.cardIndex, targetObj);
           setStatus(t('ready'));
@@ -2751,17 +2795,76 @@
         winsTapTimer = setTimeout(() => { winsTapCount = 0; }, 1500);
       });
 
-      // Tapping empty board area draws next card from stock
-      document.getElementById('board').addEventListener('click', (e) => {
+      // Board Touch Handling:
+      // 1) Long horizontal swipe right-to-left (>= 50% screen width) on empty board space triggers Undo
+      // 2) Short tap on empty board space draws next card from stock (strictly guarded against card interaction overlap)
+      const boardEl = document.getElementById('board');
+      const swipeBadgeEl = document.getElementById('swipe-undo-badge');
+      let boardTouchStartX = 0;
+      let boardTouchStartY = 0;
+      let boardTracking = false;
+      let boardSwiped = false;
+
+      boardEl.addEventListener('pointerdown', (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        if (Date.now() - lastCardInteractionTs < 350) return;
         if (e.target.closest('.card') || e.target.closest('.signpost-target') || e.target.closest('.slot-stock')) {
           return;
         }
-        drawFromStock();
+        boardTouchStartX = e.clientX;
+        boardTouchStartY = e.clientY;
+        boardTracking = true;
+        boardSwiped = false;
       });
 
+      boardEl.addEventListener('pointermove', (e) => {
+        if (!boardTracking) return;
+        const dx = e.clientX - boardTouchStartX;
+        const dy = e.clientY - boardTouchStartY;
+        const minSwipeWidth = window.innerWidth * 0.5;
+        const canUndo = !state.isGameOver && state.history.length > 0 && !autoCompleting;
+
+        if (canUndo && dx <= -minSwipeWidth && Math.abs(dx) > Math.abs(dy) * 2) {
+          boardSwiped = true;
+          swipeBadgeEl.classList.add('visible');
+        } else {
+          boardSwiped = false;
+          swipeBadgeEl.classList.remove('visible');
+        }
+      });
+
+      const resetBoardGesture = (e, isCancel = false) => {
+        if (!boardTracking) return;
+        boardTracking = false;
+        swipeBadgeEl.classList.remove('visible');
+
+        if (isCancel || Date.now() - lastCardInteractionTs < 350) {
+          boardSwiped = false;
+          return;
+        }
+
+        const dx = e.clientX - boardTouchStartX;
+        const dy = e.clientY - boardTouchStartY;
+        const minSwipeWidth = window.innerWidth * 0.5;
+
+        if (boardSwiped || (dx <= -minSwipeWidth && Math.abs(dx) > Math.abs(dy) * 2)) {
+          boardSwiped = false;
+          undoMove();
+          return;
+        }
+
+        if (Math.hypot(dx, dy) < 12) {
+          drawFromStock();
+        }
+      };
+
+      boardEl.addEventListener('pointerup', (e) => resetBoardGesture(e, false));
+      boardEl.addEventListener('pointercancel', (e) => resetBoardGesture(e, true));
+
       // Event Bindings
-      document.getElementById('slot-stock').addEventListener('click', (e) => {
+      document.getElementById('slot-stock').addEventListener('pointerdown', (e) => {
         e.stopPropagation();
+        markCardInteraction();
         drawFromStock();
       });
       document.getElementById('btn-undo').addEventListener('click', undoMove);
