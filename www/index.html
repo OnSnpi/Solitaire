@@ -1896,12 +1896,48 @@
           }
         }
 
-        const targets = getValidTargets(source, index, cardIndex, false);
+        // Determine the tapped lead card
+        let leadCard = null;
+        let isSingleTopCard = true;
+        if (source === 'waste' && state.waste.length > 0) {
+          leadCard = state.waste[state.waste.length - 1];
+        } else if (source === 'foundation' && state.foundations[index].length > 0) {
+          leadCard = state.foundations[index][state.foundations[index].length - 1];
+        } else if (source === 'tableau' && state.tableau[index][cardIndex]) {
+          leadCard = state.tableau[index][cardIndex];
+          isSingleTopCard = (cardIndex === state.tableau[index].length - 1);
+        }
+
+        let targets = getValidTargets(source, index, cardIndex, false);
         if (targets.length === 0) {
           selection = null;
           renderAll();
           setStatus(t('noMoves'));
           return;
+        }
+
+        // Rule 1: Ace (A) and Two (2) always go straight to their foundation pile without asking
+        if (leadCard && isSingleTopCard && (leadCard.rank === 1 || leadCard.rank === 2)) {
+          const foundationTarget = targets.find(tg => tg.type === 'foundation');
+          if (foundationTarget) {
+            executeMove(source, index, cardIndex, foundationTarget);
+            setStatus(t('ready'));
+            return;
+          }
+        }
+
+        // Rule 2: King (K) never asks which empty column to choose — picks the leftmost empty column automatically
+        if (leadCard && leadCard.rank === 13) {
+          const foundationTarget = targets.find(tg => tg.type === 'foundation');
+          const emptyColTargets = targets
+            .filter(tg => tg.type === 'tableau' && state.tableau[tg.index].length === 0)
+            .sort((a, b) => a.index - b.index);
+
+          if (!foundationTarget && emptyColTargets.length > 0) {
+            executeMove(source, index, cardIndex, emptyColTargets[0]);
+            setStatus(t('ready'));
+            return;
+          }
         }
 
         if (targets.length === 1) {
@@ -1914,7 +1950,7 @@
         renderAll();
         setStatus(t('multiTarget'));
       }
-
+      
       function canAutoComplete() {
         if (state.isGameOver || autoCompleting) return false;
         for (const col of state.tableau) {
