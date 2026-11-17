@@ -1,4 +1,37 @@
-- name: Restore Persistent Android Signing Keystore
+name: Build Solitaire Android APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install librsvg2-bin for vector icon generation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Restore Persistent Android Signing Keystore
         run: |
           if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
             echo "CHYBA: Secret KEYSTORE_BASE64 je prazdny!"
@@ -20,7 +53,88 @@
           MANIFEST="android/app/src/main/AndroidManifest.xml"
           sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="portrait"/g' "$MANIFEST"
 
-      # ... (zde zůstává krok Generate 512x512 Detailed King of Clubs Android App Icon) ...
+      - name: Generate 512x512 Detailed King of Clubs Android App Icon (incl. Adaptive Icons)
+        run: |
+          cat << 'EOF' > app-icon.svg
+          <svg width="512" height="512" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1e293b"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+              <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a"/>
+                <stop offset="50%" stop-color="#f59e0b"/>
+                <stop offset="100%" stop-color="#b45309"/>
+              </linearGradient>
+              <linearGradient id="plat" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="55%" stop-color="#cbd5e1"/>
+                <stop offset="100%" stop-color="#64748b"/>
+              </linearGradient>
+            </defs>
+            <rect width="128" height="128" fill="url(#bg-grad)"/>
+            <g transform="translate(14, 14) scale(0.78)">
+              <rect x="4" y="4" width="120" height="120" rx="26" fill="none" stroke="url(#gold)" stroke-width="4.5"/>
+              <g transform="translate(17, 17) scale(0.75)">
+                <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
+                <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
+                <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
+                <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
+              </g>
+              <g transform="translate(93, 17) scale(0.75)">
+                <circle cx="12" cy="7" r="4.2" fill="url(#gold)"/>
+                <circle cx="7.5" cy="13" r="4" fill="url(#gold)"/>
+                <circle cx="16.5" cy="13" r="4" fill="url(#gold)"/>
+                <path d="M12 12L9.5 19H14.5L12 12Z" fill="url(#gold)"/>
+              </g>
+              <path d="M22 117C26 91 42 82 64 82C86 82 102 91 106 117Z" fill="#1d4ed8" stroke="#0f172a" stroke-width="2"/>
+              <path d="M34 117L64 83L94 117Z" fill="#dc2626" stroke="#fef08a" stroke-width="1.5"/>
+              <path d="M44 117L64 90L84 117Z" fill="#f8fafc"/>
+              <path d="M36 96L54 117M92 96L74 117" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="64" cy="100" r="4.4" fill="#0f172a"/>
+              <circle cx="59.4" cy="104.5" r="4.1" fill="#0f172a"/>
+              <circle cx="68.6" cy="104.5" r="4.1" fill="#0f172a"/>
+              <path d="M64 103L61.2 112H66.8L64 103Z" fill="#0f172a"/>
+              <path d="M38 45C33 56 35 70 42 77H86C93 70 95 56 90 45Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.8"/>
+              <circle cx="38" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
+              <circle cx="90" cy="68" r="5" fill="#cbd5e1" stroke="#0f172a" stroke-width="1.4"/>
+              <rect x="44" y="42" width="40" height="36" rx="16" fill="#fde68a" stroke="#0f172a" stroke-width="1.8"/>
+              <path d="M51 51Q55 49 58 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              <path d="M70 51Q73 49 77 51" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="55" cy="54.5" r="2.5" fill="#0f172a"/>
+              <circle cx="73" cy="54.5" r="2.5" fill="#0f172a"/>
+              <path d="M64 54V61L61.5 62.5" stroke="#b45309" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M43 62C43 75 51 83 64 83C77 83 85 75 85 62C79 66 71 68 64 68C57 68 49 66 43 62Z" fill="url(#plat)" stroke="#0f172a" stroke-width="1.6"/>
+              <path d="M54 65Q64 61 74 65" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+              <path d="M36 42L42 21L55 34L64 17L73 34L86 21L92 42H36Z" fill="url(#gold)" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
+              <rect x="36" y="38.5" width="56" height="6.5" rx="2.5" fill="#fef08a" stroke="#0f172a" stroke-width="1.6"/>
+              <circle cx="42" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="64" cy="14" r="3.8" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="86" cy="19" r="3.2" fill="#fef08a" stroke="#0f172a" stroke-width="1.2"/>
+              <circle cx="64" cy="41.8" r="2.3" fill="#dc2626"/>
+              <circle cx="49" cy="41.8" r="2" fill="#2563eb"/>
+              <circle cx="79" cy="41.8" r="2" fill="#2563eb"/>
+            </g>
+          </svg>
+          EOF
+
+          rsvg-convert -w 512 -h 512 app-icon.svg -o icon-512.png
+
+          for dir in mipmap-mdpi mipmap-hdpi mipmap-xhdpi mipmap-xxhdpi mipmap-xxxhdpi; do
+            mkdir -p "android/app/src/main/res/$dir"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher.png"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher_round.png"
+            cp icon-512.png "android/app/src/main/res/$dir/ic_launcher_foreground.png"
+          done
+
+          mkdir -p android/app/src/main/res/values
+          cat << 'EOF' > android/app/src/main/res/values/ic_launcher_background.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="ic_launcher_background">#0f172a</color>
+          </resources>
+          EOF
 
       - name: Configure Explicit Signing and versionCode in build.gradle
         run: |
@@ -46,3 +160,16 @@
           }
           EOF
           npx cap sync android
+
+      - name: Build Signed Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../Solitaire.apk
+
+      - name: Upload Solitaire.apk Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: Solitaire-APK
+          path: Solitaire.apk
