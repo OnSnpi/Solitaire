@@ -305,6 +305,7 @@
     /* Face Theme 4: Solid 4-Color Max Contrast (10 wins) */
     body.face-solid4 .card.face-up {
       padding: 0;
+      border-width: 1.5px;
     }
 
     /* Face Theme 5 & 6: Canasta Simplified (17 wins) & Canasta Full (40 wins) */
@@ -1097,7 +1098,7 @@
 
   <script>
     (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v11';
+      const STORAGE_KEY = 'ondrandy_solitaire_v12';
 
       const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
       const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
@@ -1139,25 +1140,30 @@
           </svg>`;
       }
 
-      // Face Theme 4 (10 wins): Solid 4-Color Max Contrast with Distinct Hue Separation
+      // Face Theme 4 (10 wins): Solid 4-Color Max Contrast
+      // "Black" suits (Spades & Clubs) -> White ink on Deep Black (#090d16) & Dark Navy (#1e3a8a)
+      // "Red" suits (Hearts & Diamonds) -> Black ink (#090d16) on Bright Crimson (#f43f5e) & Deep Amber Orange (#f59e0b)
+      // Enlarged top strip (rank + suit spanning full width of top strip for stacked tableau columns)
       function renderSolid4ColorCardSVG(card) {
         const styleMap = {
-          hearts:   { bg: '#dc2626', fg: '#ffffff' },
-          diamonds: { bg: '#eab308', fg: '#0f172a' },
-          spades:   { bg: '#0f172a', fg: '#ffffff' },
-          clubs:    { bg: '#1d4ed8', fg: '#ffffff' }
+          spades:   { bg: '#090d16', fg: '#ffffff' },
+          clubs:    { bg: '#1e3a8a', fg: '#ffffff' },
+          hearts:   { bg: '#f43f5e', fg: '#090d16' },
+          diamonds: { bg: '#f59e0b', fg: '#090d16' }
         };
         const { bg, fg } = styleMap[card.suit];
         const rTxt = card.rank === 10 ? 'X' : rankLabel(card.rank);
-        const s = 11.5 / 24;
-        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="${fg}" transform="translate(22, 10.5) scale(${s}) translate(-12, -12)"/>`;
+        const s = 17.5 / 24;
+        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="${fg}" transform="translate(45, 13.5) scale(${s}) translate(-12, -12)"/>`;
 
         return `
           <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
             <rect width="60" height="88" fill="${bg}"/>
-            <text x="9.5" y="15.5" text-anchor="middle" font-size="15" font-weight="900" fill="${fg}">${rTxt}</text>
+            <!-- Enlarged full-width top index for stacked tableau visibility -->
+            <text x="15.5" y="21" text-anchor="middle" font-size="22" font-weight="900" fill="${fg}">${rTxt}</text>
             ${topPip}
-            <text x="30" y="72" text-anchor="middle" font-size="60" font-weight="900" fill="${fg}">${rTxt}</text>
+            <!-- Giant center single-character rank -->
+            <text x="30" y="76" text-anchor="middle" font-size="58" font-weight="900" fill="${fg}">${rTxt}</text>
           </svg>`;
       }
 
