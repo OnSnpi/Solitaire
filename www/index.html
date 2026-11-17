@@ -185,6 +185,7 @@
       background: var(--board-bg);
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .top-row {
@@ -294,23 +295,17 @@
       border-color: #94a3b8;
     }
 
-    /* Face Theme 3: Night Contrast (5 wins) */
-    body.face-dark .card.face-up {
-      background: #1e293b;
-      border-color: #475569;
-    }
-    body.face-dark .card.face-up.red {
-      color: #ff6b6b;
-    }
-    body.face-dark .card.face-up.black {
-      color: #f8fafc;
+    /* Face Theme 3: Watermark Corner Style (5 wins) */
+    body.face-watermark .card.face-up {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      padding: 0;
     }
 
-    /* Face Theme 4: Diagonal Low-Vision Split (10 wins) */
-    body.face-diagonal .card.face-up {
-      background: #ffffff;
-      border: 1.5px solid #64748b;
+    /* Face Theme 4: Solid 4-Color Max Contrast (10 wins) */
+    body.face-solid4 .card.face-up {
       padding: 0;
+      color: #ffffff;
     }
 
     /* Face Theme 5 & 6: Canasta Simplified (17 wins) & Canasta Full (40 wins) */
@@ -337,7 +332,7 @@
 
     .card.selected {
       border: 2.5px solid var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28), var(--shadow-md);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.34), var(--shadow-md);
       z-index: 60 !important;
     }
 
@@ -347,32 +342,67 @@
     }
 
     .card.hint-glow {
-      border: 2.5px solid var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+      border: 3px solid #16a34a !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.4);
     }
 
-    /* SIGNPOST TARGET HIGHLIGHT */
+    /* HIGH-VISIBILITY SIGNPOST TARGET HIGHLIGHT (POINT E) */
     .signpost-target {
       position: absolute;
-      inset: -2px;
-      border-radius: 8px;
-      border: 2.5px solid var(--accent);
-      background: rgba(37, 99, 235, 0.14);
+      inset: -3px;
+      border-radius: 9px;
+      border: 3px solid #16a34a;
+      background: rgba(22, 163, 74, 0.24);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.32), inset 0 0 12px rgba(22, 163, 74, 0.35);
       z-index: 80;
       cursor: pointer;
-      animation: pulseTarget 1.15s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulseTarget 0.95s infinite ease-in-out;
+    }
+
+    .signpost-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #16a34a;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .signpost-dot::after {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ffffff;
     }
 
     body.royal-gold .signpost-target {
       border-color: #fef08a;
-      background: rgba(245, 158, 11, 0.22);
+      background: rgba(245, 158, 11, 0.32);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.4), inset 0 0 12px rgba(245, 158, 11, 0.4);
+    }
+
+    body.royal-gold .signpost-dot {
+      background: #f59e0b;
+      border-color: #0f172a;
+    }
+
+    body.royal-gold .signpost-dot::after {
+      background: #0f172a;
     }
 
     @keyframes pulseTarget {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
-      50% { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+      0%, 100% { transform: scale(1); opacity: 0.96; }
+      50% { transform: scale(1.03); opacity: 1; }
     }
 
+    /* ENLARGED TYPOGRAPHY FOR CLASSIC & TINTED FACES (POINT G) */
     .card-top-strip {
       display: flex;
       align-items: center;
@@ -384,13 +414,13 @@
     }
 
     .card-rank-sm {
-      font-size: clamp(10.5px, 3.1vw, 14px);
+      font-size: clamp(11.5px, 3.4vw, 15px);
       letter-spacing: -0.6px;
     }
 
     .card-suit-sm svg {
-      width: clamp(9.5px, 2.7vw, 13px);
-      height: clamp(9.5px, 2.7vw, 13px);
+      width: clamp(10.5px, 3vw, 14px);
+      height: clamp(10.5px, 3vw, 14px);
       display: block;
     }
 
@@ -401,20 +431,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      line-height: 0.92;
+      line-height: 0.88;
       padding-bottom: 2px;
       gap: 1px;
     }
 
     .card-rank-xl {
-      font-size: clamp(15px, 4.7vw, 21px);
-      font-weight: 800;
-      letter-spacing: -0.8px;
+      font-size: clamp(19px, 5.8vw, 26px);
+      font-weight: 900;
+      letter-spacing: -1px;
     }
 
     .card-suit-xl svg {
-      width: clamp(13px, 4vw, 18px);
-      height: clamp(13px, 4vw, 18px);
+      width: clamp(14px, 4.3vw, 20px);
+      height: clamp(14px, 4.3vw, 20px);
       display: block;
     }
 
@@ -804,6 +834,7 @@
       <pattern id="pat-crimson-dots" width="3.5" height="3.5" patternUnits="userSpaceOnUse">
         <circle cx="1.75" cy="1.75" r="0.85" fill="#e11d48" opacity="0.55" />
       </pattern>
+      <!-- Blue Tartan Plaid Pattern (30 wins) -->
       <pattern id="pat-blue-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <rect width="16" height="16" fill="#ffffff" />
         <line x1="0" y1="2" x2="16" y2="2" stroke="#0284c7" stroke-width="1.3" />
@@ -815,13 +846,24 @@
         <line x1="9" y1="0" x2="9" y2="16" stroke="#0369a1" stroke-width="1.5" />
         <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#7dd3fc" stroke-width="0.7" />
       </pattern>
-      <!-- Diagonal Split Clip Paths (Top-Right to Bottom-Left) -->
-      <clipPath id="diag-left-top">
-        <polygon points="0,0 60,0 0,88" />
-      </clipPath>
-      <clipPath id="diag-right-bottom">
-        <polygon points="60,0 60,88 0,88" />
-      </clipPath>
+      <!-- Red Tartan Plaid Pattern (20 wins - recolored from Blue Tartan) -->
+      <pattern id="pat-red-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="16" height="16" fill="#ffffff" />
+        <line x1="0" y1="2" x2="16" y2="2" stroke="#e11d48" stroke-width="1.3" />
+        <line x1="0" y1="5.5" x2="16" y2="5.5" stroke="#fb7185" stroke-width="0.75" />
+        <line x1="0" y1="9" x2="16" y2="9" stroke="#be123c" stroke-width="1.5" />
+        <line x1="0" y1="12.5" x2="16" y2="12.5" stroke="#fda4af" stroke-width="0.7" />
+        <line x1="2" y1="0" x2="2" y2="16" stroke="#e11d48" stroke-width="1.3" />
+        <line x1="5.5" y1="0" x2="5.5" y2="16" stroke="#fb7185" stroke-width="0.75" />
+        <line x1="9" y1="0" x2="9" y2="16" stroke="#be123c" stroke-width="1.5" />
+        <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#fda4af" stroke-width="0.7" />
+      </pattern>
+      <!-- Classic Navy Checkerboard Pattern (3 wins - Image 6) -->
+      <pattern id="pat-navy-checker" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="6" height="6" fill="#ffffff" />
+        <rect x="0" y="0" width="3" height="3" fill="#1e3a8a" />
+        <rect x="3" y="3" width="3" height="3" fill="#1e3a8a" />
+      </pattern>
     </defs>
   </svg>
 
@@ -1010,7 +1052,7 @@
 
   <script>
     (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v9';
+      const STORAGE_KEY = 'ondrandy_solitaire_v10';
 
       const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
       const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
@@ -1028,46 +1070,59 @@
         return `<svg viewBox="0 0 24 24" ${fill}><path d="${SUIT_PATHS[suit]}"/></svg>`;
       }
 
-      // Diagonal Low-Vision Split Face (unlocked at 10 wins):
-      // Split along diagonal from top-right (60,0) to bottom-left (0,88).
-      // Spades (black) & Hearts (red): Left-top half filled with suit color, right-bottom half white.
-      // Clubs (black) & Diamonds (red): Right-bottom half filled with suit color, left-top half white.
-      // Giant centered rank value split seamlessly in color (white on colored half, suit color on white half).
-      function renderDiagonalSplitCardSVG(card) {
+      // Face Theme 3 (5 wins): Watermark Center Suit + Diagonal Opposite Corner Blocks (Image 5)
+      function renderWatermarkCardSVG(card) {
         const red = isRed(card.suit);
-        const suitColor = red ? '#dc2626' : '#0f172a';
-        const isLeftFilled = (card.suit === 'spades' || card.suit === 'hearts');
-        const leftBg = isLeftFilled ? suitColor : '#ffffff';
-        const rightBg = isLeftFilled ? '#ffffff' : suitColor;
-        const leftText = isLeftFilled ? '#ffffff' : suitColor;
-        const rightText = isLeftFilled ? suitColor : '#ffffff';
+        const ink = red ? '#dc2626' : '#0f172a';
         const rTxt = rankLabel(card.rank);
-        const fontSize = card.rank === 10 ? '40' : '48';
+        const pathD = SUIT_PATHS[card.suit];
 
-        // Top strip index (visible when stacked in tableau columns)
-        const topStripInk = isLeftFilled ? '#ffffff' : suitColor;
-        const s = 10.5 / 24;
-        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="${topStripInk}" transform="translate(22, 10) scale(${s}) translate(-12, -12)"/>`;
+        const pip = (cx, cy, size, opacity = 1) => {
+          const s = size / 24;
+          return `<path d="${pathD}" fill="${ink}" fill-opacity="${opacity}" transform="translate(${cx}, ${cy}) scale(${s}) translate(-12, -12)"/>`;
+        };
 
         return `
           <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
-            <!-- Left-Top Half -->
-            <g clip-path="url(#diag-left-top)">
-              <rect width="60" height="88" fill="${leftBg}"/>
-              <text x="30" y="63" text-anchor="middle" font-size="${fontSize}" font-weight="900" fill="${leftText}" letter-spacing="-2.5">${rTxt}</text>
+            <!-- Large Translucent Watermark Suit in Center -->
+            ${pip(30, 44, 42, 0.14)}
+            <!-- Top-Left Vertical Corner Block -->
+            <text x="12.5" y="19" text-anchor="middle" font-size="18.5" font-weight="900" fill="${ink}" letter-spacing="-1.2">${rTxt}</text>
+            ${pip(12.5, 29.5, 14, 1)}
+            <!-- Bottom-Right Inverted Vertical Corner Block -->
+            <g transform="translate(60, 88) rotate(180)">
+              <text x="12.5" y="19" text-anchor="middle" font-size="18.5" font-weight="900" fill="${ink}" letter-spacing="-1.2">${rTxt}</text>
+              ${pip(12.5, 29.5, 14, 1)}
             </g>
-            <!-- Right-Bottom Half -->
-            <g clip-path="url(#diag-right-bottom)">
-              <rect width="60" height="88" fill="${rightBg}"/>
-              <text x="30" y="63" text-anchor="middle" font-size="${fontSize}" font-weight="900" fill="${rightText}" letter-spacing="-2.5">${rTxt}</text>
-            </g>
-            <!-- Compact Top-Left Strip for Stacked Tableau Visibility -->
-            <text x="9.5" y="14.5" text-anchor="middle" font-size="13.5" font-weight="900" fill="${topStripInk}" letter-spacing="-0.8">${rTxt}</text>
-            ${topPip}
           </svg>`;
       }
 
-      // Simplified High-Readability Canasta Face (unlocked at 17 wins)
+      // Face Theme 4 (10 wins): Solid 4-Color Max Contrast with Giant White Letter/Digit ('X' for 10)
+      // Hearts = Red, Spades = Black, Clubs = Dark Blue, Diamonds = Rich Orange
+      function renderSolid4ColorCardSVG(card) {
+        const bgMap = {
+          hearts: '#dc2626',   // Sytě červená
+          spades: '#0f172a',   // Sytě černá
+          clubs: '#1e3a8a',    // Tmavě modrá
+          diamonds: '#ea580c'  // Sytě oranžová
+        };
+        const bg = bgMap[card.suit];
+        const rTxt = card.rank === 10 ? 'X' : rankLabel(card.rank);
+        const s = 11.5 / 24;
+        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="#ffffff" transform="translate(22, 10.5) scale(${s}) translate(-12, -12)"/>`;
+
+        return `
+          <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="88" fill="${bg}"/>
+            <!-- Top-left compact index for stacked tableau columns -->
+            <text x="9.5" y="15.5" text-anchor="middle" font-size="15" font-weight="900" fill="#ffffff">${rTxt}</text>
+            ${topPip}
+            <!-- Giant Bold White Single-Character Rank Filling Center -->
+            <text x="30" y="72" text-anchor="middle" font-size="60" font-weight="900" fill="#ffffff">${rTxt}</text>
+          </svg>`;
+      }
+
+      // Face Theme 5 (17 wins): Simplified High-Readability Canasta Face
       function renderCanastaLiteCardSVG(card) {
         const red = isRed(card.suit);
         const ink = red ? '#dc2626' : '#0f172a';
@@ -1122,7 +1177,7 @@
           </svg>`;
       }
 
-      // Full Highlighted Classic Canasta / Rummy SVG Face (unlocked at 40 wins)
+      // Face Theme 6 (40 wins): Full Highlighted Classic Canasta / Rummy SVG Face
       function renderCanastaCardSVG(card) {
         const red = isRed(card.suit);
         const ink = red ? '#dc2626' : '#0f172a';
@@ -1228,9 +1283,9 @@
           rules: 'N\u00e1vod',
           hint: 'N\u00e1pov\u011bda',
           newGame: 'Nov\u00e1 hra',
-          ready: 'Klepnut\u00edm ozna\u010d kartu nebo dob\u00edrej z bal\u00ed\u010dku.',
+          ready: 'Klepnut\u00edm ozna\u010d kartu nebo klepni na plochu pro dal\u0161\u00ed kartu.',
           noMoves: 'Pro tuto kartu nen\u00ed \u017e\u00e1dn\u00fd platn\u00fd tah.',
-          multiTarget: 'V\u00edce mo\u017enost\u00ed tahu \u2013 klepnut\u00edm vyber zv\u00fdrazn\u011bn\u00fd c\u00edl.',
+          multiTarget: 'V\u00edce mo\u017enost\u00ed tahu \u2013 klepnut\u00edm vyber zelen\u00fd ter\u010d\u00edk.',
           hintStock: 'N\u00e1pov\u011bda: Oto\u010d dal\u0161\u00ed kartu z dob\u00edrac\u00edho bal\u00ed\u010dku.',
           hintRecycle: 'N\u00e1pov\u011bda: Obnov dob\u00edrac\u00ed bal\u00ed\u010dek.',
           hintMove: 'N\u00e1pov\u011bda: P\u0159esu\u0148 kartu {card} na {target}.',
@@ -1250,7 +1305,7 @@
           royalActive: 'Aktivn\u00ed zlat\u00fd re\u017eim',
           royalReady: 'Odem\u010deno (klepni)',
           unlockedFree: 'Z\u00e1kladn\u00ed',
-          settingsUnlockInfo: '<strong>Odemknut\u00ed bonus\u016f:</strong> 1 v\u00fdhra = T\u00f3novan\u00e9 karty, 3 = Karm\u00ednov\u00fd erb, 5 = No\u010dn\u00ed kontrast, 7 = Smaragdov\u00fd rub, 10 = \u00dahlop\u0159\u00ed\u010dn\u00fd kontrast, 13 = U\u0161lechtil\u00e9 kovy, 17 = Canasta p\u0159ehledn\u00e1, 20 = Karm\u00ednov\u00fd ornament, 30 = Modr\u00fd tartan, 40 = Canasta \u017eol\u00edkov\u00e9, 52 = <strong>Kr\u00e1lovsk\u00e1 zlat\u00e1 edice</strong>.',
+          settingsUnlockInfo: '<strong>Odemknut\u00ed bonus\u016f:</strong> 1 v\u00fdhra = T\u00f3novan\u00e9 karty, 3 = Modr\u00fd klasick\u00fd rub, 5 = Vodoznakov\u00fd l\u00edc, 7 = Smaragdov\u00fd rub, 10 = \u010cty\u0159barevn\u00fd maxikontrast, 13 = Karm\u00ednov\u00fd ornament, 17 = Canasta p\u0159ehledn\u00e1, 20 = \u010cerven\u00fd tartan, 30 = Modr\u00fd tartan, 40 = Canasta \u017eol\u00edkov\u00e9, 52 = <strong>Kr\u00e1lovsk\u00e1 zlat\u00e1 edice</strong>.',
           restartBtn: '\u21bb Restartovat tuto hru',
           saveCloseBtn: 'Ulo\u017eit a zav\u0159\u00edt',
           newModalTitle: 'Nov\u00e1 hra',
@@ -1270,8 +1325,8 @@
               <ul class="rules-list">
                 <li><strong>Sloupce na stole (7):</strong> Karty se skl\u00e1daj\u00ed sestupn\u011b (K, Q, J, 10\u2026 2) se st\u0159\u00edd\u00e1n\u00edm <strong>\u010derven\u00e9</strong> a <strong>\u010dern\u00e9</strong> barvy.</li>
                 <li><strong>Pr\u00e1zdn\u00fd sloupec:</strong> Lze na n\u011bj polo\u017eit pouze <strong>Kr\u00e1le (K)</strong> nebo sloupec za\u010d\u00ednaj\u00edc\u00ed Kr\u00e1lem.</li>
-                <li><strong>Odkl\u00e1dac\u00ed hrom\u00e1dky:</strong> Po\u0159ad\u00ed barev je Srdce, K\u00e1ry, Piky, K\u0159\u00ed\u017ee. P\u0159i ru\u010dn\u00edm p\u0159eta\u017een\u00ed m\u016f\u017ee\u0161 prvn\u00ed Eso polo\u017eit na libovoln\u00e9 voln\u00e9 pole.</li>
-                <li><strong>Klepnut\u00ed na kartu:</strong> Je-li tah jednozna\u010dn\u00fd, karta se hned p\u0159esune. P\u0159i v\u00edce mo\u017enostech se zv\u00fdrazn\u00ed v\u0161echny c\u00edle pro v\u00fdb\u011br.</li>
+                <li><strong>Dob\u00edrac\u00ed bal\u00ed\u010dek:</strong> Dal\u0161\u00ed kartu oto\u010d\u00ed\u0161 klepnut\u00edm na bal\u00ed\u010dek nebo kamkoli na volnou plochu stolu.</li>
+                <li><strong>Klepnut\u00ed na kartu:</strong> Je-li tah jednozna\u010dn\u00fd, karta se hned p\u0159esune. P\u0159i v\u00edce mo\u017enostech se rozsv\u00edt\u00ed zelen\u00e9 ter\u010d\u00edky na c\u00edlech.</li>
               </ul>
             </div>
             <div class="info-box-green">
@@ -1279,7 +1334,7 @@
               Jakmile jsou v\u0161echny karty ve sloupc\u00edch oto\u010deny l\u00edcem nahoru, hra se sama automaticky dohraje v\u010detn\u011b dob\u00edrac\u00edho bal\u00ed\u010dku bez nutnosti ma\u010dkat dal\u0161\u00ed tla\u010d\u00edtka.
             </div>
             <p class="text-danger"><strong>Pozor:</strong> Po v\u00fdh\u0159e se historie tah\u016f uzamkne a tla\u010d\u00edtko Zp\u011bt se deaktivuje.</p>
-            <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Karm\u00ednov\u00fd erb (3), No\u010dn\u00ed kontrast (5), Smaragdov\u00fd rub (7), \u00dahlop\u0159\u00ed\u010dn\u00fd kontrast (10), U\u0161lechtil\u00e9 kovy (13), Canasta p\u0159ehledn\u00e1 (17), Karm\u00ednov\u00fd ornament (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
+            <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Modr\u00fd klasick\u00fd rub (3), Vodoznakov\u00fd l\u00edc (5), Smaragdov\u00fd rub (7), \u010cty\u0159barevn\u00fd maxikontrast (10), Karm\u00ednov\u00fd ornament (13), Canasta p\u0159ehledn\u00e1 (17), \u010cerven\u00fd tartan (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
           `,
           suitNames: {
             spades: 'Piky',
@@ -1290,17 +1345,17 @@
           faces: {
             classic: 'Klasick\u00fd kontrast',
             tinted: 'T\u00f3novan\u00e9',
-            dark: 'No\u010dn\u00ed kontrast',
-            diagonal: '\u00dahlop\u0159\u00ed\u010dn\u00fd kontrast',
+            watermark: 'Vodoznakov\u00fd',
+            solid4: '\u010cty\u0159barevn\u00fd maxikontrast',
             'canasta-lite': 'Canasta p\u0159ehledn\u00e1',
             canasta: 'Canasta \u017eol\u00edkov\u00e9'
           },
           backs: {
             royal_blue: 'Modr\u00e1 m\u0159\u00ed\u017eka',
-            crimson_crest: 'Karm\u00ednov\u00fd erb',
+            navy_classic: 'Modr\u00fd klasick\u00fd',
             emerald_geo: 'Smaragdov\u00fd',
-            noble_gold: 'U\u0161lechtil\u00e9 kovy',
             crimson_filigree: 'Karm\u00ednov\u00fd ornament',
+            red_tartan: '\u010cerven\u00fd tartan',
             blue_tartan: 'Modr\u00fd tartan'
           }
         },
@@ -1313,9 +1368,9 @@
           rules: 'Rules',
           hint: 'Hint',
           newGame: 'New Game',
-          ready: 'Tap a card to move or tap the stock pile to draw.',
+          ready: 'Tap a card to move or tap empty board space to draw.',
           noMoves: 'No valid moves for this card.',
-          multiTarget: 'Multiple targets available \u2013 tap a highlighted destination.',
+          multiTarget: 'Multiple targets available \u2013 tap a green target.',
           hintStock: 'Hint: Draw the next card from the stock pile.',
           hintRecycle: 'Hint: Recycle the waste pile back to stock.',
           hintMove: 'Hint: Move {card} to {target}.',
@@ -1335,7 +1390,7 @@
           royalActive: 'Royal Gold active',
           royalReady: 'Unlocked (tap)',
           unlockedFree: 'Default',
-          settingsUnlockInfo: '<strong>Unlock Rewards:</strong> 1 win = Tinted Faces, 3 = Crimson Crest, 5 = Night Contrast, 7 = Emerald Back, 10 = Diagonal Split, 13 = Noble Metals, 17 = Canasta Clean, 20 = Crimson Filigree, 30 = Blue Tartan, 40 = Canasta Rummy, 52 = <strong>Royal Gold Edition</strong>.',
+          settingsUnlockInfo: '<strong>Unlock Rewards:</strong> 1 win = Tinted Faces, 3 = Navy Classic Back, 5 = Watermark Face, 7 = Emerald Back, 10 = 4-Color Max Contrast, 13 = Crimson Filigree, 17 = Canasta Clean, 20 = Red Tartan, 30 = Blue Tartan, 40 = Canasta Rummy, 52 = <strong>Royal Gold Edition</strong>.',
           restartBtn: '\u21bb Restart this deal',
           saveCloseBtn: 'Save and close',
           newModalTitle: 'New Game',
@@ -1355,8 +1410,8 @@
               <ul class="rules-list">
                 <li><strong>Tableau (7 columns):</strong> Build down (K, Q, J, 10\u2026 2) in alternating <strong>Red</strong> and <strong>Black</strong> colors.</li>
                 <li><strong>Empty Column:</strong> Only a <strong>King (K)</strong> (or stack led by a King) can fill an empty column.</li>
-                <li><strong>Foundations:</strong> Default order is Hearts, Diamonds, Spades, Clubs. When dragging manually, you can drop your first Ace onto any empty foundation slot.</li>
-                <li><strong>Tap to Move:</strong> Unambiguous moves happen immediately. When multiple targets exist, all valid destinations highlight for your choice.</li>
+                <li><strong>Stock Pile:</strong> Draw the next card by tapping the stock pile or any empty table area.</li>
+                <li><strong>Tap to Move:</strong> Unambiguous moves happen immediately. When multiple targets exist, green targets highlight your destinations.</li>
               </ul>
             </div>
             <div class="info-box-green">
@@ -1364,7 +1419,7 @@
               As soon as all tableau cards are face up, the game automatically cycles the stock and finishes the deal without pressing any extra button.
             </div>
             <p class="text-danger"><strong>Note:</strong> Once a game is won, move history is locked and Undo is disabled.</p>
-            <p class="text-amber"><strong>Rewards:</strong> Wins unlock Tinted Faces (1), Crimson Crest (3), Night Contrast (5), Emerald Back (7), Diagonal Split (10), Noble Metals (13), Canasta Clean (17), Crimson Filigree (20), Blue Tartan (30), Canasta Rummy (40), and Royal Gold Edition (52).</p>
+            <p class="text-amber"><strong>Rewards:</strong> Wins unlock Tinted Faces (1), Navy Classic Back (3), Watermark Face (5), Emerald Back (7), 4-Color Max Contrast (10), Crimson Filigree (13), Canasta Clean (17), Red Tartan (20), Blue Tartan (30), Canasta Rummy (40), and Royal Gold Edition (52).</p>
           `,
           suitNames: {
             spades: 'Spades',
@@ -1375,17 +1430,17 @@
           faces: {
             classic: 'High-Contrast',
             tinted: 'Soft Tinted',
-            dark: 'Night Contrast',
-            diagonal: 'Diagonal Split',
+            watermark: 'Watermark Suit',
+            solid4: '4-Color Max Contrast',
             'canasta-lite': 'Canasta Clean',
             canasta: 'Canasta Rummy'
           },
           backs: {
             royal_blue: 'Blue Lattice',
-            crimson_crest: 'Crimson Crest',
+            navy_classic: 'Navy Classic',
             emerald_geo: 'Emerald Back',
-            noble_gold: 'Noble Metals',
             crimson_filigree: 'Crimson Filigree',
+            red_tartan: 'Red Tartan',
             blue_tartan: 'Blue Tartan'
           }
         }
@@ -1403,18 +1458,18 @@
       const FACE_THEMES = [
         { id: 'classic', req: 0 },
         { id: 'tinted', req: 1 },
-        { id: 'dark', req: 5 },
-        { id: 'diagonal', req: 10 },
+        { id: 'watermark', req: 5 },
+        { id: 'solid4', req: 10 },
         { id: 'canasta-lite', req: 17 },
         { id: 'canasta', req: 40 }
       ];
 
       const BACK_THEMES = [
         { id: 'royal_blue', req: 0 },
-        { id: 'crimson_crest', req: 3 },
+        { id: 'navy_classic', req: 3 },
         { id: 'emerald_geo', req: 7 },
-        { id: 'noble_gold', req: 13 },
-        { id: 'crimson_filigree', req: 20 },
+        { id: 'crimson_filigree', req: 13 },
+        { id: 'red_tartan', req: 20 },
         { id: 'blue_tartan', req: 30 }
       ];
 
@@ -1513,9 +1568,10 @@
           if (!Array.isArray(state.foundationSuits) || state.foundationSuits.length !== 4) {
             state.foundationSuits = [...DEFAULT_FOUNDATION_SUITS];
           }
-          if (state.faceTheme === 'royal' || state.faceTheme === 'rainbow') {
-            state.faceTheme = 'diagonal';
-          }
+          if (state.faceTheme === 'dark') state.faceTheme = 'watermark';
+          if (state.faceTheme === 'diagonal' || state.faceTheme === 'royal') state.faceTheme = 'solid4';
+          if (state.backTheme === 'crimson_crest') state.backTheme = 'navy_classic';
+          if (state.backTheme === 'noble_gold') state.backTheme = 'crimson_filigree';
           if (state.isGameOver) {
             state.history = [];
           }
@@ -2041,13 +2097,14 @@
       }
 
       function renderCardBackSVG(themeId) {
-        if (themeId === 'crimson_crest') {
+        if (themeId === 'navy_classic') {
+          // Point J: Classic Navy Scalloped Border + Diagonal Checkerboard (Image 6)
           return `
             <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="86" rx="5" fill="#7f1d1d"/>
-              <rect x="4" y="4" width="52" height="78" rx="3" fill="none" stroke="#fca5a5" stroke-width="1.5"/>
-              <path d="M30 22L42 43L30 64L18 43Z" fill="#991b1b" stroke="#fef08a" stroke-width="1.5"/>
-              <circle cx="30" cy="43" r="6" fill="#fef08a"/>
+              <rect width="60" height="86" rx="4" fill="#ffffff"/>
+              <rect x="2" y="2" width="56" height="82" rx="3" fill="none" stroke="#1e3a8a" stroke-width="2.2"/>
+              <rect x="5" y="5" width="50" height="76" rx="2" fill="none" stroke="#1e3a8a" stroke-width="1" stroke-dasharray="2 1.5"/>
+              <rect x="7" y="7" width="46" height="72" rx="1.5" fill="url(#pat-navy-checker)" stroke="#1e3a8a" stroke-width="1.2"/>
             </svg>`;
         }
         if (themeId === 'emerald_geo') {
@@ -2058,16 +2115,6 @@
               <circle cx="30" cy="28" r="10" fill="none" stroke="#34d399" stroke-width="1.5"/>
               <circle cx="30" cy="43" r="10" fill="none" stroke="#a7f3d0" stroke-width="1.5"/>
               <circle cx="30" cy="58" r="10" fill="none" stroke="#34d399" stroke-width="1.5"/>
-            </svg>`;
-        }
-        if (themeId === 'noble_gold') {
-          return `
-            <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="86" rx="5" fill="#0f172a"/>
-              <rect x="3.5" y="3.5" width="53" height="79" rx="3.5" fill="none" stroke="url(#metal-yellow-gold)" stroke-width="2"/>
-              <path d="M12 18L48 68M48 18L12 68" stroke="url(#metal-rose-gold)" stroke-width="1.4" opacity="0.7"/>
-              <polygon points="30,23 43,43 30,63 17,43" fill="#1e293b" stroke="url(#metal-platinum)" stroke-width="1.8"/>
-              <circle cx="30" cy="43" r="5.5" fill="url(#metal-yellow-gold)"/>
             </svg>`;
         }
         if (themeId === 'crimson_filigree') {
@@ -2094,6 +2141,13 @@
               <circle cx="30" cy="43" r="2.1" fill="#e11d48"/>
             </svg>`;
         }
+        if (themeId === 'red_tartan') {
+          return `
+            <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
+              <rect width="60" height="86" rx="5" fill="url(#pat-red-tartan)"/>
+              <rect x="0.75" y="0.75" width="58.5" height="84.5" rx="4.5" fill="none" stroke="#fecdd3" stroke-width="1"/>
+            </svg>`;
+        }
         if (themeId === 'blue_tartan') {
           return `
             <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
@@ -2111,7 +2165,7 @@
       }
 
       function createCardElement(card, source, index, cardIndex, topPx = 0) {
-        const isLightBack = state.backTheme === 'crimson_filigree' || state.backTheme === 'blue_tartan';
+        const isLightBack = ['navy_classic', 'crimson_filigree', 'red_tartan', 'blue_tartan'].includes(state.backTheme);
         const el = document.createElement('div');
         el.className = 'card ' + (card.faceUp ? 'face-up ' + (isRed(card.suit) ? 'red' : 'black') : ('face-down' + (isLightBack ? ' light-back' : '')));
         el.style.top = `${topPx}px`;
@@ -2128,8 +2182,10 @@
         const rText = rankLabel(card.rank);
         const sIcon = suitSVG(card.suit);
 
-        if (state.faceTheme === 'diagonal') {
-          el.innerHTML = renderDiagonalSplitCardSVG(card);
+        if (state.faceTheme === 'watermark') {
+          el.innerHTML = renderWatermarkCardSVG(card);
+        } else if (state.faceTheme === 'solid4') {
+          el.innerHTML = renderSolid4ColorCardSVG(card);
         } else if (state.faceTheme === 'canasta-lite') {
           el.innerHTML = renderCanastaLiteCardSVG(card);
         } else if (state.faceTheme === 'canasta') {
@@ -2195,6 +2251,7 @@
         let dragGhost = null;
 
         el.addEventListener('pointerdown', (e) => {
+          e.stopPropagation();
           if (state.isGameOver || autoCompleting) return;
           if (e.button !== undefined && e.button !== 0) return;
           startX = e.clientX;
@@ -2299,6 +2356,7 @@
       function addSignpostHighlight(container, targetObj) {
         const overlay = document.createElement('div');
         overlay.className = 'signpost-target';
+        overlay.innerHTML = `<div class="signpost-dot"></div>`;
         overlay.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
           if (!selection) return;
@@ -2418,7 +2476,7 @@
       }
 
       function applyThemeClasses() {
-        document.body.classList.remove('royal-gold', 'face-tinted', 'face-dark', 'face-diagonal', 'face-canasta-lite', 'face-canasta');
+        document.body.classList.remove('royal-gold', 'face-tinted', 'face-watermark', 'face-solid4', 'face-canasta-lite', 'face-canasta');
         if (state.royalGold && state.wins >= ROYAL_GOLD_REQ) {
           document.body.classList.add('royal-gold');
           document.getElementById('meta-theme-color').setAttribute('content', '#0f172a');
@@ -2518,9 +2576,6 @@
         if (royalUnlocked) {
           rBtn.addEventListener('click', () => {
             state.royalGold = !state.royalGold;
-            if (state.royalGold) {
-              state.backTheme = 'noble_gold';
-            }
             saveToStorage();
             renderSettingsModal();
             renderAll();
@@ -2553,8 +2608,7 @@
         document.getElementById(id).classList.remove('open');
       }
 
-      // Secret Testing Gestures:
-      // 1) 5x tap on "Nastavení hry" -> jumps directly to the NEXT bonus milestone & applies it immediately
+      // Secret Testing Gestures
       let titleTapCount = 0;
       let titleTapTimer = null;
       document.getElementById('modal-settings-title').addEventListener('click', () => {
@@ -2585,7 +2639,6 @@
         titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1500);
       });
 
-      // 2) 5x tap on "Výhry" box in Settings -> resets wins back to 0 and restores default themes
       let winsTapCount = 0;
       let winsTapTimer = null;
       document.getElementById('stat-box-wins').addEventListener('click', () => {
@@ -2606,13 +2659,32 @@
         winsTapTimer = setTimeout(() => { winsTapCount = 0; }, 1500);
       });
 
+      // Point A: Tapping empty board area draws next card from stock
+      document.getElementById('board').addEventListener('click', (e) => {
+        if (e.target.closest('.card') || e.target.closest('.signpost-target') || e.target.closest('.slot-stock')) {
+          return;
+        }
+        drawFromStock();
+      });
+
       // Event Bindings
-      document.getElementById('slot-stock').addEventListener('click', drawFromStock);
+      document.getElementById('slot-stock').addEventListener('click', (e) => {
+        e.stopPropagation();
+        drawFromStock();
+      });
       document.getElementById('btn-undo').addEventListener('click', undoMove);
       document.getElementById('btn-hint').addEventListener('click', showHint);
       document.getElementById('btn-rules').addEventListener('click', () => openModal('modal-rules'));
       document.getElementById('btn-settings').addEventListener('click', () => openModal('modal-settings'));
-      document.getElementById('btn-new').addEventListener('click', () => openModal('modal-new'));
+
+      // Point F: If game is already finished (isGameOver), New Game deals immediately without asking
+      document.getElementById('btn-new').addEventListener('click', () => {
+        if (state.isGameOver) {
+          dealNewGame();
+        } else {
+          openModal('modal-new');
+        }
+      });
 
       document.getElementById('btn-close-settings').addEventListener('click', () => closeModal('modal-settings'));
       document.getElementById('btn-close-rules').addEventListener('click', () => closeModal('modal-rules'));
