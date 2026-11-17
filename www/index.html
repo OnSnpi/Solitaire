@@ -305,7 +305,6 @@
     /* Face Theme 4: Solid 4-Color Max Contrast (10 wins) */
     body.face-solid4 .card.face-up {
       padding: 0;
-      color: #ffffff;
     }
 
     /* Face Theme 5 & 6: Canasta Simplified (17 wins) & Canasta Full (40 wins) */
@@ -346,7 +345,7 @@
       box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.4);
     }
 
-    /* HIGH-VISIBILITY SIGNPOST TARGET HIGHLIGHT (POINT E) */
+    /* HIGH-VISIBILITY SIGNPOST TARGET HIGHLIGHT */
     .signpost-target {
       position: absolute;
       inset: -3px;
@@ -402,7 +401,7 @@
       50% { transform: scale(1.03); opacity: 1; }
     }
 
-    /* ENLARGED TYPOGRAPHY FOR CLASSIC & TINTED FACES (POINT G) */
+    /* ENLARGED TYPOGRAPHY FOR CLASSIC & TINTED FACES */
     .card-top-strip {
       display: flex;
       align-items: center;
@@ -813,7 +812,7 @@
   </style>
 </head>
 <body>
-  <!-- Shared Noble Metal SVG Gradients & Patterns -->
+  <!-- Shared Noble Metal SVG Gradients & Card Back Patterns -->
   <svg width="0" height="0" style="position:absolute">
     <defs>
       <linearGradient id="metal-yellow-gold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -831,22 +830,40 @@
         <stop offset="55%" stop-color="#cbd5e1" />
         <stop offset="100%" stop-color="#64748b" />
       </linearGradient>
-      <pattern id="pat-crimson-dots" width="3.5" height="3.5" patternUnits="userSpaceOnUse">
-        <circle cx="1.75" cy="1.75" r="0.85" fill="#e11d48" opacity="0.55" />
+
+      <!-- Default Card Back: Blue Diamond Lattice (Image 2 in Blue) -->
+      <pattern id="pat-blue-diamond" width="8.5" height="8.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="8.5" height="8.5" fill="#1d4ed8" />
+        <line x1="0" y1="0" x2="8.5" y2="0" stroke="#ffffff" stroke-width="1.35" />
+        <line x1="0" y1="0" x2="0" y2="8.5" stroke="#ffffff" stroke-width="1.35" />
       </pattern>
-      <!-- Blue Tartan Plaid Pattern (30 wins) -->
-      <pattern id="pat-blue-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="16" height="16" fill="#ffffff" />
-        <line x1="0" y1="2" x2="16" y2="2" stroke="#0284c7" stroke-width="1.3" />
-        <line x1="0" y1="5.5" x2="16" y2="5.5" stroke="#38bdf8" stroke-width="0.75" />
-        <line x1="0" y1="9" x2="16" y2="9" stroke="#0369a1" stroke-width="1.5" />
-        <line x1="0" y1="12.5" x2="16" y2="12.5" stroke="#7dd3fc" stroke-width="0.7" />
-        <line x1="2" y1="0" x2="2" y2="16" stroke="#0284c7" stroke-width="1.3" />
-        <line x1="5.5" y1="0" x2="5.5" y2="16" stroke="#38bdf8" stroke-width="0.75" />
-        <line x1="9" y1="0" x2="9" y2="16" stroke="#0369a1" stroke-width="1.5" />
-        <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#7dd3fc" stroke-width="0.7" />
+
+      <!-- 3 Wins: Classic Navy Checkerboard -->
+      <pattern id="pat-navy-checker" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="6" height="6" fill="#ffffff" />
+        <rect x="0" y="0" width="3" height="3" fill="#1e3a8a" />
+        <rect x="3" y="3" width="3" height="3" fill="#1e3a8a" />
       </pattern>
-      <!-- Red Tartan Plaid Pattern (20 wins - recolored from Blue Tartan) -->
+
+      <!-- 7 Wins: Classic Red Checkerboard -->
+      <pattern id="pat-red-checker" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="6" height="6" fill="#ffffff" />
+        <rect x="0" y="0" width="3" height="3" fill="#dc2626" />
+        <rect x="3" y="3" width="3" height="3" fill="#dc2626" />
+      </pattern>
+
+      <!-- 13 Wins: Red Star-Hex Lattice (Image 1) -->
+      <pattern id="pat-red-hex" width="10" height="17.32" patternUnits="userSpaceOnUse">
+        <rect width="10" height="17.32" fill="#ffffff" />
+        <path d="M5 0L5 17.32M0 4.33L10 12.99M10 4.33L0 12.99M0 0L10 8.66M10 0L0 8.66M0 8.66L10 17.32M10 8.66L0 17.32" stroke="#ef4444" stroke-width="0.65" />
+        <circle cx="5" cy="8.66" r="1.1" fill="#ef4444" />
+        <circle cx="0" cy="0" r="1.1" fill="#ef4444" />
+        <circle cx="10" cy="0" r="1.1" fill="#ef4444" />
+        <circle cx="0" cy="17.32" r="1.1" fill="#ef4444" />
+        <circle cx="10" cy="17.32" r="1.1" fill="#ef4444" />
+      </pattern>
+
+      <!-- 20 Wins: Red Tartan Plaid (recolored from Blue Tartan) -->
       <pattern id="pat-red-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <rect width="16" height="16" fill="#ffffff" />
         <line x1="0" y1="2" x2="16" y2="2" stroke="#e11d48" stroke-width="1.3" />
@@ -858,11 +875,18 @@
         <line x1="9" y1="0" x2="9" y2="16" stroke="#be123c" stroke-width="1.5" />
         <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#fda4af" stroke-width="0.7" />
       </pattern>
-      <!-- Classic Navy Checkerboard Pattern (3 wins - Image 6) -->
-      <pattern id="pat-navy-checker" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="6" height="6" fill="#ffffff" />
-        <rect x="0" y="0" width="3" height="3" fill="#1e3a8a" />
-        <rect x="3" y="3" width="3" height="3" fill="#1e3a8a" />
+
+      <!-- 30 Wins: Blue Tartan Plaid -->
+      <pattern id="pat-blue-tartan" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="16" height="16" fill="#ffffff" />
+        <line x1="0" y1="2" x2="16" y2="2" stroke="#0284c7" stroke-width="1.3" />
+        <line x1="0" y1="5.5" x2="16" y2="5.5" stroke="#38bdf8" stroke-width="0.75" />
+        <line x1="0" y1="9" x2="16" y2="9" stroke="#0369a1" stroke-width="1.5" />
+        <line x1="0" y1="12.5" x2="16" y2="12.5" stroke="#7dd3fc" stroke-width="0.7" />
+        <line x1="2" y1="0" x2="2" y2="16" stroke="#0284c7" stroke-width="1.3" />
+        <line x1="5.5" y1="0" x2="5.5" y2="16" stroke="#38bdf8" stroke-width="0.75" />
+        <line x1="9" y1="0" x2="9" y2="16" stroke="#0369a1" stroke-width="1.5" />
+        <line x1="12.5" y1="0" x2="12.5" y2="16" stroke="#7dd3fc" stroke-width="0.7" />
       </pattern>
     </defs>
   </svg>
@@ -1052,7 +1076,7 @@
 
   <script>
     (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v10';
+      const STORAGE_KEY = 'ondrandy_solitaire_v11';
 
       const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
       const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
@@ -1070,7 +1094,7 @@
         return `<svg viewBox="0 0 24 24" ${fill}><path d="${SUIT_PATHS[suit]}"/></svg>`;
       }
 
-      // Face Theme 3 (5 wins): Watermark Center Suit + Diagonal Opposite Corner Blocks (Image 5)
+      // Face Theme 3 (5 wins): Watermark Center Suit + Diagonal Opposite Corner Blocks
       function renderWatermarkCardSVG(card) {
         const red = isRed(card.suit);
         const ink = red ? '#dc2626' : '#0f172a';
@@ -1084,12 +1108,9 @@
 
         return `
           <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
-            <!-- Large Translucent Watermark Suit in Center -->
             ${pip(30, 44, 42, 0.14)}
-            <!-- Top-Left Vertical Corner Block -->
             <text x="12.5" y="19" text-anchor="middle" font-size="18.5" font-weight="900" fill="${ink}" letter-spacing="-1.2">${rTxt}</text>
             ${pip(12.5, 29.5, 14, 1)}
-            <!-- Bottom-Right Inverted Vertical Corner Block -->
             <g transform="translate(60, 88) rotate(180)">
               <text x="12.5" y="19" text-anchor="middle" font-size="18.5" font-weight="900" fill="${ink}" letter-spacing="-1.2">${rTxt}</text>
               ${pip(12.5, 29.5, 14, 1)}
@@ -1097,28 +1118,29 @@
           </svg>`;
       }
 
-      // Face Theme 4 (10 wins): Solid 4-Color Max Contrast with Giant White Letter/Digit ('X' for 10)
-      // Hearts = Red, Spades = Black, Clubs = Dark Blue, Diamonds = Rich Orange
+      // Face Theme 4 (10 wins): Solid 4-Color Max Contrast with Distinct Hue Separation
+      // Hearts = Crimson Red (#dc2626) + White text
+      // Diamonds = Bright Golden Yellow (#eab308) + Deep Black text (#0f172a) -> clearly distinct from Hearts!
+      // Spades = Deep Black (#0f172a) + White text
+      // Clubs = Royal Navy Blue (#1d4ed8) + White text
       function renderSolid4ColorCardSVG(card) {
-        const bgMap = {
-          hearts: '#dc2626',   // Sytě červená
-          spades: '#0f172a',   // Sytě černá
-          clubs: '#1e3a8a',    // Tmavě modrá
-          diamonds: '#ea580c'  // Sytě oranžová
+        const styleMap = {
+          hearts:   { bg: '#dc2626', fg: '#ffffff' },
+          diamonds: { bg: '#eab308', fg: '#0f172a' },
+          spades:   { bg: '#0f172a', fg: '#ffffff' },
+          clubs:    { bg: '#1d4ed8', fg: '#ffffff' }
         };
-        const bg = bgMap[card.suit];
+        const { bg, fg } = styleMap[card.suit];
         const rTxt = card.rank === 10 ? 'X' : rankLabel(card.rank);
         const s = 11.5 / 24;
-        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="#ffffff" transform="translate(22, 10.5) scale(${s}) translate(-12, -12)"/>`;
+        const topPip = `<path d="${SUIT_PATHS[card.suit]}" fill="${fg}" transform="translate(22, 10.5) scale(${s}) translate(-12, -12)"/>`;
 
         return `
           <svg class="card-full-svg" viewBox="0 0 60 88" xmlns="http://www.w3.org/2000/svg">
             <rect width="60" height="88" fill="${bg}"/>
-            <!-- Top-left compact index for stacked tableau columns -->
-            <text x="9.5" y="15.5" text-anchor="middle" font-size="15" font-weight="900" fill="#ffffff">${rTxt}</text>
+            <text x="9.5" y="15.5" text-anchor="middle" font-size="15" font-weight="900" fill="${fg}">${rTxt}</text>
             ${topPip}
-            <!-- Giant Bold White Single-Character Rank Filling Center -->
-            <text x="30" y="72" text-anchor="middle" font-size="60" font-weight="900" fill="#ffffff">${rTxt}</text>
+            <text x="30" y="72" text-anchor="middle" font-size="60" font-weight="900" fill="${fg}">${rTxt}</text>
           </svg>`;
       }
 
@@ -1305,7 +1327,7 @@
           royalActive: 'Aktivn\u00ed zlat\u00fd re\u017eim',
           royalReady: 'Odem\u010deno (klepni)',
           unlockedFree: 'Z\u00e1kladn\u00ed',
-          settingsUnlockInfo: '<strong>Odemknut\u00ed bonus\u016f:</strong> 1 v\u00fdhra = T\u00f3novan\u00e9 karty, 3 = Modr\u00fd klasick\u00fd rub, 5 = Vodoznakov\u00fd l\u00edc, 7 = Smaragdov\u00fd rub, 10 = \u010cty\u0159barevn\u00fd maxikontrast, 13 = Karm\u00ednov\u00fd ornament, 17 = Canasta p\u0159ehledn\u00e1, 20 = \u010cerven\u00fd tartan, 30 = Modr\u00fd tartan, 40 = Canasta \u017eol\u00edkov\u00e9, 52 = <strong>Kr\u00e1lovsk\u00e1 zlat\u00e1 edice</strong>.',
+          settingsUnlockInfo: '<strong>Odemknut\u00ed bonus\u016f:</strong> 1 v\u00fdhra = T\u00f3novan\u00e9 karty, 3 = Modr\u00fd klasick\u00fd, 5 = Vodoznakov\u00fd l\u00edc, 7 = \u010cerven\u00fd klasick\u00fd, 10 = \u010cty\u0159barevn\u00fd maxikontrast, 13 = \u010cerven\u00e1 r\u016f\u017eice, 17 = Canasta p\u0159ehledn\u00e1, 20 = \u010cerven\u00fd tartan, 30 = Modr\u00fd tartan, 40 = Canasta \u017eol\u00edkov\u00e9, 52 = <strong>Kr\u00e1lovsk\u00e1 zlat\u00e1 edice</strong>.',
           restartBtn: '\u21bb Restartovat tuto hru',
           saveCloseBtn: 'Ulo\u017eit a zav\u0159\u00edt',
           newModalTitle: 'Nov\u00e1 hra',
@@ -1334,7 +1356,7 @@
               Jakmile jsou v\u0161echny karty ve sloupc\u00edch oto\u010deny l\u00edcem nahoru, hra se sama automaticky dohraje v\u010detn\u011b dob\u00edrac\u00edho bal\u00ed\u010dku bez nutnosti ma\u010dkat dal\u0161\u00ed tla\u010d\u00edtka.
             </div>
             <p class="text-danger"><strong>Pozor:</strong> Po v\u00fdh\u0159e se historie tah\u016f uzamkne a tla\u010d\u00edtko Zp\u011bt se deaktivuje.</p>
-            <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Modr\u00fd klasick\u00fd rub (3), Vodoznakov\u00fd l\u00edc (5), Smaragdov\u00fd rub (7), \u010cty\u0159barevn\u00fd maxikontrast (10), Karm\u00ednov\u00fd ornament (13), Canasta p\u0159ehledn\u00e1 (17), \u010cerven\u00fd tartan (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
+            <p class="text-amber"><strong>Odm\u011bny:</strong> V\u00fdhry postupn\u011b odemykaj\u00ed T\u00f3novan\u00e9 karty (1), Modr\u00fd klasick\u00fd (3), Vodoznakov\u00fd l\u00edc (5), \u010cerven\u00fd klasick\u00fd (7), \u010cty\u0159barevn\u00fd maxikontrast (10), \u010cervenou r\u016f\u017eici (13), Canasta p\u0159ehledn\u00e1 (17), \u010cerven\u00fd tartan (20), Modr\u00fd tartan (30), Canasta \u017eol\u00edkov\u00e9 (40) a Kr\u00e1lovskou zlatou edici (52).</p>
           `,
           suitNames: {
             spades: 'Piky',
@@ -1351,10 +1373,10 @@
             canasta: 'Canasta \u017eol\u00edkov\u00e9'
           },
           backs: {
-            royal_blue: 'Modr\u00e1 m\u0159\u00ed\u017eka',
+            blue_diamond: 'Modr\u00e1 s\u00ed\u0165',
             navy_classic: 'Modr\u00fd klasick\u00fd',
-            emerald_geo: 'Smaragdov\u00fd',
-            crimson_filigree: 'Karm\u00ednov\u00fd ornament',
+            red_classic: '\u010cerven\u00fd klasick\u00fd',
+            red_rosette: '\u010cerven\u00e1 r\u016f\u017eice',
             red_tartan: '\u010cerven\u00fd tartan',
             blue_tartan: 'Modr\u00fd tartan'
           }
@@ -1390,7 +1412,7 @@
           royalActive: 'Royal Gold active',
           royalReady: 'Unlocked (tap)',
           unlockedFree: 'Default',
-          settingsUnlockInfo: '<strong>Unlock Rewards:</strong> 1 win = Tinted Faces, 3 = Navy Classic Back, 5 = Watermark Face, 7 = Emerald Back, 10 = 4-Color Max Contrast, 13 = Crimson Filigree, 17 = Canasta Clean, 20 = Red Tartan, 30 = Blue Tartan, 40 = Canasta Rummy, 52 = <strong>Royal Gold Edition</strong>.',
+          settingsUnlockInfo: '<strong>Unlock Rewards:</strong> 1 win = Tinted Faces, 3 = Navy Classic, 5 = Watermark Face, 7 = Red Classic, 10 = 4-Color Max Contrast, 13 = Red Rosette, 17 = Canasta Clean, 20 = Red Tartan, 30 = Blue Tartan, 40 = Canasta Rummy, 52 = <strong>Royal Gold Edition</strong>.',
           restartBtn: '\u21bb Restart this deal',
           saveCloseBtn: 'Save and close',
           newModalTitle: 'New Game',
@@ -1419,7 +1441,7 @@
               As soon as all tableau cards are face up, the game automatically cycles the stock and finishes the deal without pressing any extra button.
             </div>
             <p class="text-danger"><strong>Note:</strong> Once a game is won, move history is locked and Undo is disabled.</p>
-            <p class="text-amber"><strong>Rewards:</strong> Wins unlock Tinted Faces (1), Navy Classic Back (3), Watermark Face (5), Emerald Back (7), 4-Color Max Contrast (10), Crimson Filigree (13), Canasta Clean (17), Red Tartan (20), Blue Tartan (30), Canasta Rummy (40), and Royal Gold Edition (52).</p>
+            <p class="text-amber"><strong>Rewards:</strong> Wins unlock Tinted Faces (1), Navy Classic (3), Watermark Face (5), Red Classic (7), 4-Color Max Contrast (10), Red Rosette (13), Canasta Clean (17), Red Tartan (20), Blue Tartan (30), Canasta Rummy (40), and Royal Gold Edition (52).</p>
           `,
           suitNames: {
             spades: 'Spades',
@@ -1436,10 +1458,10 @@
             canasta: 'Canasta Rummy'
           },
           backs: {
-            royal_blue: 'Blue Lattice',
+            blue_diamond: 'Blue Lattice',
             navy_classic: 'Navy Classic',
-            emerald_geo: 'Emerald Back',
-            crimson_filigree: 'Crimson Filigree',
+            red_classic: 'Red Classic',
+            red_rosette: 'Red Rosette',
             red_tartan: 'Red Tartan',
             blue_tartan: 'Blue Tartan'
           }
@@ -1465,10 +1487,10 @@
       ];
 
       const BACK_THEMES = [
-        { id: 'royal_blue', req: 0 },
+        { id: 'blue_diamond', req: 0 },
         { id: 'navy_classic', req: 3 },
-        { id: 'emerald_geo', req: 7 },
-        { id: 'crimson_filigree', req: 13 },
+        { id: 'red_classic', req: 7 },
+        { id: 'red_rosette', req: 13 },
         { id: 'red_tartan', req: 20 },
         { id: 'blue_tartan', req: 30 }
       ];
@@ -1497,7 +1519,7 @@
         lang: detectLang(),
         wins: 0,
         faceTheme: 'classic',
-        backTheme: 'royal_blue',
+        backTheme: 'blue_diamond',
         royalGold: false,
         stock: [],
         waste: [],
@@ -1568,10 +1590,12 @@
           if (!Array.isArray(state.foundationSuits) || state.foundationSuits.length !== 4) {
             state.foundationSuits = [...DEFAULT_FOUNDATION_SUITS];
           }
-          if (state.faceTheme === 'dark') state.faceTheme = 'watermark';
-          if (state.faceTheme === 'diagonal' || state.faceTheme === 'royal') state.faceTheme = 'solid4';
-          if (state.backTheme === 'crimson_crest') state.backTheme = 'navy_classic';
-          if (state.backTheme === 'noble_gold') state.backTheme = 'crimson_filigree';
+          if (!BACK_THEMES.some(b => b.id === state.backTheme)) {
+            state.backTheme = 'blue_diamond';
+          }
+          if (!FACE_THEMES.some(f => f.id === state.faceTheme)) {
+            state.faceTheme = 'classic';
+          }
           if (state.isGameOver) {
             state.history = [];
           }
@@ -2096,9 +2120,27 @@
         }
       }
 
+      // Helper for 8-pointed compass star in Red Rosette card back (Image 1)
+      function eightPointStarSVG(cx, cy, rOuter, rInner) {
+        let segs = '';
+        for (let i = 0; i < 8; i++) {
+          const a0 = (i * 45 - 90) * Math.PI / 180;
+          const aMid = (i * 45 - 90 + 22.5) * Math.PI / 180;
+          const a1 = (i * 45 - 90 + 45) * Math.PI / 180;
+          const px = cx + rOuter * Math.cos(a0);
+          const py = cy + rOuter * Math.sin(a0);
+          const mx = cx + rInner * Math.cos(aMid);
+          const my = cy + rInner * Math.sin(aMid);
+          const qx = cx + rOuter * Math.cos(a1);
+          const qy = cy + rOuter * Math.sin(a1);
+          segs += `<polygon points="${cx},${cy} ${px.toFixed(2)},${py.toFixed(2)} ${mx.toFixed(2)},${my.toFixed(2)}" fill="#ef4444"/>`;
+          segs += `<polygon points="${cx},${cy} ${mx.toFixed(2)},${my.toFixed(2)} ${qx.toFixed(2)},${qy.toFixed(2)}" fill="#ffffff" stroke="#ef4444" stroke-width="0.4"/>`;
+        }
+        return segs;
+      }
+
       function renderCardBackSVG(themeId) {
         if (themeId === 'navy_classic') {
-          // Point J: Classic Navy Scalloped Border + Diagonal Checkerboard (Image 6)
           return `
             <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
               <rect width="60" height="86" rx="4" fill="#ffffff"/>
@@ -2107,38 +2149,38 @@
               <rect x="7" y="7" width="46" height="72" rx="1.5" fill="url(#pat-navy-checker)" stroke="#1e3a8a" stroke-width="1.2"/>
             </svg>`;
         }
-        if (themeId === 'emerald_geo') {
+        if (themeId === 'red_classic') {
           return `
             <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="86" rx="5" fill="#064e3b"/>
-              <rect x="4" y="4" width="52" height="78" rx="3" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
-              <circle cx="30" cy="28" r="10" fill="none" stroke="#34d399" stroke-width="1.5"/>
-              <circle cx="30" cy="43" r="10" fill="none" stroke="#a7f3d0" stroke-width="1.5"/>
-              <circle cx="30" cy="58" r="10" fill="none" stroke="#34d399" stroke-width="1.5"/>
+              <rect width="60" height="86" rx="4" fill="#ffffff"/>
+              <rect x="2" y="2" width="56" height="82" rx="3" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+              <rect x="5" y="5" width="50" height="76" rx="2" fill="none" stroke="#dc2626" stroke-width="1" stroke-dasharray="2 1.5"/>
+              <rect x="7" y="7" width="46" height="72" rx="1.5" fill="url(#pat-red-checker)" stroke="#dc2626" stroke-width="1.2"/>
             </svg>`;
         }
-        if (themeId === 'crimson_filigree') {
+        if (themeId === 'red_rosette') {
+          // Image 1: Bold Red Border, Corner Star Medallions, Hex-Star Lattice, Center 8-Point Star
           return `
             <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="86" rx="5" fill="#ffffff"/>
-              <rect x="2.5" y="2.5" width="55" height="81" rx="3.5" fill="url(#pat-crimson-dots)"/>
-              <path d="M12 16 C12 8, 25 8, 30 15 C35 8, 48 8, 48 16 C54 19, 54 31, 47 36 C55 40, 55 46, 47 50 C54 55, 54 67, 48 70 C48 78, 35 78, 30 71 C25 78, 12 78, 12 70 C6 67, 6 55, 13 50 C5 46, 5 40, 13 36 C6 31, 6 19, 12 16 Z"
-                    fill="#e11d48" stroke="#ffffff" stroke-width="1.4"/>
-              <path d="M16 18 C20 13, 26 16, 26 22 C26 27, 19 28, 17 24 M44 18 C40 13, 34 16, 34 22 C34 27, 41 28, 43 24
-                       M16 68 C20 73, 26 70, 26 64 C26 59, 19 58, 17 62 M44 68 C40 73, 34 70, 34 64 C34 59, 41 58, 43 62"
-                    fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
-              <polygon points="30,17 25,29 35,29" fill="#ffffff" opacity="0.9"/>
-              <polygon points="30,69 25,57 35,57" fill="#ffffff" opacity="0.9"/>
-              <circle cx="30" cy="13.5" r="2.2" fill="#e11d48" stroke="#ffffff" stroke-width="1"/>
-              <circle cx="30" cy="72.5" r="2.2" fill="#e11d48" stroke="#ffffff" stroke-width="1"/>
-              <circle cx="30" cy="43" r="14" fill="#ffffff" stroke="#e11d48" stroke-width="1.4"/>
-              <circle cx="30" cy="43" r="11.5" fill="#e11d48"/>
-              <polygon points="30,33 34,43 30,53 26,43" fill="none" stroke="#ffffff" stroke-width="1.1"/>
-              <polygon points="20,43 30,39 40,43 30,47" fill="none" stroke="#ffffff" stroke-width="1.1"/>
-              <polygon points="23,36 33,40 37,50 27,46" fill="none" stroke="#ffffff" stroke-width="1.1"/>
-              <polygon points="37,36 33,46 23,50 27,40" fill="none" stroke="#ffffff" stroke-width="1.1"/>
-              <circle cx="30" cy="43" r="4.5" fill="#ffffff"/>
-              <circle cx="30" cy="43" r="2.1" fill="#e11d48"/>
+              <rect width="60" height="86" rx="4" fill="#ffffff"/>
+              <!-- Outer Red Frame -->
+              <rect x="3" y="3" width="54" height="80" rx="2" fill="none" stroke="#ef4444" stroke-width="3.6"/>
+              <rect x="6.5" y="6.5" width="47" height="73" rx="1.5" fill="none" stroke="#ef4444" stroke-width="0.9"/>
+              <!-- Inner Geometric Hex-Star Pattern -->
+              <rect x="8.5" y="8.5" width="43" height="69" fill="url(#pat-red-hex)" stroke="#ef4444" stroke-width="0.9"/>
+              <!-- 4 Corner Star Medallions -->
+              <circle cx="6.5" cy="6.5" r="5.2" fill="#ffffff" stroke="#ef4444" stroke-width="1.1"/>
+              ${eightPointStarSVG(6.5, 6.5, 4.6, 1.9)}
+              <circle cx="53.5" cy="6.5" r="5.2" fill="#ffffff" stroke="#ef4444" stroke-width="1.1"/>
+              ${eightPointStarSVG(53.5, 6.5, 4.6, 1.9)}
+              <circle cx="6.5" cy="79.5" r="5.2" fill="#ffffff" stroke="#ef4444" stroke-width="1.1"/>
+              ${eightPointStarSVG(6.5, 79.5, 4.6, 1.9)}
+              <circle cx="53.5" cy="79.5" r="5.2" fill="#ffffff" stroke="#ef4444" stroke-width="1.1"/>
+              ${eightPointStarSVG(53.5, 79.5, 4.6, 1.9)}
+              <!-- Center Compass Star Medallion -->
+              <circle cx="30" cy="43" r="10.5" fill="#ffffff" stroke="#ef4444" stroke-width="1.2"/>
+              <circle cx="30" cy="43" r="8.8" fill="#ef4444"/>
+              ${eightPointStarSVG(30, 43, 12.5, 5.2)}
             </svg>`;
         }
         if (themeId === 'red_tartan') {
@@ -2155,19 +2197,17 @@
               <rect x="0.75" y="0.75" width="58.5" height="84.5" rx="4.5" fill="none" stroke="#bae6fd" stroke-width="1"/>
             </svg>`;
         }
+        // Default (0 wins): Blue Diamond Lattice (Image 2 in Blue)
         return `
           <svg class="card-back-svg" viewBox="0 0 60 86" xmlns="http://www.w3.org/2000/svg">
-            <rect width="60" height="86" rx="5" fill="#1d4ed8"/>
-            <rect x="4" y="4" width="52" height="78" rx="3" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
-            <path d="M10 10L50 76M50 10L10 76M30 8V78M8 43H52" stroke="#3b82f6" stroke-width="1.2"/>
-            <circle cx="30" cy="43" r="8" fill="#1e40af" stroke="#dbeafe" stroke-width="1.8"/>
+            <rect width="60" height="86" rx="4" fill="#ffffff"/>
+            <rect x="2.2" y="2.2" width="55.6" height="81.6" rx="3" fill="url(#pat-blue-diamond)"/>
           </svg>`;
       }
 
       function createCardElement(card, source, index, cardIndex, topPx = 0) {
-        const isLightBack = ['navy_classic', 'crimson_filigree', 'red_tartan', 'blue_tartan'].includes(state.backTheme);
         const el = document.createElement('div');
-        el.className = 'card ' + (card.faceUp ? 'face-up ' + (isRed(card.suit) ? 'red' : 'black') : ('face-down' + (isLightBack ? ' light-back' : '')));
+        el.className = 'card ' + (card.faceUp ? 'face-up ' + (isRed(card.suit) ? 'red' : 'black') : 'face-down light-back');
         el.style.top = `${topPx}px`;
         el.style.zIndex = String(cardIndex + 2);
         el.dataset.source = source;
@@ -2608,7 +2648,8 @@
         document.getElementById(id).classList.remove('open');
       }
 
-      // Secret Testing Gestures
+      // Secret Testing Gestures:
+      // 1) 5x tap on "Nastavení hry" -> jumps directly to the NEXT bonus milestone & applies it immediately
       let titleTapCount = 0;
       let titleTapTimer = null;
       document.getElementById('modal-settings-title').addEventListener('click', () => {
@@ -2639,6 +2680,7 @@
         titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1500);
       });
 
+      // 2) 5x tap on "Výhry" box in Settings -> resets wins back to 0 and restores default themes
       let winsTapCount = 0;
       let winsTapTimer = null;
       document.getElementById('stat-box-wins').addEventListener('click', () => {
@@ -2649,7 +2691,7 @@
           state.wins = 0;
           state.royalGold = false;
           state.faceTheme = 'classic';
-          state.backTheme = 'royal_blue';
+          state.backTheme = 'blue_diamond';
           saveToStorage();
           renderSettingsModal();
           renderAll();
