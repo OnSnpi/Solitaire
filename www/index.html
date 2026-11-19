@@ -690,6 +690,18 @@
       color: var(--accent);
     }
 
+    .feedback-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .feedback-col {
+      display: flex;
+      flex-direction: column;
+    }
+
     .flag-svg {
       width: 20px;
       height: 14px;
@@ -1049,6 +1061,18 @@
           </div>
         </div>
 
+        <!-- Sound & Haptics Toggles -->
+        <div class="feedback-row">
+          <div class="feedback-col">
+            <div class="setting-title" id="lbl-sound-title">Zvuky</div>
+            <button class="seg-btn active" id="btn-toggle-sound" type="button"></button>
+          </div>
+          <div class="feedback-col">
+            <div class="setting-title" id="lbl-haptics-title">Vibrace</div>
+            <button class="seg-btn active" id="btn-toggle-haptics" type="button"></button>
+          </div>
+        </div>
+
         <div class="setting-group">
           <div class="setting-title" id="lbl-faces-title"></div>
           <div class="unlock-grid" id="face-themes-grid"></div>
@@ -1378,6 +1402,10 @@
           winsReset: 'Po\u010det v\u00fdher byl vynulov\u00e1n.',
           settingsTitle: 'Nastaven\u00ed hry',
           langTitle: 'Jazyk / Language',
+          soundTitle: 'Zvuky',
+          hapticsTitle: 'Vibrace',
+          onLabel: 'Zapnuto',
+          offLabel: 'Vypnuto',
           facesTitle: 'Vzhled l\u00edc\u016f karet',
           backsTitle: 'Vzor rubu karet',
           royalTitle: 'Mistrovsk\u00e1 edice',
@@ -1464,6 +1492,10 @@
           winsReset: 'Win counter has been reset.',
           settingsTitle: 'Game Settings',
           langTitle: 'Jazyk / Language',
+          soundTitle: 'Sound',
+          hapticsTitle: 'Vibration',
+          onLabel: 'On',
+          offLabel: 'Off',
           facesTitle: 'Card Face Style',
           backsTitle: 'Card Back Pattern',
           royalTitle: 'Master Edition',
@@ -1580,6 +1612,8 @@
         faceTheme: 'classic',
         backTheme: 'blue_diamond',
         royalGold: false,
+        soundEnabled: true,
+        hapticsEnabled: true,
         stock: [],
         waste: [],
         foundations: [[], [], [], []],
@@ -1602,6 +1636,175 @@
 
       function markCardInteraction() {
         lastCardInteractionTs = Date.now();
+      }
+
+      // ============================================================
+      // TACTILE & ACOUSTIC ENGINE (Web Audio API + @capacitor/haptics)
+      // ============================================================
+      let audioCtx = null;
+      let noiseBuffer = null;
+
+      function ensureAudioContext() {
+        if (!state.soundEnabled) return null;
+        try {
+          if (!audioCtx) {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            if (!Ctx) return null;
+            audioCtx = new Ctx();
+            // Pre-build short soft paper-rustle noise buffer
+            const sampleRate = audioCtx.sampleRate;
+            const length = Math.floor(sampleRate * 0.08);
+            noiseBuffer = audioCtx.createBuffer(1, length, sampleRate);
+            const data = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < length; i++) {
+              data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleRate * 0.018));
+            }
+          }
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+          }
+          return audioCtx;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      // Wake up AudioContext on first user interaction in Android WebView
+      window.addEventListener('pointerdown', () => {
+        ensureAudioContext();
+      }, { passive: true });
+
+      function playPaperSwish(gainLevel = 0.09, centerFreq = 1600) {
+        if (!state.soundEnabled) return;
+        const ctx = ensureAudioContext();
+        if (!ctx || !noiseBuffer) return;
+        try {
+          const now = ctx.currentTime;
+          const src = ctx.createBufferSource();
+          src.buffer = noiseBuffer;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(centerFreq, now);
+          filter.Q.value = 1.4;
+
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(gainLevel, now + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.065);
+
+          src.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          src.start(now);
+        } catch (e) {}
+      }
+
+      function playTone(freq, duration = 0.14, gainLevel = 0.08, type = 'sine', delay = 0) {
+        if (!state.soundEnabled) return;
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        try {
+          const start = ctx.currentTime + delay;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, start);
+
+          gain.gain.setValueAtTime(0.0008, start);
+          gain.gain.linearRampToValueAtTime(gainLevel, start + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0005, start + duration);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + duration + 0.01);
+        } catch (e) {}
+      }
+
+      function getNativeHaptics() {
+        try {
+          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Haptics) {
+            return window.Capacitor.Plugins.Haptics;
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function triggerHaptic(kind) {
+        if (!state.hapticsEnabled) return;
+        const haptics = getNativeHaptics();
+
+        if (haptics) {
+          try {
+            if (kind === 'tap' || kind === 'draw') {
+              haptics.impact({ style: 'LIGHT' }).catch(() => {});
+              return;
+            }
+            if (kind === 'move' || kind === 'undo') {
+              haptics.impact({ style: 'MEDIUM' }).catch(() => {});
+              return;
+            }
+            if (kind === 'foundation') {
+              haptics.notification({ type: 'SUCCESS' }).catch(() => {});
+              return;
+            }
+            if (kind === 'error') {
+              haptics.notification({ type: 'ERROR' }).catch(() => {});
+              return;
+            }
+            if (kind === 'win') {
+              haptics.notification({ type: 'SUCCESS' }).catch(() => {});
+              setTimeout(() => haptics.impact({ style: 'HEAVY' }).catch(() => {}), 140);
+              return;
+            }
+          } catch (e) {}
+        }
+
+        // Fallback Web Vibration API
+        if (navigator.vibrate) {
+          try {
+            if (kind === 'tap' || kind === 'draw') navigator.vibrate(10);
+            else if (kind === 'move') navigator.vibrate(18);
+            else if (kind === 'undo') navigator.vibrate([12, 25, 12]);
+            else if (kind === 'foundation') navigator.vibrate([15, 35, 25]);
+            else if (kind === 'error') navigator.vibrate([35, 25, 35]);
+            else if (kind === 'win') navigator.vibrate([25, 45, 25, 45, 75]);
+          } catch (e) {}
+        }
+      }
+
+      function triggerFeedback(kind, extra = {}) {
+        triggerHaptic(kind);
+        if (!state.soundEnabled) return;
+
+        if (kind === 'tap') {
+          playTone(540, 0.075, 0.055, 'triangle', 0);
+        } else if (kind === 'draw') {
+          playPaperSwish(0.085, 1750);
+        } else if (kind === 'move') {
+          playPaperSwish(0.11, 1350);
+          playTone(420, 0.09, 0.045, 'sine', 0.015);
+        } else if (kind === 'foundation') {
+          // Ascending pitch from Ace (rank 1 = C5) up to King (rank 13 = C6)
+          const rank = extra.rank || 1;
+          const semitones = Math.max(0, Math.min(12, rank - 1));
+          const freq = 523.25 * Math.pow(2, semitones / 12);
+          playTone(freq, 0.16, 0.08, 'sine', 0);
+          playTone(freq * 1.5, 0.14, 0.04, 'triangle', 0.03);
+        } else if (kind === 'undo') {
+          playTone(587.33, 0.09, 0.055, 'sine', 0);
+          playTone(440.00, 0.12, 0.055, 'sine', 0.055);
+        } else if (kind === 'error') {
+          playTone(174.61, 0.09, 0.06, 'triangle', 0);
+          playTone(146.83, 0.12, 0.06, 'triangle', 0.06);
+        } else if (kind === 'win') {
+          const chord = [523.25, 659.25, 783.99, 987.77, 1046.50];
+          chord.forEach((f, idx) => {
+            playTone(f, 0.34, 0.085, 'sine', idx * 0.075);
+          });
+        }
       }
 
       function t(key, vars = {}) {
@@ -1690,6 +1893,8 @@
           faceTheme: state.faceTheme,
           backTheme: state.backTheme,
           royalGold: state.royalGold,
+          soundEnabled: state.soundEnabled,
+          hapticsEnabled: state.hapticsEnabled,
           stock: state.stock,
           waste: state.waste,
           foundations: state.foundations,
@@ -1720,6 +1925,8 @@
           if (!FACE_THEMES.some(f => f.id === state.faceTheme)) {
             state.faceTheme = 'classic';
           }
+          if (typeof state.soundEnabled !== 'boolean') state.soundEnabled = true;
+          if (typeof state.hapticsEnabled !== 'boolean') state.hapticsEnabled = true;
           if (typeof state.seedCursor !== 'number') state.seedCursor = -1;
           if (typeof state.seedStep !== 'number') state.seedStep = 0;
           if (typeof state.seedUsedCount !== 'number') state.seedUsedCount = 0;
@@ -1755,8 +1962,6 @@
         return x;
       }
 
-      // Picks the next unused verified winnable seed using a coprime full-cycle permutation
-      // Guarantees zero repeats until all 15,000 seeds have been played once
       function getNextWinnableSeed() {
         const seeds = window.WINNABLE_SEEDS;
         if (!Array.isArray(seeds) || seeds.length === 0) return null;
@@ -1818,7 +2023,7 @@
         return deck;
       }
 
-      function dealNewGame() {
+      function dealNewGame(silent = false) {
         autoCompleting = false;
         selection = null;
         hintHighlight = null;
@@ -1850,6 +2055,7 @@
         saveToStorage();
         renderAll();
         setStatus(t('newDealt'));
+        if (!silent) triggerFeedback('draw');
       }
 
       function restartCurrentDeal() {
@@ -1872,6 +2078,7 @@
         saveToStorage();
         renderAll();
         setStatus(t('restarted'));
+        triggerFeedback('undo');
       }
 
       function pushHistory() {
@@ -1894,6 +2101,7 @@
         saveToStorage();
         renderAll();
         setStatus(t('undoneStatus'));
+        triggerFeedback('undo');
       }
 
       function isSuitClaimedElsewhere(suit, excludeIdx) {
@@ -2003,13 +2211,17 @@
           }
         }
 
+        const movedRank = movingCards[0] ? movingCards[0].rank : 1;
+
         if (target.type === 'foundation') {
           if (state.foundations[target.index].length === 0) {
             syncFoundationSuitSlot(target.index, movingCards[0].suit);
           }
           state.foundations[target.index].push(movingCards[0]);
+          triggerFeedback('foundation', { rank: movedRank });
         } else if (target.type === 'tableau') {
           state.tableau[target.index].push(...movingCards);
+          triggerFeedback('move');
         }
 
         state.moves += 1;
@@ -2033,6 +2245,7 @@
           saveToStorage();
           renderAll();
           setStatus(t('ready'));
+          triggerFeedback('draw');
           checkVictoryOrAutoComplete();
         } else if (state.waste.length > 0) {
           pushHistory();
@@ -2045,6 +2258,7 @@
           saveToStorage();
           renderAll();
           setStatus(t('ready'));
+          triggerFeedback('draw');
           checkVictoryOrAutoComplete();
         }
       }
@@ -2058,6 +2272,7 @@
           selection = null;
           renderAll();
           setStatus(t('ready'));
+          triggerFeedback('tap');
           return;
         }
 
@@ -2090,6 +2305,7 @@
           selection = null;
           renderAll();
           setStatus(t('noMoves'));
+          triggerFeedback('error');
           return;
         }
 
@@ -2126,6 +2342,7 @@
         selection = { source, index, cardIndex, targets };
         renderAll();
         setStatus(t('multiTarget'));
+        triggerFeedback('tap');
       }
 
       function canAutoComplete() {
@@ -2172,6 +2389,7 @@
                 state.moves += 1;
                 moved = true;
                 stallCycles = 0;
+                triggerFeedback('foundation', { rank: wTop.rank });
                 break;
               }
             }
@@ -2200,6 +2418,7 @@
               state.moves += 1;
               moved = true;
               stallCycles = 0;
+              triggerFeedback('foundation', { rank: card.rank });
             }
           }
 
@@ -2211,6 +2430,7 @@
               state.moves += 1;
               moved = true;
               stallCycles += 1;
+              playPaperSwish(0.05, 1800);
             } else if (state.waste.length > 0) {
               while (state.waste.length > 0) {
                 const c = state.waste.pop();
@@ -2229,7 +2449,7 @@
             autoCompleting = false;
             handleVictory();
           } else if (moved && stallCycles <= 60) {
-            setTimeout(step, 55);
+            setTimeout(step, 60);
           } else {
             autoCompleting = false;
             setStatus(t('ready'));
@@ -2267,6 +2487,7 @@
 
         saveToStorage();
         renderAll();
+        triggerFeedback('win');
 
         document.getElementById('win-summary').textContent = t('winSummary', {
           moves: state.moves,
@@ -2293,6 +2514,7 @@
       function showHint() {
         if (state.isGameOver || autoCompleting) return;
         selection = null;
+        triggerFeedback('tap');
 
         for (let c = 0; c < 7; c++) {
           const col = state.tableau[c];
@@ -2535,6 +2757,7 @@
             if (!dragging && Math.hypot(dx, dy) > 8) {
               dragging = true;
               markCardInteraction();
+              triggerFeedback('tap');
               const manualTargets = getValidTargets(source, index, cardIndex, true);
               selection = { source, index, cardIndex, targets: manualTargets };
               renderSignpostOverlaysOnly();
@@ -2772,6 +2995,8 @@
         document.getElementById('stat-val-wins').textContent = state.wins;
 
         document.getElementById('lbl-lang-title').textContent = t('langTitle');
+        document.getElementById('lbl-sound-title').textContent = t('soundTitle');
+        document.getElementById('lbl-haptics-title').textContent = t('hapticsTitle');
         document.getElementById('lbl-faces-title').textContent = t('facesTitle');
         document.getElementById('lbl-backs-title').textContent = t('backsTitle');
         document.getElementById('lbl-royal-title').textContent = t('royalTitle');
@@ -2781,6 +3006,18 @@
 
         document.getElementById('lang-cs').classList.toggle('active', state.lang === 'cs');
         document.getElementById('lang-en').classList.toggle('active', state.lang === 'en');
+
+        const soundBtn = document.getElementById('btn-toggle-sound');
+        soundBtn.classList.toggle('active', state.soundEnabled);
+        soundBtn.innerHTML = state.soundEnabled
+          ? `<span>&#128266;</span><span>${t('onLabel')}</span>`
+          : `<span>&#128263;</span><span>${t('offLabel')}</span>`;
+
+        const hapticsBtn = document.getElementById('btn-toggle-haptics');
+        hapticsBtn.classList.toggle('active', state.hapticsEnabled);
+        hapticsBtn.innerHTML = state.hapticsEnabled
+          ? `<span>&#128243;</span><span>${t('onLabel')}</span>`
+          : `<span>&#128244;</span><span>${t('offLabel')}</span>`;
 
         // Face themes
         const facesGrid = document.getElementById('face-themes-grid');
@@ -2804,6 +3041,7 @@
               saveToStorage();
               renderSettingsModal();
               renderAll();
+              triggerFeedback('tap');
             });
           }
           facesGrid.appendChild(btn);
@@ -2831,6 +3069,7 @@
               saveToStorage();
               renderSettingsModal();
               renderAll();
+              triggerFeedback('tap');
             });
           }
           backsGrid.appendChild(btn);
@@ -2853,6 +3092,7 @@
             saveToStorage();
             renderSettingsModal();
             renderAll();
+            triggerFeedback('tap');
           });
         }
         royalBox.appendChild(rBtn);
@@ -2907,6 +3147,7 @@
           saveToStorage();
           renderSettingsModal();
           renderAll();
+          triggerFeedback('win');
           setStatus(t('winUnlockNewHtml').replace(/<[^>]*>/g, ''));
           return;
         }
@@ -2927,6 +3168,7 @@
           saveToStorage();
           renderSettingsModal();
           renderAll();
+          triggerFeedback('undo');
           setStatus(t('winsReset'));
           return;
         }
@@ -2961,6 +3203,9 @@
         const canUndo = !state.isGameOver && state.history.length > 0 && !autoCompleting;
 
         if (canUndo && dx <= -minSwipeWidth && Math.abs(dx) > Math.abs(dy) * 2) {
+          if (!boardSwiped) {
+            triggerHaptic('tap');
+          }
           boardSwiped = true;
           swipeBadgeEl.classList.add('visible');
         } else {
@@ -3005,20 +3250,36 @@
       });
       document.getElementById('btn-undo').addEventListener('click', undoMove);
       document.getElementById('btn-hint').addEventListener('click', showHint);
-      document.getElementById('btn-rules').addEventListener('click', () => openModal('modal-rules'));
-      document.getElementById('btn-settings').addEventListener('click', () => openModal('modal-settings'));
+      document.getElementById('btn-rules').addEventListener('click', () => {
+        triggerFeedback('tap');
+        openModal('modal-rules');
+      });
+      document.getElementById('btn-settings').addEventListener('click', () => {
+        triggerFeedback('tap');
+        openModal('modal-settings');
+      });
 
       document.getElementById('btn-new').addEventListener('click', () => {
         if (state.isGameOver) {
           dealNewGame();
         } else {
+          triggerFeedback('tap');
           openModal('modal-new');
         }
       });
 
-      document.getElementById('btn-close-settings').addEventListener('click', () => closeModal('modal-settings'));
-      document.getElementById('btn-close-rules').addEventListener('click', () => closeModal('modal-rules'));
-      document.getElementById('btn-close-new').addEventListener('click', () => closeModal('modal-new'));
+      document.getElementById('btn-close-settings').addEventListener('click', () => {
+        triggerFeedback('tap');
+        closeModal('modal-settings');
+      });
+      document.getElementById('btn-close-rules').addEventListener('click', () => {
+        triggerFeedback('tap');
+        closeModal('modal-rules');
+      });
+      document.getElementById('btn-close-new').addEventListener('click', () => {
+        triggerFeedback('tap');
+        closeModal('modal-new');
+      });
 
       document.getElementById('btn-restart-deal').addEventListener('click', () => {
         closeModal('modal-settings');
@@ -3046,6 +3307,7 @@
         renderSettingsModal();
         renderAll();
         setStatus(t('ready'));
+        triggerFeedback('tap');
       });
 
       document.getElementById('lang-en').addEventListener('click', () => {
@@ -3054,6 +3316,26 @@
         renderSettingsModal();
         renderAll();
         setStatus(t('ready'));
+        triggerFeedback('tap');
+      });
+
+      document.getElementById('btn-toggle-sound').addEventListener('click', () => {
+        state.soundEnabled = !state.soundEnabled;
+        saveToStorage();
+        renderSettingsModal();
+        if (state.soundEnabled) {
+          ensureAudioContext();
+          triggerFeedback('foundation', { rank: 5 });
+        }
+      });
+
+      document.getElementById('btn-toggle-haptics').addEventListener('click', () => {
+        state.hapticsEnabled = !state.hapticsEnabled;
+        saveToStorage();
+        renderSettingsModal();
+        if (state.hapticsEnabled) {
+          triggerHaptic('foundation');
+        }
       });
 
       document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
@@ -3067,7 +3349,7 @@
       // Async Boot: Reads native Android SharedPreferences first, falls back & migrates from localStorage
       const loaded = await loadFromStorage();
       if (!loaded) {
-        dealNewGame();
+        dealNewGame(true);
       } else {
         renderAll();
         checkVictoryOrAutoComplete();
