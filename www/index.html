@@ -1132,8 +1132,9 @@
   </div>
 
   <script>
-    (() => {
-      const STORAGE_KEY = 'ondrandy_solitaire_v13';
+    (async () => {
+      const STORAGE_KEY = 'ondrandy_solitaire_state';
+      const LEGACY_KEYS = ['ondrandy_solitaire_v13', 'ondrandy_solitaire_v12', 'ondrandy_solitaire_v11'];
 
       const DEFAULT_FOUNDATION_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
       const ALL_SUITS = ['hearts', 'diamonds', 'spades', 'clubs'];
@@ -1619,32 +1620,85 @@
         }));
       }
 
-      function saveToStorage() {
+      // Dual Storage Engine: Primary Native Android SharedPreferences (@capacitor/preferences) + Backup localStorage
+      function getNativePreferences() {
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({
-            lang: state.lang,
-            wins: state.wins,
-            faceTheme: state.faceTheme,
-            backTheme: state.backTheme,
-            royalGold: state.royalGold,
-            stock: state.stock,
-            waste: state.waste,
-            foundations: state.foundations,
-            foundationSuits: state.foundationSuits,
-            tableau: state.tableau,
-            initialDeal: state.initialDeal,
-            history: state.history,
-            moves: state.moves,
-            isGameOver: state.isGameOver
-          }));
+          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Preferences) {
+            return window.Capacitor.Plugins.Preferences;
+          }
         } catch (e) {}
+        return null;
       }
 
-      function loadFromStorage() {
+      function storageWrite(payloadObj) {
+        const serialized = JSON.stringify(payloadObj);
         try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return false;
-          const saved = JSON.parse(raw);
+          localStorage.setItem(STORAGE_KEY, serialized);
+        } catch (e) {}
+
+        const prefs = getNativePreferences();
+        if (prefs) {
+          prefs.set({ key: STORAGE_KEY, value: serialized }).catch(() => {});
+        }
+      }
+
+      async function storageRead() {
+        const prefs = getNativePreferences();
+        if (prefs) {
+          try {
+            const res = await prefs.get({ key: STORAGE_KEY });
+            if (res && res.value) {
+              try { localStorage.setItem(STORAGE_KEY, res.value); } catch (e) {}
+              return JSON.parse(res.value);
+            }
+          } catch (e) {}
+        }
+
+        // Fallback & automatic migration from localStorage (including legacy keys)
+        try {
+          let raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            for (const oldKey of LEGACY_KEYS) {
+              const legacyRaw = localStorage.getItem(oldKey);
+              if (legacyRaw) {
+                raw = legacyRaw;
+                break;
+              }
+            }
+          }
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && prefs) {
+              prefs.set({ key: STORAGE_KEY, value: raw }).catch(() => {});
+            }
+            return parsed;
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function saveToStorage() {
+        storageWrite({
+          lang: state.lang,
+          wins: state.wins,
+          faceTheme: state.faceTheme,
+          backTheme: state.backTheme,
+          royalGold: state.royalGold,
+          stock: state.stock,
+          waste: state.waste,
+          foundations: state.foundations,
+          foundationSuits: state.foundationSuits,
+          tableau: state.tableau,
+          initialDeal: state.initialDeal,
+          history: state.history,
+          moves: state.moves,
+          isGameOver: state.isGameOver
+        });
+      }
+
+      async function loadFromStorage() {
+        try {
+          const saved = await storageRead();
           if (!saved || !Array.isArray(saved.tableau)) return false;
           Object.assign(state, saved);
           if (!Array.isArray(state.foundationSuits) || state.foundationSuits.length !== 4) {
@@ -1935,7 +1989,6 @@
           }
         }
 
-        // Determine the tapped lead card
         let leadCard = null;
         let isSingleTopCard = true;
         if (source === 'waste' && state.waste.length > 0) {
@@ -2795,9 +2848,7 @@
         winsTapTimer = setTimeout(() => { winsTapCount = 0; }, 1500);
       });
 
-      // Board Touch Handling:
-      // 1) Long horizontal swipe right-to-left (>= 50% screen width) on empty board space triggers Undo
-      // 2) Short tap on empty board space draws next card from stock (strictly guarded against card interaction overlap)
+      // Board Touch Handling
       const boardEl = document.getElementById('board');
       const swipeBadgeEl = document.getElementById('swipe-undo-badge');
       let boardTouchStartX = 0;
@@ -2928,8 +2979,9 @@
 
       window.addEventListener('resize', () => renderAll());
 
-      // Boot
-      if (!loadFromStorage()) {
+      // Async Boot: Reads native Android SharedPreferences first, falls back & migrates from localStorage
+      const loaded = await loadFromStorage();
+      if (!loaded) {
         dealNewGame();
       } else {
         renderAll();
