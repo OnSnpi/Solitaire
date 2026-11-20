@@ -33,11 +33,11 @@ window.SolitaireApp.App = (async () => {
         if (!Ctx) return null;
         audioCtx = new Ctx();
         const sampleRate = audioCtx.sampleRate;
-        const length = Math.floor(sampleRate * 0.08);
+        const length = Math.floor(sampleRate * 0.14);
         noiseBuffer = audioCtx.createBuffer(1, length, sampleRate);
         const data = noiseBuffer.getChannelData(0);
         for (let i = 0; i < length; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleRate * 0.018));
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (sampleRate * 0.028));
         }
       }
       if (audioCtx.state === 'suspended') {
@@ -53,24 +53,35 @@ window.SolitaireApp.App = (async () => {
     ensureAudioContext();
   }, { passive: true });
 
-  function playPaperSwish(gainLevel = 0.09, centerFreq = 1600) {
+  // Natural paper swish with organic pitch, envelope, and gain jitter to avoid "machine-gun" repetition
+  function playPaperSwish(baseGain = 0.085, baseFreq = 1650, delay = 0) {
     if (!state.soundEnabled) return;
     const ctx = ensureAudioContext();
     if (!ctx || !noiseBuffer) return;
     try {
-      const now = ctx.currentTime;
+      const now = ctx.currentTime + delay;
       const src = ctx.createBufferSource();
       src.buffer = noiseBuffer;
 
+      // Subtle playback rate variance (+/- 14%) shifts the grain texture organically
+      src.playbackRate.setValueAtTime(0.86 + Math.random() * 0.28, now);
+
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(centerFreq, now);
-      filter.Q.value = 1.4;
+      // Frequency jitter (+/- 18%) so every card flip sounds slightly brighter or warmer
+      const freqJitter = baseFreq * (0.82 + Math.random() * 0.36);
+      filter.frequency.setValueAtTime(freqJitter, now);
+      filter.frequency.exponentialRampToValueAtTime(freqJitter * (0.78 + Math.random() * 0.22), now + 0.06);
+      filter.Q.value = 1.1 + Math.random() * 0.65;
 
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(gainLevel, now + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.065);
+      const peakGain = baseGain * (0.85 + Math.random() * 0.30);
+      const attack = 0.006 + Math.random() * 0.008;
+      const decay = 0.048 + Math.random() * 0.028;
+
+      gain.gain.setValueAtTime(0.0008, now);
+      gain.gain.linearRampToValueAtTime(peakGain, now + attack);
+      gain.gain.exponentialRampToValueAtTime(0.0004, now + attack + decay);
 
       src.connect(filter);
       filter.connect(gain);
@@ -117,7 +128,7 @@ window.SolitaireApp.App = (async () => {
 
     if (haptics) {
       try {
-        if (kind === 'tap' || kind === 'draw') {
+        if (kind === 'tap' || kind === 'draw' || kind === 'recycle') {
           haptics.impact({ style: 'LIGHT' }).catch(() => {});
           return;
         }
@@ -144,6 +155,7 @@ window.SolitaireApp.App = (async () => {
     if (navigator.vibrate) {
       try {
         if (kind === 'tap' || kind === 'draw') navigator.vibrate(10);
+        else if (kind === 'recycle') navigator.vibrate([10, 25, 12]);
         else if (kind === 'move') navigator.vibrate(18);
         else if (kind === 'undo') navigator.vibrate([12, 25, 12]);
         else if (kind === 'foundation') navigator.vibrate([15, 35, 25]);
@@ -160,10 +172,14 @@ window.SolitaireApp.App = (async () => {
     if (kind === 'tap') {
       playTone(540, 0.075, 0.055, 'triangle', 0);
     } else if (kind === 'draw') {
-      playPaperSwish(0.085, 1750);
+      playPaperSwish(0.082, 1750, 0);
+    } else if (kind === 'recycle') {
+      // Richer double-deck shuffle swish when recycling the entire stock pile
+      playPaperSwish(0.085, 1250, 0);
+      playPaperSwish(0.075, 1550, 0.042);
     } else if (kind === 'move') {
-      playPaperSwish(0.11, 1350);
-      playTone(420, 0.09, 0.045, 'sine', 0.015);
+      playPaperSwish(0.10, 1350, 0);
+      playTone(420, 0.09, 0.042, 'sine', 0.015);
     } else if (kind === 'foundation') {
       const rank = extra.rank || 1;
       const semitones = Math.max(0, Math.min(12, rank - 1));
@@ -194,7 +210,7 @@ window.SolitaireApp.App = (async () => {
     E.setupNewDeal();
     renderAll();
     setStatus(t('newDealt'));
-    if (!silent) triggerFeedback('draw');
+    if (!silent) triggerFeedback('recycle');
   }
 
   function restartCurrentDeal() {
@@ -238,10 +254,11 @@ window.SolitaireApp.App = (async () => {
     if (state.isGameOver || autoCompleting) return;
     selection = null;
     hintHighlight = null;
+    const wasEmptyStock = state.stock.length === 0 && state.waste.length > 0;
     if (E.drawStockCard()) {
       renderAll();
       setStatus(t('ready'));
-      triggerFeedback('draw');
+      triggerFeedback(wasEmptyStock ? 'recycle' : 'draw');
       checkVictoryOrAutoComplete();
     }
   }
@@ -402,7 +419,7 @@ window.SolitaireApp.App = (async () => {
           state.moves += 1;
           moved = true;
           stallCycles += 1;
-          playPaperSwish(0.05, 1800);
+          playPaperSwish(0.045, 1800, 0);
         } else if (state.waste.length > 0) {
           while (state.waste.length > 0) {
             const c = state.waste.pop();
